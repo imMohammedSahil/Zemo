@@ -1,4 +1,12 @@
 {
+  "name": "zemo",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "node backend/server.js",
+    "dev:backend": "node --watch backend/server.js",
+    "dev:frontend": "cd frontend && npm run dev",
+    "install:all": "npm install && cd frontend && npm install"
+  },
   "dependencies": {
     "axios": "^1.13.6",
     "cheerio": "^1.2.0",

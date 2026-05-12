@@ -1,4 +1,4 @@
-const scrapeReviews = require("./automation/reviewScraper");
+const scrapeReviews = require("../automation/reviewScraper");
 
 async function test() {
 

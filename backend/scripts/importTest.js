@@ -1,7 +1,7 @@
 require("dotenv").config();
 
 const mongoose = require("mongoose");
-const importHistory = require("./services/importBuyhatkeHistory");
+const importHistory = require("../services/importBuyhatkeHistory");
 
 async function run() {
 

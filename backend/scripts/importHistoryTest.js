@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 require("dotenv").config();
 
-const importHistoricPrices = require("./services/importPriceHistory");
+const importHistoricPrices = require("../services/importPriceHistory");
 
 async function run() {
 

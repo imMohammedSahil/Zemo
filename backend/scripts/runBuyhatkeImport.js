@@ -1,7 +1,7 @@
 require("dotenv").config();
 
 const mongoose = require("mongoose");
-const extractHistory = require("./services/buyhatkeExtractor");
+const extractHistory = require("../services/buyhatkeExtractor");
 
 async function run() {
 
