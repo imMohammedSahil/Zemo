@@ -3,18 +3,16 @@
 **Autonomous E-Commerce Price Intelligence & Aspect-Based Sentiment Engine**  
 A distributed system for headless browser automation, real-time price monitoring, zero-cold-start historical trend synthesis, and serverless LLM review distillation.
 
-```
-┌───────────────────────────┬─────────────────────────────────────────────────────────────┐
-│ Core Runtime              │ Node.js (v18+ / v20+ ESM/CJS) · Express 5.2.1               │
-│ Storage & Time-Series     │ MongoDB 8+ · Mongoose 9.2.4 (Indexed Temporal Price Points) │
-│ Browser Automation        │ Playwright 1.58.2 (Chromium Headless · Network Interceptor) │
-│ Natural Language Engine   │ Meta-Llama-3-8B-Instruct (Hugging Face Router API)          │
-│ Client SPA                │ React 19.2.0 · Vite 7.3 · Recharts · Tailwind CSS           │
-│ Task Orchestration        │ Node-Cron 4.2.1 (Mutex-Guarded Reentrant 15-min Poller)     │
-│ Target Retailers          │ Amazon (IN / Global) · Flipkart                             │
-│ License                   │ MIT License                                                 │
-└───────────────────────────┴─────────────────────────────────────────────────────────────┘
-```
+| Subsystem | Technology Stack | Architecture Role |
+| :--- | :--- | :--- |
+| **API & Runtime** | `Node.js` (v18+) · `Express 5` | Asynchronous REST API gateway & middleware pipeline |
+| **Persistence** | `MongoDB` · `Mongoose 9` | Time-series price history & LLM insight caching |
+| **Headless Automation** | `Playwright 1.58` (Chromium) | Anti-bot DOM scraping & network XHR interception |
+| **AI Intelligence** | `Meta-Llama-3-8B-Instruct` | Aspect-based sentiment analysis via Hugging Face Router |
+| **Client Frontend** | `React 19` · `Vite 7` · `Tailwind CSS` | Single-page reactive dashboard with SVG area graphs |
+| **Orchestration** | `Node-Cron 4.2` | Mutex-guarded 15-minute reentrant price poller |
+| **Target Retailers** | `Amazon` (IN / Global) · `Flipkart` | Canonical ASIN extraction & DOM selector cascades |
+| **License** | `MIT` | Open-source software license |
 
 ---
 
