@@ -1,14 +1,20 @@
 # Zemo
 
-> Distributed e-commerce price monitoring, zero-cold-start historical trend synthesis, and aspect-based review sentiment engine powered by Playwright headless automation and Meta-Llama-3-8B.
+**Autonomous E-Commerce Price Intelligence & Aspect-Based Sentiment Engine**  
+A distributed system for headless browser automation, real-time price monitoring, zero-cold-start historical trend synthesis, and serverless LLM review distillation.
 
-[![Node.js Version](https://img.shields.io/badge/node.js-v18%2B%20%7C%20v20%2B-339933?style=flat-square&logo=nodedotjs&logoColor=white)](https://nodejs.org/)
-[![Express.js](https://img.shields.io/badge/express-v5.2.1-000000?style=flat-square&logo=express&logoColor=white)](https://expressjs.com/)
-[![React](https://img.shields.io/badge/react-v19.2.0-20232A?style=flat-square&logo=react&logoColor=61DAFB)](https://react.dev/)
-[![Playwright](https://img.shields.io/badge/playwright-v1.58.2-2EAD33?style=flat-square&logo=playwright&logoColor=white)](https://playwright.dev/)
-[![MongoDB](https://img.shields.io/badge/mongodb-v9.2.4-47A248?style=flat-square&logo=mongodb&logoColor=white)](https://www.mongodb.com/)
-[![Meta Llama 3](https://img.shields.io/badge/LLM-Meta--Llama--3--8B--Instruct-0467DF?style=flat-square&logo=meta&logoColor=white)](https://huggingface.co/meta-llama/Meta-Llama-3-8B-Instruct)
-[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](LICENSE)
+```
+┌───────────────────────────┬─────────────────────────────────────────────────────────────┐
+│ Core Runtime              │ Node.js (v18+ / v20+ ESM/CJS) · Express 5.2.1               │
+│ Storage & Time-Series     │ MongoDB 8+ · Mongoose 9.2.4 (Indexed Temporal Price Points) │
+│ Browser Automation        │ Playwright 1.58.2 (Chromium Headless · Network Interceptor) │
+│ Natural Language Engine   │ Meta-Llama-3-8B-Instruct (Hugging Face Router API)          │
+│ Client SPA                │ React 19.2.0 · Vite 7.3 · Recharts · Tailwind CSS           │
+│ Task Orchestration        │ Node-Cron 4.2.1 (Mutex-Guarded Reentrant 15-min Poller)     │
+│ Target Retailers          │ Amazon (IN / Global) · Flipkart                             │
+│ License                   │ MIT License                                                 │
+└───────────────────────────┴─────────────────────────────────────────────────────────────┘
+```
 
 ---
 
