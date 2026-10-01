@@ -406,31 +406,42 @@ const NotificationSchema = new mongoose.Schema({
 
 Zemo interacts with `meta-llama/Meta-Llama-3-8B-Instruct` hosted on the Hugging Face Router API (`https://router.huggingface.co/v1/chat/completions`).
 
+### System Prompt & Schema Specification
+
+The inference worker dispatches the following prompt structure to enforce strict JSON output without conversational markdown preamble:
+
+```text
+You are an expert e-commerce product analyst.
+Analyze the provided customer reviews and extract key pros and cons.
+
+RULES:
+1. Return ONLY valid JSON. Do not include markdown codeblocks or text.
+2. Extract 3 to 5 pros and 3 to 5 cons.
+3. For each item, provide:
+   - aspect: Short category (e.g., "Battery Life", "Build Quality")
+   - percentage: Integer (0-100) representing sentiment confidence
+   - explanation: A concise 1-2 sentence justification from reviews
 ```
-┌────────────────────────────────────────────────────────────────────────┐
-│                        LLM System Instructions                         │
-├────────────────────────────────────────────────────────────────────────┤
-│ You are an expert e-commerce product analyst.                          │
-│ Analyze the provided customer reviews and extract key pros and cons.   │
-│                                                                        │
-│ RULES:                                                                 │
-│ 1. Return ONLY valid JSON. Do not include markdown codeblocks or text. │
-│ 2. Extract 3 to 5 pros and 3 to 5 cons.                                │
-│ 3. For each item, provide:                                             │
-│    - aspect: Short category (e.g., "Battery Life", "Build Quality")    │
-│    - percentage: Integer (0-100) representing sentiment confidence     │
-│    - explanation: A concise 1-2 sentence justification from reviews    │
-│                                                                        │
-│ REQUIRED SCHEMA:                                                       │
-│ {                                                                      │
-│   "pros": [                                                            │
-│     {"aspect": "String", "percentage": Number, "explanation": "String"}│
-│   ],                                                                   │
-│   "cons": [                                                            │
-│     {"aspect": "String", "percentage": Number, "explanation": "String"}│
-│   ]                                                                    │
-│ }                                                                      │
-└────────────────────────────────────────────────────────────────────────┘
+
+#### Target Response Schema
+
+```json
+{
+  "pros": [
+    {
+      "aspect": "Battery Life",
+      "percentage": 88,
+      "explanation": "Users consistently reported 1.5 to 2 days of moderate usage on a single charge."
+    }
+  ],
+  "cons": [
+    {
+      "aspect": "Thermal Throttling",
+      "percentage": 42,
+      "explanation": "Multiple reviews noted noticeable warming during extended 4K video recording."
+    }
+  ]
+}
 ```
 
 ### Runtime Parameters & Resilience Controls
