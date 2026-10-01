@@ -36,13 +36,10 @@ function detectSource(url) {
 
 
 function extractASIN(url) {
-
   if (!url) return null;
-
-  const match = url.match(/[A-Z0-9]{10}/);
-
-  return match ? match[0] : null;
-
+  // Look for /dp/ASIN or /gp/product/ASIN
+  const match = url.match(/\/(?:dp|gp\/product)\/([A-Z0-9]{10})/i);
+  return match ? match[1].toUpperCase() : null;
 }
 
 

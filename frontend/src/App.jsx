@@ -19,13 +19,12 @@ function AppLayout() {
 
   const navigate = useNavigate();
   const [showProfile, setShowProfile] = useState(false);
-  const user = JSON.parse(localStorage.getItem("user"));
+  // Bypassing login for user access
+  const user = JSON.parse(localStorage.getItem("user")) || { name: "Demo User", email: "demo@zemo.ai" };
 
- 
-
-if (!user) {
-  return <LoginPage />;
-}
+  // if (!user) {
+  //   return <LoginPage />;
+  // }
 
   return (
 
