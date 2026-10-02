@@ -29,26 +29,19 @@ const ProductSchema = new mongoose.Schema({
   },
 
   currentPrice: {
-    type: Number
+    type: Number,
+    default: 0
   },
 
   historicLow: {
-    type: Number
+    type: Number,
+    default: 0
   },
 
   createdAt: {
     type: Date,
     default: Date.now
-  },
-
-  currentPrice: {
-  type: Number,
-  default: 0
-},
-historicLow: {
-  type: Number,
-  default: 0
-}
+  }
 
 });
 

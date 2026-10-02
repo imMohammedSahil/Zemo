@@ -61,10 +61,6 @@ app.get("/", (req, res) => {
     res.send("Zemo backend running");
 });
 
-/* Start Scheduler */
-
-startScheduler();
-
 /* Start Server */
 
 const PORT = process.env.PORT || 5000;

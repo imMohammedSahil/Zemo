@@ -6,18 +6,19 @@ node_modules/
 # Testing
 coverage/
 
-# Production
+# Production Builds
 dist/
 build/
+frontend/dist/
 
 # Environment Variables
 .env
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
+.env.*
+!.env.example
+!backend/.env.example
 
 # Debug logs
+*.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
@@ -29,10 +30,16 @@ yarn-error.log*
 *.swo
 .DS_Store
 
-# Backend Specific
+# Scraper & Upload Data
 backend/uploads/*
 !backend/uploads/.gitkeep
+uploads/
+**/browser-data/
 browser-data/
+
+# Temporary Agent/Runner Artifacts
+.agents/
+.replit
 
 # OS files
 Thumbs.db
