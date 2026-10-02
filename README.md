@@ -1,7 +1,9 @@
 # Zemo
 
 **Autonomous E-Commerce Price Intelligence & Aspect-Based Sentiment Engine**  
-A distributed system for headless browser automation, real-time price monitoring, zero-cold-start historical trend synthesis, and serverless LLM review distillation.
+A distributed system combining headless browser automation, real-time price monitoring, zero-cold-start historical trend synthesis, and serverless LLM review distillation.
+
+[Architecture](#architectural-overview) • [Pipelines](#data-pipelines--sequence-workflows) • [Schemas](#data-models--schemas) • [REST API](#rest-api-reference) • [LLM Engine](#llm-inference--prompt-specification) • [Local Setup](#installation--local-setup) • [Benchmarks](#performance--benchmark-metrics)
 
 | Subsystem | Technology Stack | Architecture Role |
 | :--- | :--- | :--- |
