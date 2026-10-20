@@ -6,7 +6,10 @@ async function fetchProductMetadata(url) {
 
   try {
 
-    browser = await chromium.launch({ headless: true });
+    browser = await chromium.launch({
+      headless: true,
+      args: ["--no-sandbox", "--disable-setuid-sandbox"]
+    });
 
     const context = await browser.newContext({
       userAgent:

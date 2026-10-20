@@ -1,0 +1,11 @@
+node_modules
+frontend/node_modules
+frontend/dist
+.git
+.env
+.vscode
+.idea
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*

@@ -37,7 +37,8 @@ app.use("/user", authRoutes);
 
 /* Database Connection */
 
-mongoose.connect(process.env.MONGO_URI)
+const mongoUri = process.env.MONGO_URI || process.env.MONGO_URL;
+mongoose.connect(mongoUri)
 .then(() => {
     console.log("MongoDB Connected");
     startScheduler();
