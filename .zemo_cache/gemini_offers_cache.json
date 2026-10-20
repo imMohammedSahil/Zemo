@@ -1,0 +1,717 @@
+{
+  "B0CJ8VQ3R4": {
+    "productId": "6ad3cdc8994487ce9672910b",
+    "productTitle": "Green Soul Raptor 2.0 Racing Edition Ergonomic Gaming Chair with Premium PU Leather, Adjustable Neck & Lumbar Pillow, 3D Adjustable Armrests & Heavy Duty Nylon Base (Black)",
+    "productImage": "https://m.media-amazon.com/images/I/31ezta3PQ8L._SY300_SX300_QL70_FMwebp_.jpg",
+    "currentTrackedPrice": 11490,
+    "mrp": 23990,
+    "summary": {
+      "totalOffersCount": 4,
+      "maxSingleDiscount": 3000,
+      "bestSingleEffectivePrice": 8490,
+      "totalStackedSavings": 3000,
+      "bestStackedPrice": 8490,
+      "bestBankPartner": "SBI Card",
+      "bestieStackingAdvice": "I'm so excited to help you upgrade your gaming setup! Make sure to pay using your SBI Card at checkout to instantly knock a massive ₹3,000 off the price tag. That brings your final cart value down to an incredible ₹8,490—the ultimate comfort upgrade for your back and your wallet!",
+      "stackingFormula": {
+        "basePrice": 11490,
+        "couponSavings": 0,
+        "bankDiscount": 3000,
+        "finalCheckoutPrice": 8490
+      }
+    },
+    "emiPlans": [
+      {
+        "durationMonths": 3,
+        "monthlyEmi": 2830,
+        "totalInterest": 0,
+        "isNoCost": true,
+        "bank": "HDFC / SBI / Major Credit Cards",
+        "note": "Zero processing fee, interest refunded upfront"
+      },
+      {
+        "durationMonths": 6,
+        "monthlyEmi": 1415,
+        "totalInterest": 0,
+        "isNoCost": true,
+        "bank": "All Major Credit Cards",
+        "note": "Split across 6 months with zero extra cost"
+      },
+      {
+        "durationMonths": 12,
+        "monthlyEmi": 766,
+        "totalInterest": 702,
+        "isNoCost": false,
+        "bank": "All Major Banks & Bajaj Finserv",
+        "note": "Budget friendly extended installment plan"
+      }
+    ],
+    "offers": [
+      {
+        "id": "live-amazon-1",
+        "bank": "HDFC Bank",
+        "bankCode": "hdfc",
+        "accentColor": "#004C8F",
+        "badge": "LIVE AMAZON PROMO",
+        "type": "emi",
+        "title": "No Cost EMI: Upto ₹1,153.68 EMI interest savings on select Credit Cards, HDFC Bank ",
+        "description": "Upto ₹1,153.68 EMI interest savings on select Credit Cards, HDFC Bank Debit Cards, Bajaj Finserv EMI cards, Amazon Pay LaterUpto ₹1,153.68 EMI interest savings on select Credit Cards, HDFC Bank Debit Cards, Bajaj Finserv EMI cards, Amazon Pay Later",
+        "discountAmount": 1154,
+        "effectivePrice": 10336,
+        "stores": [
+          "Amazon India"
+        ],
+        "code": "INSTANT AUTO-APPLIED",
+        "validTill": "Active on Amazon India",
+        "cardTypes": [
+          "HDFC Bank"
+        ],
+        "storePathways": [
+          {
+            "store": "Amazon India",
+            "basePrice": 11490,
+            "discount": 1154,
+            "netPrice": 10336
+          }
+        ],
+        "bestStoreRoute": {
+          "store": "Amazon India",
+          "basePrice": 11490,
+          "discount": 1154,
+          "netPrice": 10336
+        }
+      },
+      {
+        "id": "live-amazon-2",
+        "bank": "SBI Card",
+        "bankCode": "sbi",
+        "accentColor": "#00E599",
+        "badge": "LIVE AMAZON PROMO",
+        "type": "bank_discount",
+        "title": "Bank Offer: Upto ₹3,000.00 discount on SBI Credit Cards, SBI Debit CardsUpto ₹3,00",
+        "description": "Upto ₹3,000.00 discount on SBI Credit Cards, SBI Debit CardsUpto ₹3,000.00 discount on SBI Credit Cards, SBI Debit Cards",
+        "discountAmount": 3000,
+        "effectivePrice": 8490,
+        "stores": [
+          "Amazon India"
+        ],
+        "code": "INSTANT AUTO-APPLIED",
+        "validTill": "Active on Amazon India",
+        "cardTypes": [
+          "SBI Card"
+        ],
+        "storePathways": [
+          {
+            "store": "Amazon India",
+            "basePrice": 11490,
+            "discount": 3000,
+            "netPrice": 8490
+          }
+        ],
+        "bestStoreRoute": {
+          "store": "Amazon India",
+          "basePrice": 11490,
+          "discount": 3000,
+          "netPrice": 8490
+        }
+      },
+      {
+        "id": "live-amazon-3",
+        "bank": "ICICI Bank",
+        "bankCode": "icici",
+        "accentColor": "#CEFF00",
+        "badge": "LIVE AMAZON PROMO",
+        "type": "cashback",
+        "title": "Cashback: Upto ₹344.00 cashback as Amazon Pay Balance when you pay with Amazon P",
+        "description": "Upto ₹344.00 cashback as Amazon Pay Balance when you pay with Amazon Pay ICICI Bank Credit CardsUpto ₹344.00 cashback as Amazon Pay Balance when you pay with Amazon Pay ICICI Bank Credit Cards",
+        "discountAmount": 344,
+        "effectivePrice": 11146,
+        "stores": [
+          "Amazon India"
+        ],
+        "code": "INSTANT AUTO-APPLIED",
+        "validTill": "Active on Amazon India",
+        "cardTypes": [
+          "ICICI Bank"
+        ],
+        "storePathways": [
+          {
+            "store": "Amazon India",
+            "basePrice": 11490,
+            "discount": 344,
+            "netPrice": 11146
+          }
+        ],
+        "bestStoreRoute": {
+          "store": "Amazon India",
+          "basePrice": 11490,
+          "discount": 344,
+          "netPrice": 11146
+        }
+      },
+      {
+        "id": "live-amazon-4",
+        "bank": "Amazon Partner Bank",
+        "bankCode": "amazon",
+        "accentColor": "#FF9900",
+        "badge": "LIVE AMAZON PROMO",
+        "type": "bank_discount",
+        "title": "Partner Offers: Get GST invoice and save up to 18% on business purchases. Sign up for ",
+        "description": "Get GST invoice and save up to 18% on business purchases. Sign up for freeGet GST invoice and save up to 18% on business purchases. Sign up for free",
+        "discountAmount": 0,
+        "effectivePrice": 11490,
+        "stores": [
+          "Amazon India"
+        ],
+        "code": "INSTANT AUTO-APPLIED",
+        "validTill": "Active on Amazon India",
+        "cardTypes": [
+          "Amazon Partner Bank"
+        ],
+        "storePathways": [
+          {
+            "store": "Amazon India",
+            "basePrice": 11490,
+            "discount": 0,
+            "netPrice": 11490
+          }
+        ],
+        "bestStoreRoute": {
+          "store": "Amazon India",
+          "basePrice": 11490,
+          "discount": 0,
+          "netPrice": 11490
+        }
+      }
+    ],
+    "liveStorePrices": {
+      "Flipkart": 11490
+    },
+    "scannedAt": "2026-10-17T19:43:06.368Z",
+    "isCached": false,
+    "crossStoreOptimizer": {
+      "bestPathway": {
+        "store": "Amazon India",
+        "basePrice": 11490,
+        "offerId": "live-amazon-2",
+        "offerTitle": "Bank Offer: Upto ₹3,000.00 discount on SBI Credit Cards, SBI Debit CardsUpto ₹3,00",
+        "bank": "SBI Card",
+        "discount": 3000,
+        "netPrice": 8490,
+        "code": "INSTANT AUTO-APPLIED",
+        "badge": "LIVE AMAZON PROMO"
+      },
+      "trackedPathway": {
+        "store": "Amazon India",
+        "basePrice": 11490,
+        "offerId": "live-amazon-2",
+        "offerTitle": "Bank Offer: Upto ₹3,000.00 discount on SBI Credit Cards, SBI Debit CardsUpto ₹3,00",
+        "bank": "SBI Card",
+        "discount": 3000,
+        "netPrice": 8490,
+        "code": "INSTANT AUTO-APPLIED",
+        "badge": "LIVE AMAZON PROMO"
+      },
+      "extraSavingsVsTracked": 0,
+      "pathwayInsight": "Best checkout route across stores is on Amazon India with SBI Card at ₹8,490 net."
+    },
+    "cachedAt": "2026-10-17T19:43:06.370Z"
+  },
+  "B0DGJHBX5Y": {
+    "productId": "6ad4fa06a9de94bc97d3d512",
+    "productTitle": "Apple iPhone 16 128 GB: 5G Mobile Phone with Camera Control, A18 Chip and a Big Boost in Battery Life. Works with AirPods; Black",
+    "productImage": "https://m.media-amazon.com/images/I/31A-AWx8PLL._SX342_SY445_QL70_FMwebp_.jpg",
+    "currentTrackedPrice": 76999,
+    "mrp": 89900,
+    "summary": {
+      "totalOffersCount": 4,
+      "maxSingleDiscount": 3000,
+      "bestSingleEffectivePrice": 73999,
+      "totalStackedSavings": 3000,
+      "bestStackedPrice": 73999,
+      "bestBankPartner": "SBI Card",
+      "bestieStackingAdvice": "I'm so thrilled for you to get your hands on the new iPhone 16! Make sure you swipe your SBI card at checkout to instantly slash ₹3,000 off the bill, bringing your final price down to ₹73,999. If you'd rather not pay all at once, I've got your back—you can easily split it into a 6-month No Cost EMI without spending an extra rupee!",
+      "stackingFormula": {
+        "basePrice": 76999,
+        "couponSavings": 0,
+        "bankDiscount": 3000,
+        "finalCheckoutPrice": 73999
+      }
+    },
+    "emiPlans": [
+      {
+        "durationMonths": 3,
+        "monthlyEmi": 24666,
+        "totalInterest": 0,
+        "isNoCost": true,
+        "bank": "Amazon Pay ICICI / Major Banks",
+        "note": "Zero processing fee, interest refunded upfront"
+      },
+      {
+        "durationMonths": 6,
+        "monthlyEmi": 12333,
+        "totalInterest": 0,
+        "isNoCost": true,
+        "bank": "All Major Credit Cards",
+        "note": "Split across 6 months with zero extra cost"
+      },
+      {
+        "durationMonths": 12,
+        "monthlyEmi": 6680,
+        "totalInterest": 6161,
+        "isNoCost": false,
+        "bank": "All Major Banks & Bajaj Finserv",
+        "note": "Budget friendly extended installment plan"
+      }
+    ],
+    "offers": [
+      {
+        "id": "live-amazon-1",
+        "bank": "Amazon Partner Bank",
+        "bankCode": "amazon",
+        "accentColor": "#FF9900",
+        "badge": "LIVE AMAZON PROMO",
+        "type": "emi",
+        "title": "No Cost EMI: Upto ₹2,161.81 EMI interest savings on select Credit Cards",
+        "description": "Upto ₹2,161.81 EMI interest savings on select Credit Cards",
+        "discountAmount": 2162,
+        "effectivePrice": 74837,
+        "stores": [
+          "Amazon India"
+        ],
+        "code": "INSTANT AUTO-APPLIED",
+        "validTill": "Active on Amazon India",
+        "cardTypes": [
+          "Amazon Partner Bank"
+        ],
+        "storePathways": [
+          {
+            "store": "Amazon India",
+            "basePrice": 76999,
+            "discount": 2162,
+            "netPrice": 74837
+          }
+        ],
+        "bestStoreRoute": {
+          "store": "Amazon India",
+          "basePrice": 76999,
+          "discount": 2162,
+          "netPrice": 74837
+        }
+      },
+      {
+        "id": "live-amazon-2",
+        "bank": "SBI Card",
+        "bankCode": "sbi",
+        "accentColor": "#00E599",
+        "badge": "LIVE AMAZON PROMO",
+        "type": "bank_discount",
+        "title": "Bank Offer: Upto ₹3,000.00 discount on SBI Credit Cards, SBI Debit Cards",
+        "description": "Upto ₹3,000.00 discount on SBI Credit Cards, SBI Debit Cards",
+        "discountAmount": 3000,
+        "effectivePrice": 73999,
+        "stores": [
+          "Amazon India"
+        ],
+        "code": "INSTANT AUTO-APPLIED",
+        "validTill": "Active on Amazon India",
+        "cardTypes": [
+          "SBI Card"
+        ],
+        "storePathways": [
+          {
+            "store": "Amazon India",
+            "basePrice": 76999,
+            "discount": 3000,
+            "netPrice": 73999
+          }
+        ],
+        "bestStoreRoute": {
+          "store": "Amazon India",
+          "basePrice": 76999,
+          "discount": 3000,
+          "netPrice": 73999
+        }
+      },
+      {
+        "id": "live-amazon-3",
+        "bank": "ICICI Bank",
+        "bankCode": "icici",
+        "accentColor": "#CEFF00",
+        "badge": "LIVE AMAZON PROMO",
+        "type": "cashback",
+        "title": "Cashback: Upto ₹2,309.00 cashback as Amazon Pay Balance when you pay with Amazon",
+        "description": "Upto ₹2,309.00 cashback as Amazon Pay Balance when you pay with Amazon Pay ICICI Bank Credit Cards",
+        "discountAmount": 2309,
+        "effectivePrice": 74690,
+        "stores": [
+          "Amazon India"
+        ],
+        "code": "INSTANT AUTO-APPLIED",
+        "validTill": "Active on Amazon India",
+        "cardTypes": [
+          "ICICI Bank"
+        ],
+        "storePathways": [
+          {
+            "store": "Amazon India",
+            "basePrice": 76999,
+            "discount": 2309,
+            "netPrice": 74690
+          }
+        ],
+        "bestStoreRoute": {
+          "store": "Amazon India",
+          "basePrice": 76999,
+          "discount": 2309,
+          "netPrice": 74690
+        }
+      },
+      {
+        "id": "live-amazon-4",
+        "bank": "Amazon Partner Bank",
+        "bankCode": "amazon",
+        "accentColor": "#FF9900",
+        "badge": "LIVE AMAZON PROMO",
+        "type": "bank_discount",
+        "title": "Partner Offers: Get GST invoice and save up to 18% on business purchases. Sign up for ",
+        "description": "Get GST invoice and save up to 18% on business purchases. Sign up for free",
+        "discountAmount": 0,
+        "effectivePrice": 76999,
+        "stores": [
+          "Amazon India"
+        ],
+        "code": "INSTANT AUTO-APPLIED",
+        "validTill": "Active on Amazon India",
+        "cardTypes": [
+          "Amazon Partner Bank"
+        ],
+        "storePathways": [
+          {
+            "store": "Amazon India",
+            "basePrice": 76999,
+            "discount": 0,
+            "netPrice": 76999
+          }
+        ],
+        "bestStoreRoute": {
+          "store": "Amazon India",
+          "basePrice": 76999,
+          "discount": 0,
+          "netPrice": 76999
+        }
+      }
+    ],
+    "liveStorePrices": {
+      "Flipkart": 86999
+    },
+    "scannedAt": "2026-10-18T17:01:54.431Z",
+    "isCached": false,
+    "crossStoreOptimizer": {
+      "bestPathway": {
+        "store": "Amazon India",
+        "basePrice": 76999,
+        "offerId": "live-amazon-2",
+        "offerTitle": "Bank Offer: Upto ₹3,000.00 discount on SBI Credit Cards, SBI Debit Cards",
+        "bank": "SBI Card",
+        "discount": 3000,
+        "netPrice": 73999,
+        "code": "INSTANT AUTO-APPLIED",
+        "badge": "LIVE AMAZON PROMO"
+      },
+      "trackedPathway": {
+        "store": "Amazon India",
+        "basePrice": 76999,
+        "offerId": "live-amazon-2",
+        "offerTitle": "Bank Offer: Upto ₹3,000.00 discount on SBI Credit Cards, SBI Debit Cards",
+        "bank": "SBI Card",
+        "discount": 3000,
+        "netPrice": 73999,
+        "code": "INSTANT AUTO-APPLIED",
+        "badge": "LIVE AMAZON PROMO"
+      },
+      "extraSavingsVsTracked": 0,
+      "pathwayInsight": "Best checkout route across stores is on Amazon India with SBI Card at ₹73,999 net."
+    },
+    "cachedAt": "2026-10-18T17:01:54.433Z"
+  },
+  "B0C1HCS2WZ": {
+    "productId": "6ad6697417ed2ef46740ff00",
+    "productTitle": "Sony Bravia 164 cm (65 inches) 4K Ultra HD Smart LED Google TV KD-65X74L (Black)",
+    "productImage": "https://m.media-amazon.com/images/I/51eiFYQhwBL._SX300_SY300_QL70_FMwebp_.jpg",
+    "currentTrackedPrice": 8299000,
+    "mrp": 9792820,
+    "summary": {
+      "totalOffersCount": 0,
+      "maxSingleDiscount": 0,
+      "bestSingleEffectivePrice": 8299000,
+      "totalStackedSavings": 0,
+      "bestStackedPrice": 8299000,
+      "bestBankPartner": "Amazon Partner",
+      "bestieStackingAdvice": "No active bank promotions or coupons are currently running on Amazon India for this item. You can purchase directly at the live price of ₹8,299,000 or take advantage of zero-interest EMI options.",
+      "stackingFormula": {
+        "basePrice": 8299000,
+        "couponSavings": 0,
+        "bankDiscount": 0,
+        "finalCheckoutPrice": 8299000
+      }
+    },
+    "emiPlans": [
+      {
+        "durationMonths": 3,
+        "monthlyEmi": 2766333,
+        "totalInterest": 0,
+        "isNoCost": true,
+        "bank": "Amazon Pay ICICI / Major Banks",
+        "note": "Zero processing fee, interest refunded upfront"
+      },
+      {
+        "durationMonths": 6,
+        "monthlyEmi": 1383167,
+        "totalInterest": 0,
+        "isNoCost": true,
+        "bank": "All Major Credit Cards",
+        "note": "Split across 6 months with zero extra cost"
+      },
+      {
+        "durationMonths": 12,
+        "monthlyEmi": 733078,
+        "totalInterest": 497940,
+        "isNoCost": false,
+        "bank": "All Major Banks & Bajaj Finserv",
+        "note": "Budget friendly extended installment plan"
+      }
+    ],
+    "offers": [],
+    "liveStorePrices": {
+      "Flipkart": 107990
+    },
+    "scannedAt": "2026-10-19T19:07:37.910Z",
+    "isCached": false,
+    "crossStoreOptimizer": {
+      "bestPathway": null,
+      "trackedPathway": null,
+      "extraSavingsVsTracked": 0,
+      "pathwayInsight": ""
+    },
+    "cachedAt": "2026-10-19T19:07:37.911Z"
+  },
+  "B0F29P9CKJ": {
+    "productId": "6ad71e366b2c6422ae682ab4",
+    "productTitle": "Samsung Galaxy Tab S10 FE [Smartchoice], S Pen in-Box, 27.7 cm (10.9 inch) Display, AI Writing, Desktop Mode, Pre Loaded Pro Apps, 8 GB RAM, 128 GB Storage, Wi-Fi Tablet, Gray",
+    "productImage": "https://m.media-amazon.com/images/I/31qIlikAcVL._SY300_SX300_QL70_FMwebp_.jpg",
+    "currentTrackedPrice": 43999,
+    "mrp": 49999,
+    "summary": {
+      "totalOffersCount": 4,
+      "maxSingleDiscount": 3000,
+      "bestSingleEffectivePrice": 40999,
+      "totalStackedSavings": 3000,
+      "bestStackedPrice": 40999,
+      "bestBankPartner": "SBI Card",
+      "bestieStackingAdvice": "I'm so excited for you to get your hands on this gorgeous Galaxy Tab! To lock in the biggest instant discount, make sure to checkout with your SBI Card to slash a flat ₹3,000 right away, bringing your price down to ₹40,999. Alternatively, if you want zero-stress payments, pick the Amazon Pay ICICI card to unlock No Cost EMI savings along with sweet cashback!",
+      "stackingFormula": {
+        "basePrice": 43999,
+        "couponSavings": 0,
+        "bankDiscount": 3000,
+        "finalCheckoutPrice": 40999
+      }
+    },
+    "emiPlans": [
+      {
+        "durationMonths": 3,
+        "monthlyEmi": 14666,
+        "totalInterest": 0,
+        "isNoCost": true,
+        "bank": "Amazon Pay ICICI / Major Banks",
+        "note": "Zero processing fee, interest refunded upfront"
+      },
+      {
+        "durationMonths": 6,
+        "monthlyEmi": 7333,
+        "totalInterest": 0,
+        "isNoCost": true,
+        "bank": "All Major Credit Cards",
+        "note": "Split across 6 months with zero extra cost"
+      },
+      {
+        "durationMonths": 12,
+        "monthlyEmi": 3887,
+        "totalInterest": 2640,
+        "isNoCost": false,
+        "bank": "All Major Banks & Bajaj Finserv",
+        "note": "Budget friendly extended installment plan"
+      }
+    ],
+    "offers": [
+      {
+        "id": "live-amazon-1",
+        "bank": "SBI Card",
+        "bankCode": "sbi",
+        "accentColor": "#00E599",
+        "badge": "LIVE AMAZON PROMO",
+        "type": "bank_discount",
+        "title": "Bank Offer: Upto ₹3,000.00 discount on SBI Credit Cards, SBI Debit Cards",
+        "description": "Upto ₹3,000.00 discount on SBI Credit Cards, SBI Debit Cards",
+        "discountAmount": 3000,
+        "effectivePrice": 40999,
+        "stores": [
+          "Amazon India"
+        ],
+        "code": "INSTANT AUTO-APPLIED",
+        "validTill": "Active on Amazon India",
+        "cardTypes": [
+          "SBI Card"
+        ],
+        "storePathways": [
+          {
+            "store": "Amazon India",
+            "basePrice": 43999,
+            "discount": 3000,
+            "netPrice": 40999
+          }
+        ],
+        "bestStoreRoute": {
+          "store": "Amazon India",
+          "basePrice": 43999,
+          "discount": 3000,
+          "netPrice": 40999
+        }
+      },
+      {
+        "id": "live-amazon-2",
+        "bank": "ICICI Bank",
+        "bankCode": "icici",
+        "accentColor": "#CEFF00",
+        "badge": "LIVE AMAZON PROMO",
+        "type": "emi",
+        "title": "No Cost EMI: Upto ₹1,147.05 EMI interest savings on Amazon Pay ICICI Bank Credit Ca",
+        "description": "Upto ₹1,147.05 EMI interest savings on Amazon Pay ICICI Bank Credit Cards, Bajaj Finserv EMI cards",
+        "discountAmount": 1147,
+        "effectivePrice": 42852,
+        "stores": [
+          "Amazon India"
+        ],
+        "code": "INSTANT AUTO-APPLIED",
+        "validTill": "Active on Amazon India",
+        "cardTypes": [
+          "ICICI Bank"
+        ],
+        "storePathways": [
+          {
+            "store": "Amazon India",
+            "basePrice": 43999,
+            "discount": 1147,
+            "netPrice": 42852
+          }
+        ],
+        "bestStoreRoute": {
+          "store": "Amazon India",
+          "basePrice": 43999,
+          "discount": 1147,
+          "netPrice": 42852
+        }
+      },
+      {
+        "id": "live-amazon-3",
+        "bank": "ICICI Bank",
+        "bankCode": "icici",
+        "accentColor": "#CEFF00",
+        "badge": "LIVE AMAZON PROMO",
+        "type": "cashback",
+        "title": "Cashback: Upto ₹1,319.00 cashback as Amazon Pay Balance when you pay with Amazon",
+        "description": "Upto ₹1,319.00 cashback as Amazon Pay Balance when you pay with Amazon Pay ICICI Bank Credit Cards",
+        "discountAmount": 1319,
+        "effectivePrice": 42680,
+        "stores": [
+          "Amazon India"
+        ],
+        "code": "INSTANT AUTO-APPLIED",
+        "validTill": "Active on Amazon India",
+        "cardTypes": [
+          "ICICI Bank"
+        ],
+        "storePathways": [
+          {
+            "store": "Amazon India",
+            "basePrice": 43999,
+            "discount": 1319,
+            "netPrice": 42680
+          }
+        ],
+        "bestStoreRoute": {
+          "store": "Amazon India",
+          "basePrice": 43999,
+          "discount": 1319,
+          "netPrice": 42680
+        }
+      },
+      {
+        "id": "live-amazon-4",
+        "bank": "Amazon Partner Bank",
+        "bankCode": "amazon",
+        "accentColor": "#FF9900",
+        "badge": "LIVE AMAZON PROMO",
+        "type": "bank_discount",
+        "title": "Partner Offers: Get GST invoice and save up to 18% on business purchases. Sign up for ",
+        "description": "Get GST invoice and save up to 18% on business purchases. Sign up for free",
+        "discountAmount": 0,
+        "effectivePrice": 43999,
+        "stores": [
+          "Amazon India"
+        ],
+        "code": "INSTANT AUTO-APPLIED",
+        "validTill": "Active on Amazon India",
+        "cardTypes": [
+          "Amazon Partner Bank"
+        ],
+        "storePathways": [
+          {
+            "store": "Amazon India",
+            "basePrice": 43999,
+            "discount": 0,
+            "netPrice": 43999
+          }
+        ],
+        "bestStoreRoute": {
+          "store": "Amazon India",
+          "basePrice": 43999,
+          "discount": 0,
+          "netPrice": 43999
+        }
+      }
+    ],
+    "liveStorePrices": {
+      "Flipkart": 47999
+    },
+    "scannedAt": "2026-10-20T07:59:16.653Z",
+    "isCached": false,
+    "crossStoreOptimizer": {
+      "bestPathway": {
+        "store": "Amazon India",
+        "basePrice": 43999,
+        "offerId": "live-amazon-1",
+        "offerTitle": "Bank Offer: Upto ₹3,000.00 discount on SBI Credit Cards, SBI Debit Cards",
+        "bank": "SBI Card",
+        "discount": 3000,
+        "netPrice": 40999,
+        "code": "INSTANT AUTO-APPLIED",
+        "badge": "LIVE AMAZON PROMO"
+      },
+      "trackedPathway": {
+        "store": "Amazon India",
+        "basePrice": 43999,
+        "offerId": "live-amazon-1",
+        "offerTitle": "Bank Offer: Upto ₹3,000.00 discount on SBI Credit Cards, SBI Debit Cards",
+        "bank": "SBI Card",
+        "discount": 3000,
+        "netPrice": 40999,
+        "code": "INSTANT AUTO-APPLIED",
+        "badge": "LIVE AMAZON PROMO"
+      },
+      "extraSavingsVsTracked": 0,
+      "pathwayInsight": "Best checkout route across stores is on Amazon India with SBI Card at ₹40,999 net."
+    },
+    "cachedAt": "2026-10-20T07:59:16.655Z"
+  }
+}

@@ -7,8 +7,9 @@ async function fetchPrice(url, sourceType) {
     });
 
     const page = await browser.newPage();
+    await page.route(/\.(png|jpg|jpeg|webp|svg|gif|woff|woff2|ttf|css)($|\?)/, route => route.abort());
 
-    await page.goto(url, { waitUntil: "domcontentloaded" });
+    await page.goto(url, { waitUntil: "domcontentloaded", timeout: 20000 });
 
     let price;
 

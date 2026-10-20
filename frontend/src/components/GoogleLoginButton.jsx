@@ -1,6 +1,6 @@
 import { auth, provider } from "../firebase";
 import { signInWithPopup } from "firebase/auth";
-import axios from "axios";
+import API from "../services/api";
 
 export default function GoogleLoginButton() {
 
@@ -9,8 +9,8 @@ export default function GoogleLoginButton() {
     const result = await signInWithPopup(auth, provider);
     const user = result.user;
 
-    const response = await axios.post(
-      "http://localhost:5000/user/google-login",
+    const response = await API.post(
+      "/user/google-login",
       {
         googleId: user.uid,
         name: user.displayName,

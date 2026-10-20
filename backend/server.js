@@ -1,4 +1,9 @@
 require("dotenv").config();
+// Zemo Server - Email Surveillance Active
+// NOTE FOR PRODUCTION DEPLOYMENT:
+// The demo product (Samsung Galaxy Tab S10 FE, ID: 6ad71e366b2c6422ae682ab4) and its pre-generated
+// AI cache in /.zemo_cache must be deployed as-is so recruiters see instant, zero-delay Gemini intelligence
+// (Store Comparison, Reviews, Bank Offers, Short Title) without burning API tokens or scraping live.
 
 const express = require("express");
 const mongoose = require("mongoose");

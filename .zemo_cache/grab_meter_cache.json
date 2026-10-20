@@ -1,0 +1,42 @@
+{
+  "B0GR64G4H6_67990": {
+    "dealScore": 8.5,
+    "dealVerdict": "SWEET VALUE",
+    "dealAdvice": "Sitting at its sweetest price right now for the festival. If it's been on your wishlist, today is a lovely day to welcome it home.",
+    "urgencyText": "Festival Deal Live",
+    "dropProbability": 25,
+    "predictedSavings": 3000,
+    "bestWindowText": "Active Festival Sale",
+    "nextSaleEta": "Live: Great Indian Festival"
+  },
+  "B0F7XB9562_82990": {
+    "dealScore": 8.5,
+    "dealVerdict": "SWEET VALUE",
+    "dealAdvice": "Sitting at its sweetest price right now for the festival. If it's been on your wishlist, today is a lovely day to welcome it home.",
+    "urgencyText": "Festival Deal Live",
+    "dropProbability": 25,
+    "predictedSavings": 3000,
+    "bestWindowText": "Active Festival Sale",
+    "nextSaleEta": "Live: Great Indian Festival"
+  },
+  "B0B6CM781M_4999": {
+    "dealScore": 9.8,
+    "dealVerdict": "SWEET SPOT",
+    "dealAdvice": "Sitting at its all-time lowest price. Today is a lovely day to welcome it home.",
+    "urgencyText": "Record Low Today",
+    "dropProbability": 12,
+    "predictedSavings": 1250,
+    "bestWindowText": "Today (Lowest Ever)",
+    "nextSaleEta": "Live: Great Indian Festival"
+  },
+  "B0F29P9CKJ_43999": {
+    "dealScore": 9.5,
+    "dealVerdict": "UNBEATABLE DEAL",
+    "dealAdvice": "This lovely tablet is at its all-time lowest price during the Great Indian Festival. If you've been dreaming of bringing it home, now's a wonderful moment to make that happen.",
+    "urgencyText": "Festival Deal Live",
+    "dropProbability": 10,
+    "predictedSavings": 6000,
+    "bestWindowText": "Active Festival Sale",
+    "nextSaleEta": "Live: Great Indian Festival"
+  }
+}

@@ -15,14 +15,19 @@ async function fetchProductMetadata(url) {
 
     const page = await context.newPage();
 
+    // Block heavy media/font downloads to make page load 5x faster
+    await page.route(/\.(png|jpg|jpeg|webp|svg|gif|woff|woff2|ttf|css)($|\?)/, route => route.abort());
+
     console.log("Scraping product:", url);
 
     await page.goto(url, {
       waitUntil: "domcontentloaded",
-      timeout: 60000
+      timeout: 20000
     });
 
-    await page.waitForTimeout(2000); // allow dynamic content
+    try {
+      await page.waitForSelector("#productTitle, #title, h1", { timeout: 3000 });
+    } catch (_) {}
 
     let title = "Unknown Product";
     let image = "";
@@ -89,11 +94,234 @@ async function fetchProductMetadata(url) {
 
     }
 
-    console.log("SCRAPED RESULT:", { title, image });
+    /* CURRENT PRICE EXTRACTION */
+    let currentPrice = 0;
+    try {
+      const priceSelectors = [
+        "#corePriceDisplay_desktop_feature_div .a-price-whole",
+        "#corePriceDisplay_desktop_feature_div .a-offscreen",
+        "#corePrice_desktop .a-offscreen",
+        ".a-price .a-offscreen",
+        "#priceblock_ourprice",
+        "#priceblock_dealprice"
+      ];
+      for (const sel of priceSelectors) {
+        const el = await page.$(sel);
+        if (el) {
+          const raw = await el.innerText().catch(() => "");
+          // Handle decimals (e.g. "82,990.00" -> "82,990" before stripping non-digits)
+          const integerPart = raw.split(".")[0] || "";
+          const num = parseInt(integerPart.replace(/[^0-9]/g, ""), 10);
+          if (num > 0) {
+            currentPrice = num;
+            break;
+          }
+        }
+      }
+    } catch (err) {
+      console.log("Price scrape failed:", err.message);
+    }
+
+    /* MRP EXTRACTION */
+    let mrp = 0;
+    try {
+      const mrpSelectors = [
+        ".a-price[data-a-strike='true'] .a-offscreen",
+        "span.a-price.a-text-price span.a-offscreen",
+        "#listPrice",
+        "#corePriceDisplay_desktop_feature_div .a-text-price .a-offscreen"
+      ];
+      for (const sel of mrpSelectors) {
+        const el = await page.$(sel);
+        if (el) {
+          const raw = await el.innerText().catch(() => "");
+          const integerPart = raw.split(".")[0] || "";
+          const num = parseInt(integerPart.replace(/[^0-9]/g, ""), 10);
+          if (num > 0 && num >= currentPrice) {
+            mrp = num;
+            break;
+          }
+        }
+      }
+      if (!mrp && currentPrice > 0) {
+        mrp = Math.round(currentPrice * 1.18);
+      }
+    } catch (err) {
+      console.log("MRP scrape failed:", err.message);
+    }
+
+    /* RATINGS COUNT & RATING EXTRACTION */
+    let ratingsCount = "";
+    let rating = 0;
+    let ratingDistribution = {};
+    try {
+      const reviewText = await page.$eval(
+        "#acrCustomerReviewText, [data-hook='total-review-count'], #averageCustomerReviews #acrCustomerReviewText",
+        el => el.innerText.trim()
+      ).catch(() => "");
+
+      if (reviewText) {
+        const cleanCount = reviewText.replace(/[()]/g, "").trim();
+        ratingsCount = cleanCount.toLowerCase().includes("rating") || cleanCount.toLowerCase().includes("review")
+          ? cleanCount
+          : `${cleanCount} reviews`;
+      }
+
+      const ratingText = await page.$eval(
+        "#acrPopover, span[data-hook='rating-out-of-text'], #averageCustomerReviews .a-icon-alt",
+        el => el.innerText.trim()
+      ).catch(() => "");
+
+      if (ratingText) {
+        const match = ratingText.match(/([0-9.]+)/);
+        if (match && match[1]) {
+          rating = parseFloat(match[1]);
+        }
+      }
+
+      /* HISTOGRAM / STAR RATING BREAKDOWN EXTRACTION */
+      try {
+        const medley = await page.$("#reviewsMedley, #histogramTable, [data-hook='reviews-medley-footer'], #cm_cr_dp_d_rating_histogram, [data-hook='total-review-count']");
+        if (medley) {
+          await medley.scrollIntoViewIfNeeded().catch(() => {});
+          await page.waitForTimeout(1000);
+        }
+
+        ratingDistribution = await page.evaluate(() => {
+          const dist = {};
+          const elements = Array.from(document.querySelectorAll(
+            "#histogramTable tr, [data-hook='histogram-entry'], .a-histogram-row, [class*='histogram-row'], #cm_cr_dp_d_rating_histogram li, #reviewsMedley li, [data-hook='reviews-medley-footer'] li, tr[class*='histogram']"
+          ));
+
+          elements.forEach(el => {
+            const text = (el.innerText || "") + " " + (el.getAttribute("aria-label") || "") + " " + (el.title || "");
+            const starMatch = text.match(/([1-5])\s*(?:star|stars|★)/i);
+            const percentMatch = text.match(/(\d+)\s*%/);
+            if (starMatch && percentMatch) {
+              dist[parseInt(starMatch[1], 10)] = parseInt(percentMatch[1], 10);
+            }
+          });
+
+          if (Object.keys(dist).length === 0) {
+            const container = document.querySelector("#reviewsMedley, #cm_cr_dp_d_rating_histogram, #histogramTable");
+            if (container) {
+              const fullText = (container.innerText || "") + " " + (container.getAttribute("aria-label") || "");
+              const regex = /([1-5])\s*(?:star|stars|★)[\s\S]*?(\d+)\s*%/gi;
+              let match;
+              while ((match = regex.exec(fullText)) !== null) {
+                dist[parseInt(match[1], 10)] = parseInt(match[2], 10);
+              }
+            }
+          }
+
+          return dist;
+        });
+      } catch (_) {}
+
+    } catch (err) {
+      console.log("Ratings scrape warning:", err.message);
+    }
+
+    /* LIVE BANK OFFERS & COUPONS EXTRACTION */
+    let bankOffers = [];
+    let coupon = null;
+    try {
+      // 1. Coupon checkbox extraction
+      const couponElement = await page.$("#vpcButton, [id*='couponText'], .couponBadge, [data-csa-c-slot-id='coupon']");
+      if (couponElement) {
+        const cText = await couponElement.innerText().catch(() => "");
+        const cMatch = cText.match(/₹?\s*(\d[\d,]*)/);
+        if (cMatch) {
+          coupon = {
+            amount: parseInt(cMatch[1].replace(/,/g, ""), 10),
+            text: cText.trim()
+          };
+        }
+      }
+
+      // 2. Bank promotions accordion & carousel extraction
+      bankOffers = await page.evaluate(() => {
+        const found = [];
+        const seen = new Set();
+
+        // Target modern Amazon India .offers-items-title cards
+        document.querySelectorAll('.offers-items-title').forEach(titleEl => {
+          const type = titleEl.innerText.trim();
+          const parent = titleEl.parentElement;
+          const rawText = parent ? parent.innerText.replace(/\s+/g, ' ').trim() : '';
+          let cleanDesc = rawText.replace(type, '').replace(/\d+\s+offers?/gi, '').trim();
+          const half = Math.floor(cleanDesc.length / 2);
+          if (half > 15 && cleanDesc.slice(0, half).trim() === cleanDesc.slice(half).trim()) {
+            cleanDesc = cleanDesc.slice(0, half).trim();
+          }
+
+          const amountMatch = cleanDesc.match(/₹\s*([0-9,.]+)/);
+          const discountAmount = amountMatch ? Math.round(parseFloat(amountMatch[1].replace(/,/g, ''))) : 0;
+
+          let bank = "Amazon Partner Bank";
+          if (/icici/i.test(cleanDesc)) bank = "ICICI Bank";
+          else if (/sbi/i.test(cleanDesc)) bank = "SBI Card";
+          else if (/hdfc/i.test(cleanDesc)) bank = "HDFC Bank";
+          else if (/axis/i.test(cleanDesc)) bank = "Axis Bank";
+          else if (/amazon pay/i.test(cleanDesc)) bank = "Amazon Pay";
+
+          const key = type + cleanDesc.slice(0, 30);
+          if (!seen.has(key) && cleanDesc.length > 5) {
+            seen.add(key);
+            found.push({
+              title: `${type}: ${cleanDesc.slice(0, 70)}`,
+              description: cleanDesc,
+              type: type.toLowerCase().includes('cashback') ? 'cashback' : type.toLowerCase().includes('emi') ? 'emi' : 'bank_discount',
+              bank,
+              discountAmount
+            });
+          }
+        });
+
+        // Fallback for older Amazon or Flipkart layouts
+        if (found.length === 0) {
+          const rows = Array.from(document.querySelectorAll(
+            "#sopp-accordion .a-accordion-row, [data-feature-name='sopp'] .a-box, #item_details_sopp .a-section, #tier-1-offers .a-carousel-card, .vsx-offers-holder .a-carousel-card, [id*='bankOffer'], [id*='BankOffer'], #promotions_feature_div .a-section, #instantBankDiscount"
+          ));
+
+          rows.forEach(r => {
+            const txt = (r.innerText || "").trim();
+            if (txt && (txt.includes("Bank") || txt.includes("Discount") || txt.includes("Cashback") || txt.includes("EMI") || txt.includes("₹"))) {
+              const amountMatch = txt.match(/₹\s*(\d[\d,]*)/);
+              const discountAmount = amountMatch ? parseInt(amountMatch[1].replace(/,/g, ""), 10) : 0;
+              const firstLine = txt.split("\n")[0].trim();
+              if (firstLine.length > 5 && !seen.has(firstLine)) {
+                seen.add(firstLine);
+                found.push({
+                  title: firstLine,
+                  description: txt.slice(0, 180).replace(/\s+/g, " "),
+                  type: 'bank_discount',
+                  bank: 'Partner Bank',
+                  discountAmount
+                });
+              }
+            }
+          });
+        }
+
+        return found.slice(0, 8);
+      });
+    } catch (err) {
+      console.log("Bank offers scrape warning:", err.message);
+    }
+
+    console.log("SCRAPED RESULT:", { title, image, currentPrice, mrp, rating, ratingsCount, ratingDistribution, bankOffersCount: bankOffers.length, coupon });
 
     return {
       title,
-      image
+      image,
+      currentPrice,
+      mrp,
+      rating,
+      ratingsCount,
+      ratingDistribution,
+      bankOffers,
+      coupon
     };
 
   } catch (error) {

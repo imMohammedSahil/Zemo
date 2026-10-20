@@ -2,16 +2,362 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Remove number input arrows */
+*,
+*::before,
+*::after,
+.font-mono,
+.font-sans,
+body {
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+}
 
-/* Chrome, Edge, Safari */
+.font-cinzel {
+  font-family: 'Cinzel', Georgia, serif !important;
+}
+
+.font-cinzel-decorative {
+  font-family: 'Cinzel Decorative', 'Cinzel', Georgia, serif !important;
+}
+
+.font-prata {
+  font-family: 'Prata', Didot, 'Bodoni MT', Georgia, serif !important;
+}
+
+.font-rozha {
+  font-family: 'Rozha One', serif !important;
+}
+
+.font-medieval {
+  font-family: 'MedievalSharp', cursive, serif !important;
+}
+
+.font-caesar {
+  font-family: 'Caesar Dressing', cursive, serif !important;
+}
+
+.font-cormorant {
+  font-family: 'Cormorant Garamond', Georgia, serif !important;
+}
+
+@layer base {
+  body {
+    background-color: #060907;
+    color: #f4ffe0;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+}
+
+/* Lenis Ultra-Slow Cinematic Smooth Scroll Standards */
+html.lenis, html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-scrolling iframe {
+  pointer-events: none;
+}
+
+/* Custom Portal Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+/* Remove default focus border/outline on Recharts graph elements when clicked */
+.recharts-responsive-container,
+.recharts-wrapper,
+.recharts-surface,
+.recharts-wrapper:focus,
+.recharts-surface:focus,
+.recharts-responsive-container:focus,
+svg.recharts-surface:focus {
+  outline: none !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* Remove ugly browser click focus outlines globally on all buttons and clickable elements */
+*,
+*::before,
+*::after {
+  -webkit-tap-highlight-color: transparent !important;
+}
+
+button,
+button:focus,
+button:active,
+button:focus-visible,
+a,
+a:focus,
+a:active {
+  outline: none !important;
+  box-shadow: none !important;
+  -webkit-focus-ring-color: transparent !important;
+}
+::-webkit-scrollbar-track {
+  background: #060907;
+}
+::-webkit-scrollbar-thumb {
+  background: #163E22;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #CEFF00;
+}
+
+/* Custom isolated scrollbar for Notification Bar drawer */
+.custom-notification-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: #163E26 transparent;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+.custom-notification-scroll::-webkit-scrollbar {
+  width: 5px;
+}
+
+.custom-notification-scroll::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 9999px;
+  margin: 6px 0;
+}
+
+.custom-notification-scroll::-webkit-scrollbar-thumb {
+  background: #163E26;
+  border-radius: 9999px;
+  transition: background-color 0.2s ease;
+}
+
+.custom-notification-scroll::-webkit-scrollbar-thumb:hover {
+  background: #CEFF00;
+}
+
+/* Global Acid & Pine Text Selection Highlight */
+::selection {
+  background-color: #0E2A1B;
+  color: #CEFF00;
+}
+
+::-moz-selection {
+  background-color: #0E2A1B;
+  color: #CEFF00;
+}
+
+/* Invert selection when hovering over acid chartreuse containers so text remains 100% legible */
+.group\/bell:hover ::selection,
+.group\/price:hover ::selection,
+.hover\:bg-\[\#CEFF00\]:hover ::selection,
+button:hover ::selection {
+  background-color: #000000 !important;
+  color: #CEFF00 !important;
+}
+
+input::selection,
+textarea::selection {
+  background-color: #0E2A1B;
+  color: #CEFF00;
+}
+
+/* Remove number input arrows */
 input[type="number"]::-webkit-outer-spin-button,
 input[type="number"]::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
-
-/* Firefox */
 input[type="number"] {
   -moz-appearance: textfield;
 }
+
+/* Clean 2-Layer Tactile Push Button (Acid Cap + Solid Pine Base, Zero Glow) */
+.btn-3d-track {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.625rem;
+  cursor: pointer;
+  outline: none;
+  font-family: inherit;
+  font-size: 0.925rem;
+  font-weight: 900;
+  color: #000000;
+  background-color: #CEFF00;
+  border: 2px solid #184C2E;
+  border-radius: 0.875rem;
+  padding: 0.85rem 1.6rem;
+  white-space: nowrap;
+  box-shadow: -0.3rem 0.18rem 0 0 #184C2E, -0.3rem 0.3rem 0 0 #184C2E, 0 0.3rem 0 0 #184C2E;
+  transition: transform 120ms cubic-bezier(0, 0, 0.58, 1), box-shadow 120ms cubic-bezier(0, 0, 0.58, 1), background-color 120ms ease;
+  margin-left: 0.35rem;
+  margin-top: -0.25rem;
+  margin-bottom: 0;
+}
+
+.btn-3d-track:hover {
+  background-color: #D8FF33;
+  transform: translate(-0.15rem, 0.15rem);
+  box-shadow: -0.15rem 0.09rem 0 0 #184C2E, -0.15rem 0.15rem 0 0 #184C2E, 0 0.15rem 0 0 #184C2E;
+}
+
+.btn-3d-track:active {
+  background-color: #C4EA00;
+  transform: translate(-0.3rem, 0.3rem);
+  box-shadow: 0 0 0 0 #184C2E;
+}
+
+.btn-3d-track:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* Slow Cinematic Organic Fluid Circular Wave Fill from Bottom-Left */
+.card-cinematic-fill {
+  position: absolute;
+  width: 320%;
+  height: 320%;
+  left: -160%;
+  bottom: -160%;
+  background-color: #CEFF00;
+  border-radius: 50%;
+  transform: scale(0);
+  transform-origin: center center;
+  transition: transform 1300ms cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
+  z-index: 0;
+  will-change: transform;
+}
+
+.group:hover .card-cinematic-fill {
+  transform: scale(1);
+}
+
+.card-dual-border {
+  position: absolute;
+  inset: 0;
+  border-radius: 1rem;
+  border: 1px solid #1E5633;
+  pointer-events: none;
+  transition: opacity 1300ms cubic-bezier(0.16, 1, 0.3, 1);
+  opacity: 1;
+  z-index: 1;
+  will-change: opacity;
+}
+
+.group:hover .card-dual-border {
+  opacity: 0;
+}
+
+/* Custom Acid Price Slider - Clean contained thumb, zero border overflow */
+.slider-acid {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 6px;
+  background: #11281A;
+  border-radius: 9999px;
+  outline: none;
+  cursor: pointer;
+  border: none;
+  margin: 6px 0;
+}
+
+.slider-acid::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #CEFF00;
+  cursor: grab;
+  border: 2px solid #060907;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+  transition: background-color 0.15s ease;
+}
+
+.slider-acid::-webkit-slider-thumb:active {
+  cursor: grabbing;
+}
+
+.slider-acid::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #CEFF00;
+  cursor: grab;
+  border: 2px solid #060907;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+  transition: background-color 0.15s ease;
+}
+
+.slider-acid::-moz-range-thumb:active {
+  cursor: grabbing;
+}
+
+/* ========================================================= */
+/* Linear / Fintech Horizontal Sweep (Smooth & Clean)        */
+/* ========================================================= */
+@keyframes linearHorizontalSweep {
+  0% {
+    opacity: 0;
+    transform: translateX(16px);
+  }
+  40% {
+    opacity: 0.9;
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.page-cinematic-enter,
+.animate-fadeIn {
+  animation: linearHorizontalSweep 550ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  will-change: opacity, transform;
+}
+
+/* Sound Wave Equalizer */
+@keyframes soundWaveBar {
+  0%, 100% {
+    height: 3px;
+  }
+  50% {
+    height: 14px;
+  }
+}
+
+.animate-sound-wave-1 {
+  animation: soundWaveBar 0.85s ease-in-out -0.2s infinite;
+}
+.animate-sound-wave-2 {
+  animation: soundWaveBar 0.65s ease-in-out -0.45s infinite;
+}
+.animate-sound-wave-3 {
+  animation: soundWaveBar 1.05s ease-in-out -0.3s infinite;
+}
+.animate-sound-wave-4 {
+  animation: soundWaveBar 0.75s ease-in-out -0.6s infinite;
+}
+
+.wave-paused {
+  animation-play-state: paused !important;
+}
+
+.wave-running {
+  animation-play-state: running !important;
+}
+
+

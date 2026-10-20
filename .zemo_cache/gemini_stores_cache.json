@@ -1,0 +1,173 @@
+{
+  "B0F29P9CKJ": {
+    "productId": "6ad71e366b2c6422ae682ab4",
+    "productTitle": "Samsung Galaxy Tab S10 FE [Smartchoice], S Pen in-Box, 27.7 cm (10.9 inch) Display, AI Writing, Desktop Mode, Pre Loaded Pro Apps, 8 GB RAM, 128 GB Storage, Wi-Fi Tablet, Gray",
+    "currentTrackedPrice": 43999,
+    "mrp": 49999,
+    "stores": [
+      {
+        "id": "amazon",
+        "name": "Amazon India",
+        "tagline": "Prime Fast Delivery",
+        "accentColor": "#FF9900",
+        "price": 43999,
+        "mrp": 49999,
+        "discountPercent": 12,
+        "difference": 0,
+        "isLowestPrice": true,
+        "inStock": true,
+        "stockStatus": "In Stock",
+        "deliveryEstimate": "Tomorrow by 2 PM",
+        "deliveryFee": 0,
+        "storeRating": 4.8,
+        "ratingCount": "82K ratings",
+        "sellerName": "Appario Retail",
+        "returnWindow": "7 Days Replacement",
+        "warranty": "1 Year Manufacturer Warranty",
+        "offers": [
+          {
+            "badge": "BANK OFFER",
+            "text": "Flat ₹1,750 Instant Discount on ICICI Bank Cards"
+          }
+        ],
+        "effectivePriceWithOffer": 42249,
+        "badge": "FASTEST SHIPPING",
+        "hasCardOffer": true
+      },
+      {
+        "id": "reliancedigital",
+        "name": "Reliance Digital",
+        "tagline": "Great Deals on Electronics",
+        "accentColor": "#002060",
+        "price": 49999,
+        "mrp": 75999,
+        "discountPercent": 34,
+        "difference": 6000,
+        "isLowestPrice": false,
+        "inStock": true,
+        "stockStatus": "In Stock",
+        "deliveryEstimate": "Typically 2-4 days",
+        "deliveryFee": 0,
+        "storeRating": 3,
+        "ratingCount": "2 Ratings",
+        "sellerName": "Reliance Retail Ltd.",
+        "returnWindow": "7 Days Replacement Policy",
+        "warranty": "1 Year Manufacturer Warranty",
+        "offers": [
+          {
+            "badge": "BANK OFFER",
+            "text": "₹3,000 Instant Discount with applicable bank offers"
+          }
+        ],
+        "effectivePriceWithOffer": 46999,
+        "badge": null,
+        "hasCardOffer": true
+      },
+      {
+        "id": "croma",
+        "name": "Croma",
+        "tagline": "Shop with Confidence",
+        "accentColor": "#323232",
+        "price": 52999,
+        "mrp": 75999,
+        "discountPercent": 30,
+        "difference": 9000,
+        "isLowestPrice": false,
+        "inStock": true,
+        "stockStatus": "In Stock",
+        "deliveryEstimate": "Check pincode for delivery",
+        "deliveryFee": 0,
+        "storeRating": null,
+        "ratingCount": "Be the First One to Review",
+        "sellerName": null,
+        "returnWindow": "7 Days Easy Returns",
+        "warranty": "1 Year Manufacturer Warranty",
+        "offers": [
+          {
+            "badge": "BANK OFFER",
+            "text": "Instant discount of Rs.8000 on HDFC Bank Credit Card"
+          }
+        ],
+        "effectivePriceWithOffer": 44999,
+        "badge": null,
+        "hasCardOffer": true
+      },
+      {
+        "id": "flipkart",
+        "name": "Flipkart",
+        "tagline": "India's homegrown e-commerce",
+        "accentColor": "#2874F0",
+        "price": 47999,
+        "mrp": 49999,
+        "discountPercent": 0,
+        "difference": 6000,
+        "isLowestPrice": false,
+        "inStock": true,
+        "stockStatus": "In Stock",
+        "deliveryEstimate": "Check pincode for delivery",
+        "deliveryFee": 0,
+        "storeRating": 4.6,
+        "ratingCount": "Based on 3.2K ratings",
+        "sellerName": "RetailNet",
+        "returnWindow": "7 Days Replacement Policy",
+        "warranty": "1 Year Manufacturer Warranty",
+        "offers": [
+          {
+            "badge": "LIVE PROMO",
+            "text": "Bank Offer"
+          },
+          {
+            "badge": "BANK OFFER",
+            "text": "Check for available bank offers"
+          }
+        ],
+        "effectivePriceWithOffer": null,
+        "badge": null,
+        "hasCardOffer": false,
+        "cardOfferNote": "Check for available bank offers",
+        "url": "https://www.flipkart.com/samsung-galaxy-tab-s10-fe-s-pen-8-gb-ram-128-rom-13-1-inch-wi-fi-only-gaming-exynos-1580-tablet-gray/p/itm376fd07ae989d?pid=TABHANSG4HMAEF6S&lid=LSTTABHANSG4HMAEF6SIYQVAN&marketplace=FLIPKART&q=Samsung+Galaxy+Tab+S10+FE+128+GB&store=tyy%2Fhry&srno=s_1_1&otracker=search&fm=organic&iid=15136e73-4c94-4b81-b33f-0fdeeb9eb0e9.TABHANSG4HMAEF6S.SEARCH&ppt=None&ppn=None&ssid=72nwj4ne7k0000001792494897416&qH=60ad15383a2b913f&ov_redirect=true"
+      },
+      {
+        "id": "samsung",
+        "name": "Samsung India",
+        "tagline": "Official Brand Store",
+        "accentColor": "#1428A0",
+        "price": 58999,
+        "mrp": 75999,
+        "discountPercent": 22,
+        "difference": 15000,
+        "isLowestPrice": false,
+        "inStock": true,
+        "stockStatus": "In Stock",
+        "deliveryEstimate": "Typically 3-5 days",
+        "deliveryFee": 0,
+        "storeRating": null,
+        "ratingCount": null,
+        "sellerName": "Samsung India Electronics Pvt. Ltd.",
+        "returnWindow": "15 Days Easy Returns",
+        "warranty": "1 Year Manufacturer Warranty",
+        "offers": [],
+        "effectivePriceWithOffer": null,
+        "badge": null,
+        "hasCardOffer": false,
+        "cardOfferNote": "No Instant Card Discount (Regular Price)"
+      }
+    ],
+    "summary": {
+      "cheapestStore": "Amazon India",
+      "cheapestStoreId": "amazon",
+      "lowestPrice": 43999,
+      "highestPrice": 58999,
+      "averagePrice": 50799,
+      "maxSavingsVsCurrent": 0,
+      "effectiveLowestWithOffers": 42249,
+      "totalStoresCompared": 5,
+      "aiRecommendation": "I verified live listings across 5 stores. Amazon India offers the best price at ₹43,999!",
+      "savingsTip": "Grab it with the bank card discount for maximum smiles!",
+      "bestValuePick": "Amazon India"
+    },
+    "scannedAt": "2026-10-20T11:15:42.624Z",
+    "isCached": false,
+    "cachedAt": "2026-10-20T11:15:42.628Z"
+  }
+}

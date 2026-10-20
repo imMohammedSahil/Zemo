@@ -41,6 +41,11 @@ browser-data/
 .agents/
 .replit
 
+# Production Demo Cache: Keep .zemo_cache committed so demo products (e.g. Samsung Galaxy Tab S10 FE)
+# serve instant Gemini comparisons, reviews, bank offers, and short names to recruiters without hitting API quotas.
+!.zemo_cache/
+!.zemo_cache/*
+
 # OS files
 Thumbs.db
 ehthumbs.db

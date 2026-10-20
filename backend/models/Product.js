@@ -13,6 +13,16 @@ const ProductSchema = new mongoose.Schema({
     required: true
   },
 
+  shortTitle: {
+    type: String,
+    default: ""
+  },
+
+  warmPhrase: {
+    type: String,
+    default: ""
+  },
+
   image: {
     type: String
   },
@@ -36,6 +46,51 @@ const ProductSchema = new mongoose.Schema({
   historicLow: {
     type: Number,
     default: 0
+  },
+
+  mrp: {
+    type: Number,
+    default: 0
+  },
+
+  rating: {
+    type: Number,
+    default: 0
+  },
+
+  ratingsCount: {
+    type: String,
+    default: ""
+  },
+
+  ratingDistribution: {
+    type: Object,
+    default: {}
+  },
+
+  bankOffers: {
+    type: Array,
+    default: []
+  },
+
+  coupon: {
+    type: Object,
+    default: null
+  },
+
+  inStock: {
+    type: Boolean,
+    default: true
+  },
+
+  stockStatus: {
+    type: String,
+    default: "In Stock"
+  },
+
+  lastCheckedAt: {
+    type: Date,
+    default: Date.now
   },
 
   createdAt: {

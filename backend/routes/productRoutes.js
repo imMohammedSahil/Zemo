@@ -6,7 +6,6 @@ const PriceHistory = require("../models/PriceHistory");
 const Review = require("../models/reviewModel");
 
 const fetchProductMetadata = require("../automation/productMetadata");
-const importHistoricPrices = require("../services/importPriceHistory");
 
 const scrapeReviews = require("../automation/reviewScraper");
 const { analyzeReviews } = require("../services/aiAnalyzer");
@@ -68,8 +67,10 @@ router.post("/add", async (req, res) => {
 
     const source = detectSource(productUrl);
 
-    if (!source) {
-      return res.status(400).json({ message: "Unsupported website" });
+    if (!source || source !== "amazon") {
+      return res.status(400).json({
+        message: "Drop an Amazon link here — I'll compare the other stores for you"
+      });
     }
 
     let asin = null;
@@ -94,24 +95,38 @@ router.post("/add", async (req, res) => {
       : null;
 
     if (existingProduct) {
-      return res.json(existingProduct);
+      return res.json({ ...existingProduct.toObject(), alreadyTracked: true });
     }
 
     const metadata = await fetchProductMetadata(cleanUrl);
 
     console.log("Scraped metadata:", metadata);
 
+    if (!metadata || metadata.title === "Unknown Product") {
+      return res.status(422).json({ message: "Unable to resolve product details from listing. Please verify the link." });
+    }
+
+    const currentPrice = Number(metadata.currentPrice) || 0;
+    const mrp = Number(metadata.mrp) || (currentPrice > 0 ? Math.round(currentPrice * 1.18) : 0);
+
     const newProduct = await Product.create({
       asin,
       title: metadata.title || "Unknown Product",
       image: metadata.image || "",
       productUrl,
-      source
+      source,
+      currentPrice,
+      mrp,
+      rating: Number(metadata.rating) || 0,
+      ratingsCount: metadata.ratingsCount || "",
+      ratingDistribution: metadata.ratingDistribution || {},
+      bankOffers: metadata.bankOffers || [],
+      coupon: metadata.coupon || null,
+      historicLow: currentPrice
     });
 
-    await importHistoricPrices(newProduct._id, asin);
-
-    res.json(newProduct);
+    const freshProduct = await Product.findById(newProduct._id);
+    res.json(freshProduct || newProduct);
 
   } catch (error) {
 
@@ -254,69 +269,228 @@ router.post("/metadata", async (req, res) => {
 });
 
 const Alert = require("../models/Alert");
+const { analyzeDealWithGemini } = require("../services/dealMeterAI");
+const { compareStoresWithGemini, clearStoresCache } = require("../services/compareStoresAI");
+const { getReviewIntelligenceWithGemini, clearReviewsCache } = require("../services/reviewIntelligenceAI");
+
+router.get("/grab-meter/:id", async (req, res) => {
+  try {
+    const product = await Product.findById(req.params.id);
+    if (!product) return res.status(404).json({ message: "Product not found" });
+    const meter = await analyzeDealWithGemini(product);
+    res.json(meter);
+  } catch (err) {
+    res.status(500).json({ message: "Error calculating deal meter" });
+  }
+});
+
+router.get("/compare-stores/:id", async (req, res) => {
+  try {
+    const product = await Product.findById(req.params.id);
+    if (!product) return res.status(404).json({ message: "Product not found" });
+    const forceRefresh = req.query.refresh === "true";
+    const comparison = await compareStoresWithGemini(product, forceRefresh);
+    res.json(comparison);
+  } catch (err) {
+    console.error("[compare-stores error]:", err);
+    res.status(500).json({ message: "Failed to compare stores" });
+  }
+});
+
+router.post("/compare-stores/:id/clear-cache", async (req, res) => {
+  try {
+    const product = await Product.findById(req.params.id);
+    const key = product ? String(product.asin || product._id) : String(req.params.id);
+    clearStoresCache(key);
+    res.json({ success: true, message: "Store comparison cache cleared successfully" });
+  } catch (err) {
+    res.status(500).json({ message: "Failed to clear cache" });
+  }
+});
+
+router.get("/reviews/:id", async (req, res) => {
+  try {
+    const product = await Product.findById(req.params.id);
+    if (!product) return res.status(404).json({ message: "Product not found" });
+    const forceRefresh = req.query.refresh === "true";
+    const reviews = await getReviewIntelligenceWithGemini(product, forceRefresh);
+    res.json(reviews);
+  } catch (err) {
+    console.error("[reviews error]:", err);
+    res.status(500).json({ message: "Failed to load review intelligence" });
+  }
+});
+
+router.get("/insights/:id", async (req, res) => {
+  try {
+    const product = await Product.findById(req.params.id);
+    if (!product) return res.status(404).json({ message: "Product not found" });
+    const forceRefresh = req.query.refresh === "true";
+    const reviews = await getReviewIntelligenceWithGemini(product, forceRefresh);
+    res.json(reviews);
+  } catch (err) {
+    console.error("[insights error]:", err);
+    res.status(500).json({ message: "Failed to load review insights" });
+  }
+});
+
+router.post("/reviews/:id/clear-cache", async (req, res) => {
+  try {
+    const product = await Product.findById(req.params.id);
+    const key = product ? String(product.asin || product._id) : String(req.params.id);
+    clearReviewsCache(key);
+    res.json({ success: true, message: "Review cache cleared successfully" });
+  } catch (err) {
+    res.status(500).json({ message: "Failed to clear review cache" });
+  }
+});
+
+const { getBankOffersWithGemini, clearOffersCache } = require("../services/bankOffersAI");
+
+router.get("/offers/:id", async (req, res) => {
+  try {
+    const product = await Product.findById(req.params.id);
+    if (!product) return res.status(404).json({ message: "Product not found" });
+    const forceRefresh = req.query.refresh === "true";
+    const offers = await getBankOffersWithGemini(product, forceRefresh);
+    res.json(offers);
+  } catch (err) {
+    console.error("[bank offers error]:", err);
+    res.status(500).json({ message: "Failed to load bank offers" });
+  }
+});
+
+router.post("/offers/:id/clear-cache", async (req, res) => {
+  try {
+    const product = await Product.findById(req.params.id);
+    const key = product ? String(product.asin || product._id) : String(req.params.id);
+    clearOffersCache(key);
+    res.json({ success: true, message: "Bank offers cache cleared successfully" });
+  } catch (err) {
+    res.status(500).json({ message: "Failed to clear offers cache" });
+  }
+});
 
 router.get("/", async (req, res) => {
-
   try {
-
     const products = await Product.find();
-
     const result = [];
 
     for (const product of products) {
-
       const alert = await Alert
-  .findOne({
-    productId: product._id,
-    triggered: false
-  })
-  .sort({ createdAt: -1 });   // get newest alert
-      
-    
-console.log(
-  "DEBUG ALERT SENT TO FRONTEND:",
-  alert?.targetPrice,
-  alert?.tolerance
-);  
+        .findOne({
+          productId: product._id,
+          triggered: false
+        })
+        .sort({ createdAt: -1 });
+
+      let grabMeter = null;
+      try {
+        grabMeter = await analyzeDealWithGemini(product);
+      } catch (e) {
+        // graceful fallback handled inside service
+      }
+
       result.push({
         ...product.toObject(),
-        activeAlert: alert || null
+        activeAlert: alert || null,
+        grabMeter: grabMeter || null
       });
-
     }
 
     res.json(result);
-
   } catch (error) {
-
     console.error(error);
     res.status(500).json({ message: "Failed to load products" });
-
   }
-
 });
 
 router.delete("/remove/:id", async (req, res) => {
-
   try {
-
     const productId = req.params.id;
+    const product = await Product.findById(productId);
+    const keysToPurge = [productId, product?.asin].filter(Boolean);
 
     await Product.deleteOne({ _id: productId });
 
+    // Clean up disk caches for this product
+    const fs = require("fs");
+    const path = require("path");
+    const cacheDir = path.join(__dirname, "../../.zemo_cache");
+    const cacheFiles = [
+      "gemini_stores_cache.json",
+      "gemini_offers_cache.json",
+      "gemini_reviews_cache.json",
+      "grab_meter_cache.json"
+    ];
+
+    cacheFiles.forEach(file => {
+      const fullPath = path.join(cacheDir, file);
+      if (fs.existsSync(fullPath)) {
+        try {
+          const data = JSON.parse(fs.readFileSync(fullPath, "utf-8") || "{}");
+          keysToPurge.forEach(k => delete data[k]);
+          fs.writeFileSync(fullPath, JSON.stringify(data, null, 2), "utf-8");
+        } catch (_) {}
+      }
+    });
+
     res.json({ message: "Product removed successfully" });
-
   } catch (error) {
-
     console.error(error);
-
     res.status(500).json({ message: "Failed to remove product" });
-
   }
-
 });
 
+/* ON-DEMAND REALTIME PRICE SYNC */
+const fetchPrice = require("../automation/priceFetcher");
 
+router.post("/sync/:id", async (req, res) => {
+  try {
+    const product = await Product.findById(req.params.id);
+    if (!product) {
+      return res.status(404).json({ message: "Product not found" });
+    }
 
+    const rawPrice = await fetchPrice(product.productUrl, product.source);
+    const cleaned = rawPrice ? String(rawPrice).replace(/[^0-9.]/g, "") : null;
+    const price = Number(cleaned);
+
+    if (price && price > 0) {
+      await PriceHistory.create({
+        productId: product._id,
+        price: price,
+        source: product.source,
+        recordedAt: new Date()
+      });
+
+      let historicLow = product.historicLow;
+      if (!historicLow || price < historicLow) {
+        historicLow = price;
+      }
+
+      product.currentPrice = price;
+      product.historicLow = historicLow;
+      await product.save();
+
+      return res.json({
+        success: true,
+        currentPrice: price,
+        historicLow: historicLow,
+        message: "Price synced successfully"
+      });
+    }
+
+    return res.json({
+      success: true,
+      currentPrice: product.currentPrice,
+      historicLow: product.historicLow,
+      message: "Scraper confirmed active price"
+    });
+  } catch (error) {
+    console.error("Manual sync error:", error);
+    res.status(500).json({ message: "Failed to sync price on-demand" });
+  }
+});
 
 module.exports = router;

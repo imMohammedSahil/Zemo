@@ -35,9 +35,20 @@ async function checkAlerts(product, currentPrice) {
                 await Notification.create({
                     userId: alert.userId,
                     productId: product._id,
-                    message: message,
+                    title: "Price Drop Alert",
+                    message: `${product.title.slice(0, 50)} dropped to ₹${currentPrice.toLocaleString()}`,
                     sentAt: new Date()
                 });
+
+                // Dispatch price drop email
+                const { sendPriceDropEmail } = require("../services/emailService");
+                sendPriceDropEmail({
+                    to: null,
+                    productTitle: product.title,
+                    newPrice: currentPrice,
+                    targetPrice: alert.targetPrice,
+                    productUrl: product.productUrl
+                }).catch(err => console.warn("[Scheduler] Drop email warning:", err.message));
 
             }
 
@@ -137,6 +148,17 @@ function startScheduler() {
 
     cron.schedule("*/15 * * * *", () => {
         runPriceCheck();
+    });
+
+    /* Refresh Grab-o-Meter deals every night at 12:00 AM */
+    cron.schedule("0 0 * * *", () => {
+        console.log("[Scheduler] 12:00 AM Midnight: Purging Grab-o-Meter cache for new day...");
+        try {
+            const { clearMeterCache } = require("../services/dealMeterAI");
+            clearMeterCache();
+        } catch (e) {
+            console.error("[Scheduler] Grab-o-Meter purge error:", e.message);
+        }
     });
 
 }

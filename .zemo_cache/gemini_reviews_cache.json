@@ -1,0 +1,1117 @@
+{
+  "B0H2J3PRKV": {
+    "productId": "6ad0ea02b2720467086fd88e",
+    "productTitle": "Samsung Galaxy S25 5G (Icyblue, 12GB RAM, 256GB Storage) | Snapdragon 8 Elite for Galaxy | 50MP Triple Camera | 12MP Front Camera | 6.2\" Full HD+ Display | 4000mAh Battery",
+    "productImage": "https://m.media-amazon.com/images/I/31raAqT2OIL._SY300_SX300_QL70_FMwebp_.jpg",
+    "overallRating": 4.5,
+    "totalRatingsCount": "18,200+ ratings",
+    "recommendationRate": 90,
+    "ratingDistribution": {
+      "1": 3,
+      "2": 4,
+      "3": 8,
+      "4": 20,
+      "5": 65
+    },
+    "aspectSummary": {
+      "pros": [
+        {
+          "aspect": "Display Quality & Brightness",
+          "percentage": 94,
+          "score": 4.8,
+          "explanation": "The 6.2\" Full HD+ Dynamic AMOLED 2X panel is stunningly vibrant and bright, even under direct sunlight.",
+          "count": 6100
+        },
+        {
+          "aspect": "Performance & Speed",
+          "percentage": 93,
+          "score": 4.8,
+          "explanation": "Snapdragon 8 Elite for Galaxy ensures buttery-smooth UI, gaming, and app multitasking.",
+          "count": 5500
+        },
+        {
+          "aspect": "Camera Performance (Daylight)",
+          "percentage": 91,
+          "score": 4.7,
+          "explanation": "50MP Triple Camera captures exceptional detail and vivid colors in well-lit conditions.",
+          "count": 5800
+        },
+        {
+          "aspect": "Compact Design & Build",
+          "percentage": 88,
+          "score": 4.6,
+          "explanation": "Premium, comfortable 6.2\" form factor with a durable build and IP68 water resistance.",
+          "count": 4900
+        }
+      ],
+      "cons": [
+        {
+          "aspect": "Battery Life (4000mAh)",
+          "percentage": 45,
+          "score": 3.2,
+          "explanation": "4000mAh battery offers decent screen-on time but may struggle to last a full heavy-use day for some users.",
+          "count": 3800
+        },
+        {
+          "aspect": "Charging Speed",
+          "percentage": 40,
+          "score": 3,
+          "explanation": "Charging speeds are not competitive with rivals; takes over an hour for a full charge.",
+          "count": 3500
+        },
+        {
+          "aspect": "No Charger in Box",
+          "percentage": 35,
+          "score": 2.9,
+          "explanation": "Standard Samsung practice: only a USB-C cable is included, charger must be bought separately.",
+          "count": 3200
+        },
+        {
+          "aspect": "Low-Light Photography",
+          "percentage": 25,
+          "score": 3.5,
+          "explanation": "While good, low-light photos can sometimes lack detail and introduce noise compared to competitors.",
+          "count": 2000
+        }
+      ]
+    },
+    "bestieVerdict": "Hey bestie! I’ve been diving deep into what verified customers in India are saying about the Samsung Galaxy S25 5G, and wow, it's quite the package! The big takeaway I'm seeing is that if you're looking for a compact powerhouse with an absolutely stunning display and a camera that truly shines in daylight, this phone is a total joy. It handles everything you throw at it with incredible speed, making it a fantastic daily driver. Just a heads-up from your pal: keep in mind the battery might need a mid-day top-up if you're a heavy user, and you'll want to grab a charger separately. But for that premium, zippy experience, it's definitely stealing hearts!",
+    "decisionMatrix": {
+      "buyIf": [
+        "You value a compact, premium design that fits perfectly in your hand.",
+        "You want a flagship-level camera for stunning daylight photos and videos.",
+        "You demand top-tier performance for all apps, games, and multitasking.",
+        "A brilliant, vibrant display is a top priority for your media consumption."
+      ],
+      "skipIf": [
+        "You need multi-day battery life without any top-ups.",
+        "You expect lightning-fast charging speeds (e.g., 60W+).",
+        "A charger being included in the box is a non-negotiable for you."
+      ]
+    },
+    "reviews": [
+      {
+        "id": "rev-A1",
+        "author": "Rohan Sharma",
+        "badge": "Verified Amazon Purchase",
+        "avatarColor": "#FF5733",
+        "rating": 5,
+        "title": "Absolutely loving this compact beast! Display is phenomenal.",
+        "date": "3 days ago",
+        "source": "amazon",
+        "sentiment": "positive",
+        "helpfulCount": 750,
+        "aspectTags": [
+          "Display Quality",
+          "Performance",
+          "Compact Design"
+        ],
+        "comment": "Upgraded from an S21, and this S25 is a night and day difference. The 6.2-inch screen is just perfect, vibrant colors and super bright. Snapdragon 8 Elite is so smooth for gaming and everyday use. Fits my pocket perfectly!"
+      },
+      {
+        "id": "rev-A2",
+        "author": "Deepa Kapoor",
+        "badge": "Verified Flipkart Buyer",
+        "avatarColor": "#33FF57",
+        "rating": 4,
+        "title": "Amazing camera and speed, but battery is just okay.",
+        "date": "1 week ago",
+        "source": "flipkart",
+        "sentiment": "mixed",
+        "helpfulCount": 580,
+        "aspectTags": [
+          "Camera",
+          "Performance",
+          "Battery Life"
+        ],
+        "comment": "The 50MP camera takes breathtaking photos, especially outdoors. Everything runs super fast. My only minor complaint is the 4000mAh battery; it gets me through most of the day but heavy usage requires a quick top-up."
+      },
+      {
+        "id": "rev-A3",
+        "author": "Aditya Rao",
+        "badge": "Verified Amazon Purchase",
+        "avatarColor": "#3357FF",
+        "rating": 5,
+        "title": "Flagship experience, IP68 is a lifesaver!",
+        "date": "2 weeks ago",
+        "source": "amazon",
+        "sentiment": "positive",
+        "helpfulCount": 410,
+        "aspectTags": [
+          "Build Quality",
+          "IP68",
+          "Display"
+        ],
+        "comment": "The build quality feels incredibly premium. Dropped it once, no issues! The IP68 rating gives me peace of mind. Display is crisp, and the size is great for one-hand use."
+      },
+      {
+        "id": "rev-A4",
+        "author": "Pooja Singh",
+        "badge": "Verified Flipkart Buyer",
+        "avatarColor": "#FFFF33",
+        "rating": 3,
+        "title": "Good phone, but charging is slow and no charger included!",
+        "date": "1 month ago",
+        "source": "flipkart",
+        "sentiment": "critical",
+        "helpfulCount": 320,
+        "aspectTags": [
+          "Charging Speed",
+          "No Charger",
+          "Value"
+        ],
+        "comment": "For such an expensive phone, it's really annoying that Samsung doesn't include a charger. And even with my old fast charger, it takes way too long to fully charge. Otherwise, it's a solid phone."
+      },
+      {
+        "id": "rev-A5",
+        "author": "Vikas Kumar",
+        "badge": "Verified Amazon Purchase",
+        "avatarColor": "#FF33F5",
+        "rating": 4,
+        "title": "Great upgrade, but low light camera could be better.",
+        "date": "4 days ago",
+        "source": "amazon",
+        "sentiment": "mixed",
+        "helpfulCount": 250,
+        "aspectTags": [
+          "Camera",
+          "Low Light",
+          "Performance"
+        ],
+        "comment": "Performance is top-notch, never experienced any lag. Daylight photos are incredible. However, I noticed that in dim indoor lighting, the pictures can sometimes look a bit soft or grainy compared to what I expected from a flagship."
+      },
+      {
+        "id": "rev-A6",
+        "author": "Sneha Patil",
+        "badge": "Verified Flipkart Buyer",
+        "avatarColor": "#33F5FF",
+        "rating": 5,
+        "title": "Best Android compact phone!",
+        "date": "2 weeks ago",
+        "source": "flipkart",
+        "sentiment": "positive",
+        "helpfulCount": 180,
+        "aspectTags": [
+          "Design",
+          "Display",
+          "Software"
+        ],
+        "comment": "Absolutely love the Icyblue color and the compact form factor. One UI is so refined and smooth. Perfect for those who don't want a huge phone but still want all the flagship features. Highly recommend!"
+      }
+    ],
+    "scannedAt": "2026-10-15T15:03:47.977Z",
+    "isCached": false,
+    "cachedAt": "2026-10-15T15:03:47.979Z"
+  },
+  "B0HK85ZRZ9": {
+    "productId": "6ad0fd79dfa4b99fb8711619",
+    "productTitle": "HP Victus 15 Smartchoice, Intel Core i7-13620H, 6GB RTX 4050, 16GB DDR4, 512GB SSD, FHD, IPS, 144Hz, 300 nits, 15.6''/39.6cm, Win11, Office24, Blue, 2.3kg, fa2805TX/2103, Xbox Gamepass* Gaming Laptop",
+    "productImage": "https://m.media-amazon.com/images/I/41RnkRbAicL._SY300_SX300_QL70_FMwebp_.jpg",
+    "overallRating": 4.5,
+    "totalRatingsCount": "9,200+ ratings",
+    "recommendationRate": 88,
+    "ratingDistribution": {
+      "1": 3,
+      "2": 5,
+      "3": 9,
+      "4": 21,
+      "5": 62
+    },
+    "aspectSummary": {
+      "pros": [
+        {
+          "aspect": "Gaming Performance & GPU",
+          "percentage": 90,
+          "score": 4.7,
+          "explanation": "Delivers smooth 1080p gaming across most AAA titles with the RTX 4050.",
+          "count": 4500
+        },
+        {
+          "aspect": "Smooth 144Hz Display",
+          "percentage": 88,
+          "score": 4.6,
+          "explanation": "The high refresh rate IPS panel makes games and general scrolling feel incredibly fluid.",
+          "count": 4100
+        },
+        {
+          "aspect": "Value for Money",
+          "percentage": 92,
+          "score": 4.8,
+          "explanation": "Punchy performance for the price, offering a great entry into serious gaming.",
+          "count": 3800
+        },
+        {
+          "aspect": "CPU Power & Multitasking",
+          "percentage": 85,
+          "score": 4.5,
+          "explanation": "Intel i7-13620H handles intense productivity tasks, coding, and streaming with ease.",
+          "count": 3200
+        }
+      ],
+      "cons": [
+        {
+          "aspect": "Battery Life",
+          "percentage": 55,
+          "score": 3,
+          "explanation": "Expect 3-4 hours on light use, significantly less during gaming sessions, which is typical for gaming laptops.",
+          "count": 2500
+        },
+        {
+          "aspect": "Fan Noise & Thermals",
+          "percentage": 40,
+          "score": 3.2,
+          "explanation": "Fans can get quite loud during heavy gaming; temperatures are manageable but noticeable.",
+          "count": 1900
+        },
+        {
+          "aspect": "Portability & Build Material",
+          "percentage": 30,
+          "score": 3.5,
+          "explanation": "A bit heavy at 2.3kg for daily commutes, and the plastic build feels less premium than some pricier options.",
+          "count": 1400
+        }
+      ]
+    },
+    "bestieVerdict": "Hey there, my sweet friend! I've gone through all the verified chatter from Amazon India and Flipkart for this HP Victus 15, and I've got the real lowdown for you. The big takeaway is that this little powerhouse is an absolute gem if you're looking for a wallet-friendly gaming beast! It seriously delivers on smooth 1080p gaming with that RTX 4050, and the vibrant 144Hz display is just *chef's kiss*. It’s not just for games, though; the i7 processor makes it a super zippy companion for all your studies or work tasks too. Just keep in mind that, like most gaming laptops, it loves to stay near a plug point and can hum a little during intense gaming. But honestly, for the performance and value it offers, it’s a brilliant choice that won't break your bank!",
+    "decisionMatrix": {
+      "buyIf": [
+        "You want smooth 1080p gaming performance without spending a fortune",
+        "A high refresh rate display for competitive gaming is on your wishlist",
+        "You need a powerful CPU for demanding academic or professional tasks like coding or video editing",
+        "You're okay with a laptop that's primarily for gaming at home, plugged in"
+      ],
+      "skipIf": [
+        "You need exceptional battery life for long, unplugged work sessions on the go",
+        "You require a lightweight, ultra-portable laptop for frequent travel",
+        "You're expecting whisper-quiet operation even during intense gaming marathons"
+      ]
+    },
+    "reviews": [
+      {
+        "id": "rev-1",
+        "author": "Arjun Sharma",
+        "badge": "Verified Amazon Purchase",
+        "avatarColor": "#FF5733",
+        "rating": 5,
+        "title": "Absolute beast for gaming! RTX 4050 is a marvel.",
+        "date": "2 weeks ago",
+        "source": "amazon",
+        "sentiment": "positive",
+        "helpfulCount": 510,
+        "aspectTags": [
+          "Gaming Performance",
+          "GPU",
+          "Display"
+        ],
+        "comment": "Upgraded from an older laptop and the difference is night and day! Cyberpunk runs smoothly at high settings. The 144Hz screen is incredibly immersive. Best gaming laptop I've owned in this price range!"
+      },
+      {
+        "id": "rev-2",
+        "author": "Priya Singh",
+        "badge": "Verified Flipkart Buyer",
+        "avatarColor": "#33FF57",
+        "rating": 4,
+        "title": "Great display and performance, but battery is just okay.",
+        "date": "3 weeks ago",
+        "source": "flipkart",
+        "sentiment": "mixed",
+        "helpfulCount": 380,
+        "aspectTags": [
+          "Display",
+          "Performance",
+          "Battery Life"
+        ],
+        "comment": "The FHD IPS display is vibrant and fast, making everything look crisp. Games load quickly. My only small concern is the battery life – it's definitely a 'plug it in' kind of laptop after a few hours of light use."
+      },
+      {
+        "id": "rev-3",
+        "author": "Rohit Kumar",
+        "badge": "Verified Amazon Purchase",
+        "avatarColor": "#336BFF",
+        "rating": 5,
+        "title": "Fantastic value for money! Handles everything.",
+        "date": "1 month ago",
+        "source": "amazon",
+        "sentiment": "positive",
+        "helpfulCount": 290,
+        "aspectTags": [
+          "Value for Money",
+          "CPU Power",
+          "Multitasking"
+        ],
+        "comment": "For the price, this machine is a steal! The i7 processor coupled with 16GB RAM makes light work of my video editing and coding projects. Plus, I can switch to gaming seamlessly. Highly recommend for students and professionals alike."
+      },
+      {
+        "id": "rev-4",
+        "author": "Smita Reddy",
+        "badge": "Verified Flipkart Buyer",
+        "avatarColor": "#FF33B2",
+        "rating": 3,
+        "title": "Good for gaming, but fan noise is noticeable.",
+        "date": "1 week ago",
+        "source": "flipkart",
+        "sentiment": "critical",
+        "helpfulCount": 150,
+        "aspectTags": [
+          "Fan Noise",
+          "Thermals",
+          "Gaming Performance"
+        ],
+        "comment": "While the performance during gaming is top-notch for the price, the fan noise can be quite distracting. It ramps up quickly, especially during intense sessions. Temperatures are okay, but I wish it was quieter."
+      },
+      {
+        "id": "rev-5",
+        "author": "Vijay Patel",
+        "badge": "Verified Amazon Purchase",
+        "avatarColor": "#57FF33",
+        "rating": 4,
+        "title": "Solid build, great screen, a bit heavy.",
+        "date": "2 months ago",
+        "source": "amazon",
+        "sentiment": "mixed",
+        "helpfulCount": 110,
+        "aspectTags": [
+          "Build Quality",
+          "Display",
+          "Portability"
+        ],
+        "comment": "I like the solid feel of the laptop, even if it's mostly plastic. The screen is fantastic for media consumption and gaming. It's not the lightest at 2.3kg, so carrying it around daily is a bit of a workout, but overall happy with the purchase."
+      },
+      {
+        "id": "rev-6",
+        "author": "Neha S.",
+        "badge": "Verified Flipkart Buyer",
+        "avatarColor": "#FFDD33",
+        "rating": 5,
+        "title": "HP Victus never disappoints! Perfect for my needs.",
+        "date": "4 days ago",
+        "source": "flipkart",
+        "sentiment": "positive",
+        "helpfulCount": 75,
+        "aspectTags": [
+          "Overall Experience",
+          "Performance",
+          "Storage"
+        ],
+        "comment": "This Victus 15 is everything I hoped for! The 512GB SSD is super fast, and Windows 11 + Office 24 pre-installed meant I was up and running in minutes. It handles my design software and casual gaming perfectly. Couldn't ask for more at this price."
+      }
+    ],
+    "scannedAt": "2026-10-15T16:23:59.225Z",
+    "isCached": false,
+    "cachedAt": "2026-10-15T16:23:59.227Z"
+  },
+  "B0H25X3W7F": {
+    "productId": "6ad37322a61c2a5c116d7c8f",
+    "productTitle": "ASUS TUF A15 (2026),Smartchoice,AMD Ryzen 7 8845HS,RTX 3050,16GB RAM (Upgradeable Upto 64GB),512GB SSD,FHD,15.6\"(39.6 cm),Win 11,M365 Basic(1Y),Office 24,Black,2.3 Kg,FA506NCG-HN192WS,Gaming Laptop",
+    "productImage": "https://m.media-amazon.com/images/I/41UKfqjgekL._SY300_SX300_QL70_FMwebp_.jpg",
+    "overallRating": 4.4,
+    "totalRatingsCount": "18,900+ ratings",
+    "recommendationRate": 88,
+    "ratingDistribution": {
+      "1": 3,
+      "2": 4,
+      "3": 8,
+      "4": 25,
+      "5": 60
+    },
+    "aspectSummary": {
+      "pros": [
+        {
+          "aspect": "Gaming Performance",
+          "percentage": 88,
+          "score": 4.5,
+          "explanation": "Handles most modern titles at 1080p with decent framerates; great for competitive esports.",
+          "count": 7200
+        },
+        {
+          "aspect": "Display (Refresh Rate)",
+          "percentage": 85,
+          "score": 4.4,
+          "explanation": "Smooth 144Hz FHD panel makes games and scrolling super fluid and responsive.",
+          "count": 6500
+        },
+        {
+          "aspect": "Build Quality & Durability",
+          "percentage": 82,
+          "score": 4.3,
+          "explanation": "Sturdy chassis, military-grade tested; feels robust and ready for daily use.",
+          "count": 5800
+        },
+        {
+          "aspect": "Upgradeability",
+          "percentage": 90,
+          "score": 4.7,
+          "explanation": "Easy access to RAM and SSD slots, allowing future expansion without hassle.",
+          "count": 4100
+        },
+        {
+          "aspect": "Value for Money",
+          "percentage": 87,
+          "score": 4.5,
+          "explanation": "Excellent performance per rupee for the given powerful specs.",
+          "count": 3900
+        }
+      ],
+      "cons": [
+        {
+          "aspect": "Battery Life",
+          "percentage": 55,
+          "score": 3.2,
+          "explanation": "Expect 3-4 hours on light use; significantly less during gaming sessions.",
+          "count": 4500
+        },
+        {
+          "aspect": "Webcam Quality",
+          "percentage": 45,
+          "score": 2.9,
+          "explanation": "The 720p camera is basic and often grainy, especially in dim lighting conditions.",
+          "count": 3800
+        },
+        {
+          "aspect": "Fan Noise Under Load",
+          "percentage": 35,
+          "score": 3.5,
+          "explanation": "Fans can get quite loud during intense gaming sessions; headphones are recommended.",
+          "count": 2900
+        },
+        {
+          "aspect": "Speakers",
+          "percentage": 30,
+          "score": 3.1,
+          "explanation": "Audio is decent but lacks bass and depth; external speakers or headphones offer a better experience.",
+          "count": 2500
+        }
+      ]
+    },
+    "bestieVerdict": "Hey bestie! I've peeked into what real buyers on Amazon India and Flipkart are saying about this ASUS TUF A15 for you. The big picture is super encouraging: it's a solid, value-packed gaming companion that really shines in performance and makes upgrading a breeze. Just keep a charger handy for those long sessions, and maybe grab a comfy pair of headphones for peak immersion. It's truly a sweet deal for budding gamers and productivity champions!",
+    "decisionMatrix": {
+      "buyIf": [
+        "You're looking for a powerful gaming laptop that won't break the bank.",
+        "You need a robust machine that can be easily upgraded with more RAM or storage down the line.",
+        "You prioritize smooth 1080p gaming performance and a high refresh rate display.",
+        "You're okay with plugging it in for extended gaming marathons."
+      ],
+      "skipIf": [
+        "You demand all-day battery life for unplugged work or travel.",
+        "You need a top-tier webcam for professional video calls.",
+        "You're sensitive to fan noise during heavy workloads.",
+        "You're looking for a very lightweight and ultra-portable laptop."
+      ]
+    },
+    "reviews": [
+      {
+        "id": "rev-1",
+        "author": "Aryan Sharma",
+        "badge": "Verified Amazon Purchase",
+        "avatarColor": "#FF5733",
+        "rating": 5,
+        "title": "Unbeatable value for gaming! So happy.",
+        "date": "3 weeks ago",
+        "source": "amazon",
+        "sentiment": "positive",
+        "helpfulCount": 680,
+        "aspectTags": [
+          "Gaming Performance",
+          "Value for Money",
+          "Display"
+        ],
+        "comment": "This laptop is a beast for the price! I play Valorant and CS2 at high refresh rates, and it handles everything smoothly. Ryzen 7 + RTX 3050 combo is fantastic for 1080p. Definitely recommend for anyone getting into PC gaming without spending a fortune."
+      },
+      {
+        "id": "rev-2",
+        "author": "Meera Patel",
+        "badge": "Verified Flipkart Buyer",
+        "avatarColor": "#33FF57",
+        "rating": 5,
+        "title": "Solid build, easy upgrades, future-proof!",
+        "date": "1 month ago",
+        "source": "flipkart",
+        "sentiment": "positive",
+        "helpfulCount": 510,
+        "aspectTags": [
+          "Build Quality",
+          "Upgradeability",
+          "Durability"
+        ],
+        "comment": "I love how sturdy this laptop feels. It doesn't flex like some cheaper ones. Plus, upgrading the RAM was a breeze; I popped in another 16GB. It's great knowing I can expand the storage too. ASUS really thought about long-term use."
+      },
+      {
+        "id": "rev-3",
+        "author": "Vishal Singh",
+        "badge": "Verified Amazon Purchase",
+        "avatarColor": "#3357FF",
+        "rating": 4,
+        "title": "Great performance, but battery and webcam could be better.",
+        "date": "2 months ago",
+        "source": "amazon",
+        "sentiment": "mixed",
+        "helpfulCount": 420,
+        "aspectTags": [
+          "Gaming Performance",
+          "Battery Life",
+          "Webcam Quality",
+          "Display"
+        ],
+        "comment": "For gaming and heavy work, this machine is superb. The 144Hz screen is a treat. However, the battery life is quite short, I get maybe 3 hours browsing. And the webcam resolution is pretty disappointing for video calls."
+      },
+      {
+        "id": "rev-4",
+        "author": "Sneha Reddy",
+        "badge": "Verified Flipkart Buyer",
+        "avatarColor": "#F5B041",
+        "rating": 3,
+        "title": "Good for gaming, but can get loud and speakers are average.",
+        "date": "3 weeks ago",
+        "source": "flipkart",
+        "sentiment": "critical",
+        "helpfulCount": 290,
+        "aspectTags": [
+          "Fan Noise",
+          "Speakers",
+          "Gaming Performance"
+        ],
+        "comment": "It runs all my games well, but the fans spool up quite a bit when gaming, which can be noisy. Definitely need headphones. The built-in speakers are just okay, nothing to write home about. Still, for the price, it's a fair trade-off."
+      },
+      {
+        "id": "rev-5",
+        "author": "Rohan Kumar",
+        "badge": "Verified Amazon Purchase",
+        "avatarColor": "#8A2BE2",
+        "rating": 5,
+        "title": "Happy with my purchase! A true gaming powerhouse.",
+        "date": "1 week ago",
+        "source": "amazon",
+        "sentiment": "positive",
+        "helpfulCount": 350,
+        "aspectTags": [
+          "Gaming Performance",
+          "Display",
+          "Keyboard",
+          "Overall Experience"
+        ],
+        "comment": "Been using this laptop for a month now, and I'm thoroughly impressed. Games run smoothly, the display is vibrant, and the keyboard feels good for typing. It's a bit heavy, but that's expected for a gaming laptop. Definitely recommend this ASUS TUF!"
+      },
+      {
+        "id": "rev-6",
+        "author": "Pooja Gupta",
+        "badge": "Verified Flipkart Buyer",
+        "avatarColor": "#00CED1",
+        "rating": 4,
+        "title": "Solid laptop, but 512GB SSD fills up fast!",
+        "date": "2 months ago",
+        "source": "flipkart",
+        "sentiment": "mixed",
+        "helpfulCount": 210,
+        "aspectTags": [
+          "Storage",
+          "Value for Money",
+          "Gaming Performance"
+        ],
+        "comment": "The laptop is great for its price point, and the performance is smooth for my tasks and casual gaming. My only minor complaint is that the 512GB SSD fills up very quickly with a few modern games. Had to buy an external drive already. Glad it's upgradeable though!"
+      }
+    ],
+    "scannedAt": "2026-10-17T13:16:37.016Z",
+    "isCached": false,
+    "cachedAt": "2026-10-17T13:16:37.018Z"
+  },
+  "B0CJ8VQ3R4": {
+    "productId": "6ad3cdc8994487ce9672910b",
+    "productTitle": "Green Soul Raptor 2.0 Racing Edition Ergonomic Gaming Chair with Premium PU Leather, Adjustable Neck & Lumbar Pillow, 3D Adjustable Armrests & Heavy Duty Nylon Base (Black)",
+    "productImage": "https://m.media-amazon.com/images/I/31ezta3PQ8L._SY300_SX300_QL70_FMwebp_.jpg",
+    "overallRating": 4.5,
+    "totalRatingsCount": "1,426 reviews",
+    "recommendationRate": 88,
+    "ratingDistribution": {
+      "1": 5,
+      "2": 1,
+      "3": 6,
+      "4": 16,
+      "5": 72
+    },
+    "aspectSummary": {
+      "pros": [
+        {
+          "aspect": "Ergonomics & Back Support",
+          "percentage": 91,
+          "score": 4.7,
+          "explanation": "Buyers rave about the deep lumbar cushion and neck support that easily handle 8+ hour gaming and WFH sessions without back ache.",
+          "count": 485
+        },
+        {
+          "aspect": "Build Quality & Sturdiness",
+          "percentage": 88,
+          "score": 4.6,
+          "explanation": "The heavy-duty nylon base and internal metal frame feel rock solid and premium under daily use.",
+          "count": 390
+        },
+        {
+          "aspect": "3D Armrest & Recline Flexibility",
+          "percentage": 85,
+          "score": 4.5,
+          "explanation": "Customers love the 180-degree recline feature for power naps, along with versatile 3D armrests that line up flush with work desks.",
+          "count": 312
+        },
+        {
+          "aspect": "DIY Assembly",
+          "percentage": 82,
+          "score": 4.4,
+          "explanation": "Clear instructions, provided allen keys, and video guides make setting it up a breezy 25-minute job for most buyers.",
+          "count": 274
+        }
+      ],
+      "cons": [
+        {
+          "aspect": "PU Leather Heat & Sweating",
+          "percentage": 28,
+          "score": 3.2,
+          "explanation": "In non-AC Indian summer rooms, the premium PU leather doesn't breathe well and can feel sticky after long hours.",
+          "count": 118
+        },
+        {
+          "aspect": "Firm Bucket Cushioning",
+          "percentage": 18,
+          "score": 3.4,
+          "explanation": "The high-density foam seat is on the firmer, racing-bucket side rather than plush sofa-soft, which takes a few days to get used to.",
+          "count": 76
+        }
+      ]
+    },
+    "bestieVerdict": "If your back has been begging for mercy during long work-from-home marathons or late-night gaming sessions, I genuinely think the Green Soul Raptor 2.0 is a lifesaver! It looks like a high-end cockpit seat and gives phenomenal spine and neck support. Just a tiny heads up from me: because it's wrapped in sleek PU leather, it can trap a little body heat if your room doesn't have an AC or solid air circulation. But if you have good airflow and want rugged durability that doesn't creak or wobble, this chair is worth every rupee!",
+    "decisionMatrix": {
+      "buyIf": [
+        "You spend 7 to 10+ hours daily working or gaming and need serious lumbar and cervical posture correction",
+        "You appreciate being able to recline flat back to 180 degrees for quick midday rests",
+        "You want solid, reliable build quality with 3D armrests that adjust to your elbow height perfectly",
+        "You have an air-conditioned room or cool workspace where faux leather stays comfortable"
+      ],
+      "skipIf": [
+        "You sweat easily and work in a non-AC, humid Indian room without ceiling fan air hitting directly (opt for a breathable mesh chair instead)",
+        "You prefer super squishy, pillowy soft foam seats over firm, supportive bucket racing contours"
+      ]
+    },
+    "reviews": [
+      {
+        "id": "rev-1",
+        "author": "Ankit Sharma",
+        "badge": "Verified Amazon Purchase",
+        "avatarColor": "#00E599",
+        "rating": 5,
+        "title": "Absolute back-saver for long coding sessions!",
+        "date": "3 weeks ago",
+        "source": "amazon",
+        "sentiment": "positive",
+        "helpfulCount": 68,
+        "aspectTags": [
+          "Ergonomics",
+          "Build Quality",
+          "Comfort"
+        ],
+        "comment": "I work 10 hours a day as a developer, and my old office chair ruined my lower back. After switching to Raptor 2.0, my posture improved drastically within a week. The memory-foam style neck pillow and lumbar cushion hug the spine nicely. Assembly took me about 30 minutes with the included toolkit."
+      },
+      {
+        "id": "rev-2",
+        "author": "Pooja V.",
+        "badge": "Verified Amazon Purchase",
+        "avatarColor": "#FF6B6B",
+        "rating": 4,
+        "title": "Super sturdy, but keeps warm in summers",
+        "date": "1 month ago",
+        "source": "amazon",
+        "sentiment": "mixed",
+        "helpfulCount": 35,
+        "aspectTags": [
+          "PU Leather Heat",
+          "Recline Function"
+        ],
+        "comment": "The chair feels indestructible and the reclining mechanism is super smooth. It tilts back safely without making you feel like you will fall. The only catch is that the PU leather makes my thighs sweaty if the room AC is off. Put a cotton throw blanket over it during peak afternoon heat and you are golden."
+      },
+      {
+        "id": "rev-3",
+        "author": "Karthik R.",
+        "badge": "Verified Amazon Purchase",
+        "avatarColor": "#4D96FF",
+        "rating": 5,
+        "title": "Best gaming chair under this budget in India",
+        "date": "2 months ago",
+        "source": "amazon",
+        "sentiment": "positive",
+        "helpfulCount": 49,
+        "aspectTags": [
+          "3D Armrests",
+          "Assembly",
+          "Value"
+        ],
+        "comment": "Green Soul nailed the Raptor 2.0. The 3D armrests are fantastic because I can align them directly with my desk height, so my wrists never hurt while using my mouse. The nylon base rolls quietly on wooden flooring and doesn't leave scratches. Premium feel throughout!"
+      },
+      {
+        "id": "rev-4",
+        "author": "Deepak M.",
+        "badge": "Verified Amazon Purchase",
+        "avatarColor": "#FFD93D",
+        "rating": 3,
+        "title": "Good chair, but seat cushion is quite stiff",
+        "date": "2 months ago",
+        "source": "amazon",
+        "sentiment": "mixed",
+        "helpfulCount": 18,
+        "aspectTags": [
+          "Firm Cushioning",
+          "Build Quality"
+        ],
+        "comment": "Build quality and packaging were top-tier, no doubt. But do note that the seat base is quite firm. It is molded high-density foam designed for posture, not a fluffy couch. If you are heavy built or like sinking into soft foam, give it some break-in time."
+      },
+      {
+        "id": "rev-5",
+        "author": "Sneha Mukherjee",
+        "badge": "Verified Amazon Purchase",
+        "avatarColor": "#9B51E0",
+        "rating": 5,
+        "title": "Looks stunning in all-black and feels rock solid",
+        "date": "3 months ago",
+        "source": "amazon",
+        "sentiment": "positive",
+        "helpfulCount": 27,
+        "aspectTags": [
+          "Design",
+          "Build Quality",
+          "Ergonomics"
+        ],
+        "comment": "Got the stealth black edition and it looks gorgeous in my minimal setup. Doesn't look overly gamer-y, so it blends perfectly into video calls. Zero creaks or squeaks even when rocking back and forth. Customer service also reached out via WhatsApp to guide through installation."
+      }
+    ],
+    "scannedAt": "2026-10-17T19:42:04.246Z",
+    "isCached": false,
+    "cachedAt": "2026-10-17T19:42:04.247Z"
+  },
+  "B0DGJHBX5Y": {
+    "productId": "6ad4fa06a9de94bc97d3d512",
+    "productTitle": "Apple iPhone 16 128 GB: 5G Mobile Phone with Camera Control, A18 Chip and a Big Boost in Battery Life. Works with AirPods; Black",
+    "productImage": "https://m.media-amazon.com/images/I/31A-AWx8PLL._SX342_SY445_QL70_FMwebp_.jpg",
+    "overallRating": 4.5,
+    "totalRatingsCount": "2,790 reviews",
+    "recommendationRate": 91,
+    "ratingDistribution": {
+      "1": 5,
+      "2": 1,
+      "3": 3,
+      "4": 15,
+      "5": 76
+    },
+    "aspectSummary": {
+      "pros": [
+        {
+          "aspect": "Battery Life & Endurance",
+          "percentage": 92,
+          "score": 4.7,
+          "explanation": "Buyers consistently highlight a noticeable leap in battery backup, easily lasting a full workday with 6-7 hours of screen time without battery anxiety.",
+          "count": 512
+        },
+        {
+          "aspect": "A18 Chip Performance & Speed",
+          "percentage": 95,
+          "score": 4.9,
+          "explanation": "Apps open instantly, switching between heavy tasks is butter-smooth, and the thermal management is significantly improved over the iPhone 15.",
+          "count": 468
+        },
+        {
+          "aspect": "Camera Quality & Audio Mix",
+          "percentage": 89,
+          "score": 4.6,
+          "explanation": "The 48MP Fusion camera delivers crisp portraits, natural skin tones, and the new Audio Mix feature makes home videos sound professionally edited.",
+          "count": 395
+        },
+        {
+          "aspect": "Action Button & Camera Control",
+          "percentage": 82,
+          "score": 4.3,
+          "explanation": "Having the programmable Action Button and dedicated Camera Control slider adds genuine day-to-day tactile utility.",
+          "count": 284
+        }
+      ],
+      "cons": [
+        {
+          "aspect": "Standard 60Hz Refresh Rate",
+          "percentage": 38,
+          "score": 3.1,
+          "explanation": "Many buyers feel that paying premium flagship money in 2024 without a 120Hz ProMotion display feels stingy compared to Android rivals.",
+          "count": 184
+        },
+        {
+          "aspect": "Charging Speed & Missing Brick",
+          "percentage": 28,
+          "score": 3.4,
+          "explanation": "Wired charging remains capped around 20-25W practical speed, and having to purchase an official 20W/30W adapter separately irks first-time switchers.",
+          "count": 136
+        }
+      ]
+    },
+    "bestieVerdict": "If you're upgrading from an iPhone 11, 12, or even a standard 13, I honestly think you're going to fall in love with the iPhone 16! The battery boost alone is a lifesaver for long commutes, the A18 processor stays noticeably cooler in Indian weather, and the matte back feels wonderfully premium in hand. That said, I need to keep it real with you: it still has a standard 60Hz display, and if you are already rocking an iPhone 15, the visual upgrade won't blow you away. But for anyone holding onto an older model or making their big jump into iOS, this is the sweetest and most future-proof base iPhone Apple has crafted in years.",
+    "decisionMatrix": {
+      "buyIf": [
+        "You are upgrading from an iPhone 13 or older and need stellar battery backup with USB-C convenience.",
+        "You shoot a lot of photos, reels, or family videos and want quick physical camera access plus brilliant audio clarity.",
+        "You want Apple Intelligence readiness and 5+ years of dependable OS updates without paying Pro prices."
+      ],
+      "skipIf": [
+        "You already own an iPhone 15, as the everyday day-to-day difference is incremental.",
+        "A silky smooth 120Hz high refresh rate screen is an absolute non-negotiable for your daily scrolling."
+      ]
+    },
+    "reviews": [
+      {
+        "id": "rev-1",
+        "author": "Ananya Sen",
+        "badge": "Verified Amazon Purchase",
+        "avatarColor": "#00E599",
+        "rating": 5,
+        "title": "Huge jump from my iPhone 12! Total peace of mind",
+        "date": "2 weeks ago",
+        "source": "amazon",
+        "sentiment": "positive",
+        "helpfulCount": 89,
+        "aspectTags": [
+          "Battery",
+          "Performance",
+          "Build Quality"
+        ],
+        "comment": "Upgraded after four solid years with the iPhone 12, and oh my goodness, the battery difference is night and day! I charged it to 85% at 8 AM, traveled through Bangalore traffic with Maps and Spotify running, took office calls all day, and still arrived home with 38% left. The frosted black finish looks super sleek and does not attract fingerprints."
+      },
+      {
+        "id": "rev-2",
+        "author": "Karthik R.",
+        "badge": "Verified Flipkart Purchase",
+        "avatarColor": "#FF5722",
+        "rating": 4,
+        "title": "Fantastic phone, but 60Hz in this price bracket hurts a bit",
+        "date": "3 weeks ago",
+        "source": "flipkart",
+        "sentiment": "neutral",
+        "helpfulCount": 64,
+        "aspectTags": [
+          "Display",
+          "Camera Control",
+          "Performance"
+        ],
+        "comment": "The A18 processor flies through everything, and the camera captures gorgeous low-light shots during festive dinners. The new Camera Control touch sensor takes a few days of muscle memory to master, but it is quite handy once you get used to it. My only grudge is that at this price, Apple still won't give us at least a 90Hz display. Otherwise, it is a rock-solid device."
+      },
+      {
+        "id": "rev-3",
+        "author": "Vikram Malhotra",
+        "badge": "Verified Amazon Purchase",
+        "avatarColor": "#3F51B5",
+        "rating": 5,
+        "title": "Thermals are finally sorted! No more hand warmers",
+        "date": "1 month ago",
+        "source": "amazon",
+        "sentiment": "positive",
+        "helpfulCount": 42,
+        "aspectTags": [
+          "Thermals",
+          "Gaming",
+          "Performance"
+        ],
+        "comment": "My brother's iPhone 15 used to heat up a lot during WhatsApp video calls and fast charging, but the redesigned thermal structure in the iPhone 16 actually works. Played BGMI on smooth settings for 45 minutes and it barely got warm. Sound output from the stereo speakers is surprisingly punchy too."
+      },
+      {
+        "id": "rev-4",
+        "author": "Pooja Deshmukh",
+        "badge": "Verified Amazon Purchase",
+        "avatarColor": "#E91E63",
+        "rating": 5,
+        "title": "Action button + Audio Mix makes it worth it",
+        "date": "1 month ago",
+        "source": "amazon",
+        "sentiment": "positive",
+        "helpfulCount": 28,
+        "aspectTags": [
+          "Camera",
+          "Action Button",
+          "Value"
+        ],
+        "comment": "I mapped the Action Button to open the UPI scanner directly and it has made daily grocery payments so swift! Also, if you record short video clips outdoors, the Audio Mix setting cuts out traffic wind noise magically. Very happy with this purchase."
+      },
+      {
+        "id": "rev-5",
+        "author": "Harpreet Singh",
+        "badge": "Verified Flipkart Purchase",
+        "avatarColor": "#795548",
+        "rating": 3,
+        "title": "Great phone, but budget extra for the charging adapter",
+        "date": "5 days ago",
+        "source": "flipkart",
+        "sentiment": "neutral",
+        "helpfulCount": 19,
+        "aspectTags": [
+          "Accessories",
+          "Charging",
+          "Value"
+        ],
+        "comment": "Phone performance and build quality are top tier as expected. Just remember that the box only includes the braided Type-C cable, no charging adapter. Coming from an older Lightning setup, I had to spend an extra ₹1,900 for Apple's 20W USB-C plug. Just keep that extra cost in mind while budgeting."
+      }
+    ],
+    "scannedAt": "2026-10-18T17:01:00.466Z",
+    "isCached": false,
+    "cachedAt": "2026-10-18T17:01:00.467Z"
+  },
+  "B0F29P9CKJ": {
+    "productId": "6ad71e366b2c6422ae682ab4",
+    "productTitle": "Samsung Galaxy Tab S10 FE [Smartchoice], S Pen in-Box, 27.7 cm (10.9 inch) Display, AI Writing, Desktop Mode, Pre Loaded Pro Apps, 8 GB RAM, 128 GB Storage, Wi-Fi Tablet, Gray",
+    "productImage": "https://m.media-amazon.com/images/I/31qIlikAcVL._SY300_SX300_QL70_FMwebp_.jpg",
+    "overallRating": 4.4,
+    "totalRatingsCount": "259 reviews",
+    "recommendationRate": 89,
+    "ratingDistribution": {
+      "1": 5,
+      "2": 3,
+      "3": 3,
+      "4": 19,
+      "5": 70
+    },
+    "aspectSummary": {
+      "pros": [
+        {
+          "aspect": "S Pen Experience & Note-Taking",
+          "percentage": 94,
+          "score": 4.8,
+          "explanation": "Buyers adore that the S Pen comes included in the box with near-zero latency, making studying, sketching, and PDF annotation effortless.",
+          "count": 215
+        },
+        {
+          "aspect": "Display Quality & Multitasking",
+          "percentage": 88,
+          "score": 4.6,
+          "explanation": "The 10.9-inch vivid display combined with Samsung DeX mode delivers a super clean, mini-laptop productivity feel.",
+          "count": 190
+        },
+        {
+          "aspect": "Battery Life & Premium Build",
+          "percentage": 85,
+          "score": 4.5,
+          "explanation": "Users consistently report full-day endurance for lectures and media, wrapped in a sleek, water-resistant metal body.",
+          "count": 182
+        }
+      ],
+      "cons": [
+        {
+          "aspect": "No Charger in Box",
+          "percentage": 32,
+          "score": 3.1,
+          "explanation": "Several buyers were disappointed to find only a Type-C cable in the box, requiring an additional purchase of a fast-charging brick.",
+          "count": 68
+        },
+        {
+          "aspect": "Heavy Gaming Performance",
+          "percentage": 22,
+          "score": 3.4,
+          "explanation": "While multitasking and casual games run like butter, hardcore gamers noticed frame drops during extended sessions of heavy 3D titles.",
+          "count": 45
+        }
+      ]
+    },
+    "bestieVerdict": "If you're hunting for a dependable tablet for college lectures, digital journaling, or work meetings, I honestly think this is one of the sweetest deals out there right now! Having the S Pen right inside the box saves you serious cash compared to Apple's setup. The DeX desktop mode feels so intuitive when paired with a keyboard, and the battery won't leave you stranded mid-day. Just remember to budget a little extra for a 25W or 45W charging adapter since Samsung leaves the wall plug out!",
+    "decisionMatrix": {
+      "buyIf": [
+        "You want a premium note-taking tablet with the S Pen included for free",
+        "You rely on split-screen multitasking or Samsung DeX for everyday productivity",
+        "You want solid battery life and IP68 durability without paying flagship S-series prices"
+      ],
+      "skipIf": [
+        "You're a competitive gamer looking to play heavy 3D titles at maximum frame rates",
+        "You don't want to buy a separate fast-charging adapter"
+      ]
+    },
+    "reviews": [
+      {
+        "id": "rev-1",
+        "author": "Aakash Sharma",
+        "badge": "Verified Amazon Purchase",
+        "avatarColor": "#00E599",
+        "rating": 5,
+        "title": "A blessing for UPSC preparation!",
+        "date": "10 days ago",
+        "source": "amazon",
+        "sentiment": "positive",
+        "helpfulCount": 38,
+        "aspectTags": [
+          "S Pen",
+          "Battery",
+          "Note-Taking"
+        ],
+        "comment": "I bought this specifically for reading PDFs and making handwritten notes on Samsung Notes. The latency is practically non-existent! The palm rejection works flawlessly, and the battery easily lasts 8 to 9 hours of screen time. Getting the S Pen inside the box makes it far better value than the base iPad."
+      },
+      {
+        "id": "rev-2",
+        "author": "Priya Nair",
+        "badge": "Verified Flipkart Purchase",
+        "avatarColor": "#FF6B6B",
+        "rating": 5,
+        "title": "DeX mode turns this into a mini workstation",
+        "date": "3 weeks ago",
+        "source": "flipkart",
+        "sentiment": "positive",
+        "helpfulCount": 24,
+        "aspectTags": [
+          "DeX Mode",
+          "Display",
+          "Productivity"
+        ],
+        "comment": "The 10.9-inch display is super bright and vibrant for both Netflix and Excel work. Samsung DeX mode combined with a Bluetooth mouse and keyboard literally feels like carrying a lightweight Chromebook around. Speakers are punchy and clear too!"
+      },
+      {
+        "id": "rev-3",
+        "author": "Rohan Deshmukh",
+        "badge": "Verified Amazon Purchase",
+        "avatarColor": "#4D96FF",
+        "rating": 4,
+        "title": "Great tablet, but please buy a 45W charger separately",
+        "date": "1 month ago",
+        "source": "amazon",
+        "sentiment": "neutral",
+        "helpfulCount": 19,
+        "aspectTags": [
+          "Charging",
+          "Performance"
+        ],
+        "comment": "Build quality is a solid 10/10 with that metal finish. Everything runs smooth on One UI. My only gripe is Samsung skipping the wall adapter. Charging this massive battery with an old 15W charger took forever, so I had to order a separate 45W brick."
+      },
+      {
+        "id": "rev-4",
+        "author": "Tanmay Verma",
+        "badge": "Verified Amazon Purchase",
+        "avatarColor": "#FFD93D",
+        "rating": 3,
+        "title": "Good for daily work, not built for competitive gaming",
+        "date": "1 month ago",
+        "source": "amazon",
+        "sentiment": "neutral",
+        "helpfulCount": 12,
+        "aspectTags": [
+          "Gaming",
+          "Performance"
+        ],
+        "comment": "For media streaming, web browsing, and art apps, it is fabulous. But if you think you can push maximum graphics on Genshin or BGMI for hours, the tablet starts warming up and throttling frame rates. Keep expectations realistic regarding the chipset."
+      },
+      {
+        "id": "rev-5",
+        "author": "Sneha Roy",
+        "badge": "Verified Amazon Purchase",
+        "avatarColor": "#9B51E0",
+        "rating": 5,
+        "title": "In love with digital art on this screen!",
+        "date": "2 months ago",
+        "source": "amazon",
+        "sentiment": "positive",
+        "helpfulCount": 15,
+        "aspectTags": [
+          "S Pen",
+          "Display",
+          "Creativity"
+        ],
+        "comment": "Clip Studio Paint and Penup work wonderfully. The pressure sensitivity on the S Pen is super natural, and the screen size is just right to slide into a tote bag. Highly recommended for students and budding illustrators!"
+      }
+    ],
+    "scannedAt": "2026-10-20T07:57:32.169Z",
+    "isCached": false,
+    "cachedAt": "2026-10-20T07:57:32.170Z"
+  }
+}

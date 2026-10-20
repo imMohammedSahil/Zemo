@@ -64,6 +64,11 @@ const UserSchema = new mongoose.Schema({
     default: Date.now
   },
 
+  hasReceivedWelcomeEmail: {
+    type: Boolean,
+    default: false
+  },
+
   trackedProducts: [
     {
       type: mongoose.Schema.Types.ObjectId,

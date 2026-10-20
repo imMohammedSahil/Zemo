@@ -1,661 +1,620 @@
 # Zemo
 
-**Autonomous E-Commerce Price Intelligence & Aspect-Based Sentiment Engine**  
-A distributed system for headless browser automation, real-time price monitoring, zero-cold-start historical trend synthesis, and serverless LLM review distillation.
+**Autonomous E-Commerce Price Intelligence, Cross-Store Arbitrage & Aspect-Based Sentiment Analysis Platform**
 
-| Subsystem | Technology Stack | Architecture Role |
+Zemo is a distributed e-commerce intelligence system engineered for automated web extraction, cross-retailer pricing arbitrage, historical price trajectory modeling, and large language model (LLM) cognitive distillation. The platform monitors high-turnover retail platforms (Amazon India, Flipkart), normalizes unstructured product metadata, reconstructs longitudinal pricing trends, and synthesizes aspect-level consumer sentiment and banking promotions into actionable consumer telemetry.
+
+---
+
+## Architectural Specification
+
+| Dimension | Specification | Architecture Context |
 | :--- | :--- | :--- |
-| **API & Runtime** | `Node.js` (v18+) · `Express 5` | Asynchronous REST API gateway & middleware pipeline |
-| **Persistence** | `MongoDB` · `Mongoose 9` | Time-series price history & LLM insight caching |
-| **Headless Automation** | `Playwright 1.58` (Chromium) | Anti-bot DOM scraping & network XHR interception |
-| **AI Intelligence** | `Meta-Llama-3-8B-Instruct` | Aspect-based sentiment analysis via Hugging Face Router |
-| **Client Frontend** | `React 19` · `Vite 7` · `Tailwind CSS` | Single-page reactive dashboard with SVG area graphs |
-| **Orchestration** | `Node-Cron 4.2` | Mutex-guarded 15-minute reentrant price poller |
-| **Target Retailers** | `Amazon` (IN / Global) · `Flipkart` | Canonical ASIN extraction & DOM selector cascades |
-| **License** | `MIT` | Open-source software license |
+| **API Runtime** | Node.js (v18+) / Express 5.x | Non-blocking asynchronous REST API gateway and request routing |
+| **Persistence Engine** | MongoDB (v6+) / Mongoose 9.x | Document datastore for product catalogs, alerts, and time-series history |
+| **Browser Automation** | Playwright 1.58 (Chromium) | Headless browser automation, DOM selector cascades, network stream interception |
+| **Cognitive Intelligence** | Google Gemini API + Meta-Llama-3-8B | Dual-model LLM pipeline for price comparison, review aspect mining, bank discount logic |
+| **Client Application** | React 19 / Vite 7 / Tailwind CSS | Single-page reactive interface, procedural canvas shaders, fluid audio engine |
+| **Task Scheduling** | Node-Cron 4.2 | Mutex-guarded cron daemon executing periodic multi-threaded scraping |
+| **Alert & Messaging** | Nodemailer / Abstract API | Transactional SMTP engine with multipart CID asset rendering |
+| **Caching Layer** | Local High-Throughput JSON Store | Deterministic filesystem cache for zero-latency inference on critical demo products |
+| **Target Retailers** | Amazon India (`amazon.in`), Flipkart (`flipkart.com`) | Canonical ASIN and FSN normalization pipelines |
 
 ---
 
-## Table of Contents
+## System Architecture
 
-- [Architectural Overview](#architectural-overview)
-- [Key Engineering Highlights](#key-engineering-highlights)
-- [Data Pipelines & Sequence Workflows](#data-pipelines--sequence-workflows)
-  - [1. Ingestion & Zero-Cold-Start Historical Backfill](#1-ingestion--zero-cold-start-historical-backfill)
-  - [2. Cron Polling & Stateful Alert State Machine](#2-cron-polling--stateful-alert-state-machine)
-  - [3. Stratified Review Mining & Aspect-Based Sentiment](#3-stratified-review-mining--aspect-based-sentiment)
-- [Data Models & Schemas](#data-models--schemas)
-- [REST API Reference](#rest-api-reference)
-- [LLM Inference & Prompt Specification](#llm-inference--prompt-specification)
-- [Repository Structure](#repository-structure)
-- [Environment Configuration](#environment-configuration)
-- [Installation & Local Setup](#installation--local-setup)
-- [Performance & Benchmark Metrics](#performance--benchmark-metrics)
-- [Operational Runbook & Edge Cases](#operational-runbook--edge-cases)
-- [License](#license)
-
----
-
-## Architectural Overview
-
-Zemo is built as a decoupled, service-oriented web architecture designed for resilient asynchronous scraping, idempotent time-series ingestion, and serverless LLM aspect analysis.
+The following diagram illustrates the component topology and data lifecycle across client, gateway, automation, persistence, cognitive AI, and messaging tiers:
 
 ```mermaid
 flowchart TD
-    subgraph Client["Client Tier (SPA)"]
-        UI["React 19 Dashboard<br/>(Vite + Tailwind CSS)"]
-        Viz["Visualization Engine<br/>(Recharts + Plotly.js)"]
-        Meters["Aspect Sentiment Gauges<br/>(SVG SemiCircleMeter)"]
-        UI --- Viz
-        UI --- Meters
+    subgraph ClientTier["Client Tier (React 19 SPA)"]
+        UI["React 19 SPA (Vite + Tailwind CSS)"]
+        SubRoutes["Sub-Navigation Routing (/stores, /reviews, /offers, /insights)"]
+        CanvasFX["Procedural Rainy Glass Canvas Shader"]
+        AudioEng["Audio Subsystem (Lenis Smooth Scroll + SoundPill)"]
+        UI --- SubRoutes
+        UI --- CanvasFX
+        UI --- AudioEng
     end
 
-    subgraph Gateway["API & Middleware Tier"]
+    subgraph GatewayTier["API Gateway & Middleware Tier"]
         Express["Express 5.x REST API Gateway"]
-        AuthMid["Firebase Auth & Token Verification"]
-        MulterMid["Multer Disk Storage (Avatars/Assets)"]
-        Express --> AuthMid
-        Express --> MulterMid
+        CORS["Cross-Origin Resource Sharing (CORS)"]
+        StaticSvc["Static Asset Provider (/uploads)"]
+        AuthMiddleware["Firebase Auth & Session Verification"]
+        Express --> CORS
+        Express --> StaticSvc
+        Express --> AuthMiddleware
     end
 
-    subgraph DataStore["Persistence Tier"]
-        DB[(MongoDB Cluster / Atlas)]
-        ColProd[("Product Catalog")]
-        ColPrice[("PriceHistory Time-Series")]
-        ColRev[("Review & Aspect Cache")]
-        ColAlert[("Target Alerts")]
-        ColNotif[("Notifications")]
-        DB --- ColProd
-        DB --- ColPrice
-        DB --- ColRev
-        DB --- ColAlert
-        DB --- ColNotif
+    subgraph IngestionTier["Headless Automation & Scraping Tier"]
+        PlaywrightEngine["Playwright Headless Chromium Engine"]
+        MetadataScraper["Product Ingestion (Title, Image, Live Price, ASIN)"]
+        MultiStoreEngine["Multi-Store Search Scraper (Amazon vs Flipkart)"]
+        ReviewMiner["Stratified Review Harvester (Pos/Neg Balanced)"]
+        BackfillStream["Network XHR/Fetch Stream Interceptor"]
+        PlaywrightEngine --> MetadataScraper
+        PlaywrightEngine --> MultiStoreEngine
+        PlaywrightEngine --> ReviewMiner
+        PlaywrightEngine --> BackfillStream
     end
 
-    subgraph Automation["Headless Automation Tier"]
-        PW["Playwright Headless Chromium Engine"]
-        MetaScraper["Metadata & Price Extractor<br/>(Selector Cascades)"]
-        RevScraper["Review Corpus Miner<br/>(Stratified Sampling)"]
-        Backfill["Network Interceptor<br/>(XHR / Fetch Stream Listener)"]
-        PW --- MetaScraper
-        PW --- RevScraper
-        PW --- Backfill
+    subgraph CognitiveTier["Cognitive Intelligence Tier (Dual LLM Pipeline)"]
+        GeminiEngine["Google Gemini AI Engine"]
+        LlamaEngine["Meta-Llama-3-8B-Instruct (HF Router)"]
+        LocalCache[(".zemo_cache Filesystem Layer")]
+
+        GeminiEngine --> CompareStoresAI["Multi-Store Price Arbitrage Synthesis"]
+        GeminiEngine --> BankOffersAI["Bank & Card Discount Deduction Engine"]
+        GeminiEngine --> ShortNameAI["Product Title Canonicalizer"]
+        GeminiEngine --> DealMeterAI["Algorithmic Grab Meter Scoring"]
+        LlamaEngine --> AspectSentimentAI["Aspect-Based Sentiment Distillation"]
+        LocalCache <--> GeminiEngine
     end
 
-    subgraph Background["Daemon & Scheduler Tier"]
-        Cron["Node-Cron Scheduler (*/15 * * * *)"]
-        Mutex["Reentrant Mutex Guard (let running = false)"]
-        AlertEng["Threshold Delta Evaluator"]
-        Cron --> Mutex
-        Mutex --> MetaScraper
-        MetaScraper --> AlertEng
+    subgraph PersistenceTier["Persistence Tier (MongoDB Atlas / Local)"]
+        DB[(MongoDB 6.x Database)]
+        ColProducts[("products (Catalog & Metadata)")]
+        ColPriceHistory[("pricehistories (Time-Series Data)")]
+        ColAlerts[("alerts (Target Triggers)")]
+        ColNotifications[("notifications (User Dispatch Queue)")]
+        ColUsers[("users (Profiles & Preferences)")]
+        DB --- ColProducts
+        DB --- ColPriceHistory
+        DB --- ColAlerts
+        DB --- ColNotifications
+        DB --- ColUsers
     end
 
-    subgraph AI["Cognitive Intelligence Tier"]
-        HF["Hugging Face Inference Router"]
-        Llama["Meta-Llama-3-8B-Instruct"]
-        Parser["Deterministic JSON Parser + Fallback"]
-        HF --> Llama
-        Llama --> Parser
+    subgraph SchedulerTier["Scheduler & Notification Tier"]
+        CronDaemon["Node-Cron Scheduler (15-min intervals)"]
+        ReentrantLock["Reentrant Mutex Guard (atomic flag)"]
+        NotificationDispatch["Email Notification Service (Nodemailer)"]
+        CronDaemon --> ReentrantLock
+        ReentrantLock --> IngestionTier
+        ReentrantLock --> NotificationDispatch
     end
 
-    UI <-->|HTTP / JSON REST| Express
-    Express <-->|Mongoose ODM| DB
-    Express -->|Async Dispatch| PW
-    AlertEng -->|Push State / Mutate| ColAlert
-    AlertEng -->|Generate| ColNotif
-    RevScraper -->|Sampled Batch| HF
-    Parser -->|Write Insights Cache| ColRev
-    Backfill -->|Bulk Unordered Insert| ColPrice
+    ClientTier <-->|REST API / JSON| GatewayTier
+    GatewayTier <--> PersistenceTier
+    GatewayTier <--> IngestionTier
+    GatewayTier <--> CognitiveTier
+    IngestionTier --> PersistenceTier
+    NotificationDispatch -->|SMTP / TLS| UserInbox["User Email Inbox"]
 ```
 
 ---
 
-## Key Engineering Highlights
+## Core Engineering Subsystems
 
-### 1. Resilient Multi-Selector Cascading Engine
-E-commerce DOM hierarchies change dynamically during A/B tests and promotional events. Zemo uses multi-tiered selector fallback chains inside Playwright drivers:
-- **Primary Tier**: Target high-specificity desktop price containers (`#corePriceDisplay_desktop_feature_div .a-offscreen`).
-- **Secondary Tier**: Generic price display wrappers (`.a-price .a-offscreen`).
-- **Tertiary Tier**: Deal and apex containers (`#priceblock_dealprice`, `#priceblock_ourprice`).
-- **Sanitization**: Localized currency strings are parsed through deterministic regex filters (`replace(/[^0-9.]/g, "")`) to produce floating-point numeric types.
+### 1. Headless Browser Automation & Anti-Bot Mitigation
+E-commerce retail domains rely on single-page JavaScript architectures, obfuscated class structures, and dynamic rendering mechanisms. 
 
-### 2. Zero-Cold-Start Historical Backfill via Network Interception
-When a new product is added, traditional scrapers have zero history points. Zemo resolves the cold-start problem by navigating a sandboxed browser context to historic price index repositories while attaching an asynchronous event listener to the `page.on("response")` stream:
-- Intercepts raw JSON chart payloads directly from underlying network responses.
-- Deserializes historical price/timestamp pairs.
-- Executes unordered bulk write operations (`PriceHistory.insertMany(data, { ordered: false })`) to bypass existing duplicate keys and instantly populate months of price history.
+- **Playwright Execution Engine**: Emulates native Chromium environments with tailored user-agent headers, viewpoint randomization, and locale settings to prevent fingerprint-based anti-bot blocks.
+- **Selector Cascade Strategy**: Employs redundant XPath, CSS selector lists, and microdata attributes (e.g., `#priceblock_ourprice`, `.a-price .a-offscreen`, `[data-asin]`) to guarantee extraction reliability when DOM targets shift.
+- **Resilient ASIN/FSN Resolution**: Normalizes raw, tracking-polluted referral URLs down to canonical identifiers:
+  ```
+  https://www.amazon.in/dp/B0GR64G4H6/ref=... -> B0GR64G4H6
+  ```
 
-### 3. Stratified Sampling & LLM Aspect Extraction
-Passing large review corpora (50+ reviews) to an LLM exceeds context budgets and inflates latency. Zemo implements:
-- Stratified sampling selecting 5 verified positive and 5 verified negative reviews.
-- Strict system-level JSON grammar prompts requiring percentage weights and semantic explanations per aspect.
-- Multi-tier document caching in MongoDB (`Review.insights`) to reduce token consumption by 82% and serve subsequent queries in under 50ms.
-
-### 4. Reentrant Mutex-Guarded Cron Engine
-Background polling in Node.js can cause event-loop congestion or overlapping database writes if an ingestion cycle takes longer than the cron interval. Zemo uses an atomic state mutex (`let running = false`) around its 15-minute cron cycle, guaranteeing that all browser contexts close cleanly before the next cycle begins.
-
-### 5. Deterministic ASIN Normalization & Idempotency
-User submissions often include tracking codes, affiliate tags, and variable subpaths. Zemo parses links using strict regular expressions (`/\/(?:dp|gp\/product)\/([A-Z0-9]{10})/i`) to extract the 10-character canonical ASIN and reconstructs standardized URLs (`https://www.amazon.in/dp/${asin}`), guaranteeing deduplicated database indices.
-
-### 6. Continuous Temporal Forward-Fill Timeline Interpolation
-Because price changes occur asynchronously, raw time-series data contains irregular gaps. The frontend timeline generator calculates the time delta from the earliest record to the current timestamp and applies a forward-fill algorithm, creating a continuous day-by-day time-series for unbroken SVG area gradient rendering.
-
----
-
-## Data Pipelines & Sequence Workflows
-
-### 1. Ingestion & Zero-Cold-Start Historical Backfill
+### 2. Zero-Cold-Start Historical Backfill
+Newly tracked items traditionally lack historical price points. Zemo circumvents this cold-start limitation by listening to and intercepting price-index network streams during initial product ingestion.
 
 ```mermaid
 sequenceDiagram
     autonumber
-    actor User as Client Dashboard
-    participant API as Express API (/product/add)
-    participant Normalizer as ASIN Normalizer
-    participant DB as MongoDB (Product / PriceHistory)
-    participant PW as Playwright Worker
-    participant ExtIndex as Price Index Repository
-    participant Retailer as Amazon / Retailer DOM
+    actor User as Client
+    participant API as Express API
+    participant Scraper as Playwright Engine
+    participant Interceptor as Network Listener
+    participant DB as MongoDB
 
-    User->>API: POST /product/add { url }
-    API->>Normalizer: extractASIN(url) & normalizeAmazonUrl(url)
-    Normalizer-->>API: Normalized ASIN: B0CX21C16F
-    API->>DB: Product.findOne({ asin })
-    
-    alt Product Already Tracked
-        DB-->>API: Return Existing Product Document
-        API-->>User: 200 OK (Cached Product)
-    else New Product Registration
-        API->>PW: Launch Sandboxed Chromium Context
-        par Live Metadata Scraping
-            PW->>Retailer: Navigate to Canonical Product URL
-            PW->>Retailer: Evaluate Title, Image, and Current Price Selectors
-            Retailer-->>PW: Extracted Title, Image URL, Current Price (₹69,999)
-        and Historical Backfill Interception
-            PW->>ExtIndex: Navigate to Price Index Endpoint
-            PW->>PW: page.on('response') Listen for Chart JSON Payload
-            ExtIndex-->>PW: Return Historical Time-Series Array (180+ Points)
-        end
-        PW-->>API: Ingestion Data Bundle
-        API->>DB: Product.create({ asin, title, image, currentPrice, historicLow })
-        API->>DB: PriceHistory.insertMany(historicalPoints, { ordered: false })
-        API-->>User: 201 Created (Full Ingested Entity + Timeline)
-    end
+    User->>API: POST /product/track { url }
+    API->>Scraper: Launch Headless Browser Session
+    Scraper->>Scraper: Navigate to Normalized Product Page
+    Scraper->>Interceptor: Register Stream Listener (XHR/Fetch)
+    Scraper->>API: Return Live Price, Title, Image, ASIN
+    Interceptor->>Interceptor: Intercept Longitudinal Price History
+    Interceptor->>DB: Batch Insert Historical Price Records
+    API->>DB: Save Product Document & Initial Snapshot
+    API-->>User: 200 OK (Product Ingested + Historical Data Ready)
 ```
 
-### 2. Cron Polling & Stateful Alert State Machine
+### 3. Multi-Store Cross-Retailer Price Discovery
+When analyzing a product, the platform concurrently scouts alternative e-commerce platforms (Flipkart, Amazon) using clean title tokens generated by the AI title canonicalizer.
 
-```mermaid
-flowchart TD
-    StartCron([Node-Cron Trigger: */15 * * * *]) --> CheckMutex{running === true?}
-    CheckMutex -- Yes --> SkipCycle[Skip Cycle - Mutex Locked]
-    CheckMutex -- No --> SetLock[Set running = true]
-    
-    SetLock --> FetchProducts[Query Active Products from MongoDB]
-    FetchProducts --> LoopProducts[Iterate Products via Playwright]
-    
-    LoopProducts --> ExtractPrice[Extract Live Price via Selector Cascade]
-    ExtractPrice --> ValidPrice{Valid Number?}
-    ValidPrice -- No --> LogErr[Log Extraction Error]
-    ValidPrice -- Yes --> RecordHistory[Insert Document into PriceHistory]
-    
-    RecordHistory --> EvalLow{Price < Product.historicLow?}
-    EvalLow -- Yes --> UpdateLow[Update Product currentPrice & historicLow]
-    EvalLow -- No --> UpdateCurrent[Update Product currentPrice]
-    
-    UpdateLow --> EvalAlerts[Query Pending Alerts for Product]
-    UpdateCurrent --> EvalAlerts
-    
-    EvalAlerts --> CheckThreshold{currentPrice <= targetPrice + tolerance?}
-    CheckThreshold -- Yes --> CheckTriggered{alert.triggered === false?}
-    CheckTriggered -- Yes --> DispatchNotif[Create Notification Document & Dispatch Alert]
-    DispatchNotif --> MutateAlert[Set alert.triggered = true]
-    
-    CheckThreshold -- No --> NextProduct[Proceed to Next Product]
-    CheckTriggered -- No --> NextProduct
-    MutateAlert --> NextProduct
-    LogErr --> NextProduct
-    
-    NextProduct --> AllDone{All Products Processed?}
-    AllDone -- No --> LoopProducts
-    AllDone -- Yes --> ReleaseLock[Set running = false & Close Chromium Context]
-    ReleaseLock --> EndCron([Cycle Completed])
-```
+- **Dynamic Query Optimization**: Strips technical jargon, color codes, and SKU codes to execute targeted search queries on secondary platforms.
+- **Fuzzy Token Matching**: Verifies that discovered listings match the primary item by validating RAM, storage, screen size, and model nomenclature before price differential calculation.
+- **Direct Link Synthesis**: Ingests direct store URLs, shipping costs, and in-stock statuses across competing retailers.
 
-### 3. Stratified Review Mining & Aspect-Based Sentiment
+### 4. Dual LLM Cognitive Intelligence Pipeline
 
 ```mermaid
 flowchart LR
-    subgraph Scrape["Corpus Mining"]
-        Req[User Requests Analysis] --> LaunchPW[Playwright Navigates Review Pages]
-        LaunchPW --> Extract50[Extract up to 50 Raw Reviews]
-        Extract50 --> Stratify[Stratified Sampler: 5 Positive + 5 Negative]
+    RawData["Raw Scraped Telemetry<br/>(Reviews, Store Listings, Promo Texts)"]
+    
+    subgraph RoutingEngine["LLM Dispatch Pipeline"]
+        Router{"Task Classification"}
     end
 
-    subgraph LLM["Inference Engine"]
-        Stratify --> PromptFormat[Construct JSON-Constrained Prompt]
-        PromptFormat --> HFRouter[Hugging Face Router API]
-        HFRouter --> LlamaModel[Meta-Llama-3-8B-Instruct]
-        LlamaModel --> SchemaCheck{Valid JSON Schema?}
-        SchemaCheck -- Valid --> ParseJSON[Parse Pros & Cons with % Weights]
-        SchemaCheck -- Malformed --> FallbackRegex[Regex Extractor / Fallback Schema]
+    subgraph GeminiSubsystem["Gemini Flash Engine"]
+        TaskStores["Cross-Store Price Arbitrage"]
+        TaskBank["Bank Offers & Net Price Evaluation"]
+        TaskShort["Canonical Title Compression"]
+        TaskMeter["Grab/Deal Timing Metric"]
     end
 
-    subgraph Persistence["Cache Layer"]
-        ParseJSON --> WriteCache[(MongoDB Review.insights)]
-        FallbackRegex --> WriteCache
-        WriteCache --> ReturnClient[Return Structured Insights to Client]
+    subgraph LlamaSubsystem["Meta-Llama-3-8B Engine"]
+        TaskAspect["Aspect-Based Sentiment Extraction"]
     end
+
+    RawData --> Router
+    Router -->|Store Comparison| TaskStores
+    Router -->|Bank & Card Rules| TaskBank
+    Router -->|Raw Title String| TaskShort
+    Router -->|Market Context| TaskMeter
+    Router -->|Customer Review Corpus| TaskAspect
 ```
 
----
-
-## Data Models & Schemas
-
-<details>
-<summary><b>1. Product Schema (<code>backend/models/Product.js</code>)</b></summary>
-
-Represents a tracked e-commerce item with canonical identifiers and current pricing state.
-
-| Field | Type | Required | Description |
-| :--- | :--- | :--- | :--- |
-| `asin` | `String` | Yes | Unique 10-character canonical product identifier (Indexed, Unique). |
-| `title` | `String` | Yes | Extracted product title. |
-| `image` | `String` | No | Primary high-resolution product media URL. |
-| `productUrl` | `String` | Yes | Sanitized canonical product endpoint. |
-| `source` | `String` | Yes | Retailer identifier (`amazon` \| `flipkart`). |
-| `currentPrice` | `Number` | Yes | Latest extracted price in INR (Default: `0`). |
-| `historicLow` | `Number` | Yes | All-time lowest recorded price for this product (Default: `0`). |
-| `createdAt` | `Date` | Yes | Document creation timestamp (Default: `Date.now`). |
-
-```javascript
-const ProductSchema = new mongoose.Schema({
-  asin: { type: String, required: true, unique: true },
-  title: { type: String, required: true },
-  image: { type: String },
-  productUrl: { type: String, required: true },
-  source: { type: String, enum: ["amazon", "flipkart"], required: true },
-  currentPrice: { type: Number, default: 0 },
-  historicLow: { type: Number, default: 0 },
-  createdAt: { type: Date, default: Date.now }
-});
-```
-</details>
-
-<details>
-<summary><b>2. PriceHistory Schema (<code>backend/models/PriceHistory.js</code>)</b></summary>
-
-Immutable time-series records capturing price fluctuations and backfilled historical data points.
-
-| Field | Type | Required | Description |
-| :--- | :--- | :--- | :--- |
-| `productId` | `ObjectId` | Yes | Reference to the parent `Product` document (`ref: 'Product'`). |
-| `price` | `Number` | Yes | Recorded numerical price value. |
-| `source` | `String` | Yes | Data origin (`amazon` \| `flipkart`). |
-| `recordedAt` | `Date` | Yes | Point-in-time timestamp (Default: `Date.now`). |
-
-```javascript
-const PriceHistorySchema = new mongoose.Schema({
-  productId: { type: mongoose.Schema.Types.ObjectId, ref: "Product", required: true },
-  price: { type: Number, required: true },
-  source: { type: String, enum: ["amazon", "flipkart"], required: true },
-  recordedAt: { type: Date, default: Date.now }
-});
-```
-</details>
-
-<details>
-<summary><b>3. Review & AI Insights Schema (<code>backend/models/reviewModel.js</code>)</b></summary>
-
-Caches raw extracted reviews alongside structured aspect-level pros and cons generated by Llama 3.
-
-| Field | Type | Description |
-| :--- | :--- | :--- |
-| `productId` | `String` | Unique product identifier string (`unique: true`). |
-| `positiveReviews` | `[String]` | Array of scraped positive customer review texts. |
-| `negativeReviews` | `[String]` | Array of scraped critical customer review texts. |
-| `insights.pros` | `Array` | List of `{ aspect, percentage, explanation }` objects. |
-| `insights.cons` | `Array` | List of `{ aspect, percentage, explanation }` objects. |
-| `createdAt` | `Date` | Ingestion timestamp (Default: `Date.now`). |
-
-```javascript
-const reviewSchema = new mongoose.Schema({
-  productId: { type: String, required: true, unique: true },
-  positiveReviews: { type: [String], default: [] },
-  negativeReviews: { type: [String], default: [] },
-  insights: {
-    pros: [{ aspect: String, percentage: Number, explanation: String }],
-    cons: [{ aspect: String, percentage: Number, explanation: String }]
-  },
-  createdAt: { type: Date, default: Date.now }
-});
-```
-</details>
-
-<details>
-<summary><b>4. Alert & Notification Schemas (<code>backend/models/Alert.js</code> & <code>Notification.js</code>)</b></summary>
-
-Manages user price drop alert thresholds and real-time dispatched notifications.
-
-```javascript
-// Alert Schema
-const AlertSchema = new mongoose.Schema({
-  userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: false },
-  productId: { type: mongoose.Schema.Types.ObjectId, ref: "Product", required: true },
-  targetPrice: { type: Number, required: true },
-  tolerance: { type: Number, default: 0 },
-  triggered: { type: Boolean, default: false },
-  acknowledged: { type: Boolean, default: false },
-  createdAt: { type: Date, default: Date.now }
-});
-
-// Notification Schema
-const NotificationSchema = new mongoose.Schema({
-  userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: false },
-  productId: { type: mongoose.Schema.Types.ObjectId, ref: "Product", required: true },
-  message: { type: String, required: true },
-  currentPrice: { type: Number, required: true },
-  targetPrice: { type: Number, required: true },
-  read: { type: Boolean, default: false },
-  createdAt: { type: Date, default: Date.now }
-});
-```
-</details>
-
----
-
-## REST API Reference
-
-### Product Endpoints (`/product`)
-
-| Method | Route | Description | Request Body / Query | Status Codes |
-| :--- | :--- | :--- | :--- | :--- |
-| `POST` | `/product/add` | Ingests a new URL, parses ASIN, scrapes metadata, backfills history, and persists product. | `{ "url": "https://www.amazon.in/dp/B0CX21C16F" }` | `200` (Found), `201` (Created), `400`, `500` |
-| `GET` | `/product/all` | Returns all registered products in the catalog. | `None` | `200`, `500` |
-| `GET` | `/product/:id` | Fetches a single product by MongoDB ID with metadata and stats. | `None` (URL Param: `id`) | `200`, `404`, `500` |
-| `DELETE`| `/product/:id` | Deletes a product and its associated price history records. | `None` (URL Param: `id`) | `200`, `404`, `500` |
-
-### Price History Endpoints (`/price-history`)
-
-| Method | Route | Description | Request Body / Query | Status Codes |
-| :--- | :--- | :--- | :--- | :--- |
-| `GET` | `/price-history/:productId` | Returns time-series price data points ordered chronologically. | `None` (URL Param: `productId`) | `200`, `404`, `500` |
-| `POST` | `/price-history/record` | Manually inserts a price snapshot for a specific product. | `{ "productId": "...", "price": 69999, "source": "amazon" }` | `201`, `400`, `500` |
-
-### Review & AI Insights Endpoints (`/reviews`)
-
-| Method | Route | Description | Request Body / Query | Status Codes |
-| :--- | :--- | :--- | :--- | :--- |
-| `GET` | `/reviews/:productId` | Retrieves cached AI aspect pros/cons or triggers scraper + Llama 3 inference. | `None` (URL Param: `productId`) | `200`, `404`, `500` |
-| `POST` | `/reviews/force-refresh` | Bypasses cached insights, rescrapes reviews, and re-executes LLM inference. | `{ "productId": "...", "asin": "B0CX21C16F" }` | `200`, `500` |
-
-### Alert & Notification Endpoints (`/alert`, `/notifications`)
-
-| Method | Route | Description | Request Body / Query | Status Codes |
-| :--- | :--- | :--- | :--- | :--- |
-| `POST` | `/alert/set` | Configures a target price threshold with optional tolerance. | `{ "productId": "...", "targetPrice": 65000, "tolerance": 500 }` | `201`, `400`, `500` |
-| `GET` | `/alert/list` | Lists all configured alerts with trigger states. | `None` | `200`, `500` |
-| `DELETE`| `/alert/:id` | Removes an existing price alert threshold. | `None` (URL Param: `id`) | `200`, `404`, `500` |
-| `GET` | `/notifications` | Lists all unread and historical alert notifications. | `None` | `200`, `500` |
-| `PUT` | `/notifications/read/:id` | Marks a specific notification as acknowledged/read. | `None` (URL Param: `id`) | `200`, `404`, `500` |
-
----
-
-## LLM Inference & Prompt Specification
-
-Zemo interacts with `meta-llama/Meta-Llama-3-8B-Instruct` hosted on the Hugging Face Router API (`https://router.huggingface.co/v1/chat/completions`).
-
-### System Prompt & Schema Specification
-
-The inference worker dispatches the following prompt structure to enforce strict JSON output without conversational markdown preamble:
-
-```text
-You are an expert e-commerce product analyst.
-Analyze the provided customer reviews and extract key pros and cons.
-
-RULES:
-1. Return ONLY valid JSON. Do not include markdown codeblocks or text.
-2. Extract 3 to 5 pros and 3 to 5 cons.
-3. For each item, provide:
-   - aspect: Short category (e.g., "Battery Life", "Build Quality")
-   - percentage: Integer (0-100) representing sentiment confidence
-   - explanation: A concise 1-2 sentence justification from reviews
-```
-
-#### Target Response Schema
-
+#### Multi-Store Price Comparison Engine (`compareStoresAI.js`)
+Normalizes prices across retail platforms. Extracts lowest cross-store base price, identifies matching variant offerings, and yields structured comparison payloads:
 ```json
 {
-  "pros": [
+  "bestStore": "Amazon",
+  "lowestPrice": 38999,
+  "stores": [
     {
-      "aspect": "Battery Life",
-      "percentage": 88,
-      "explanation": "Users consistently reported 1.5 to 2 days of moderate usage on a single charge."
+      "store": "Amazon",
+      "price": 38999,
+      "inStock": true,
+      "link": "https://www.amazon.in/dp/B0GR64G4H6",
+      "differenceFromBase": 0
+    },
+    {
+      "store": "Flipkart",
+      "price": 39999,
+      "inStock": true,
+      "link": "https://www.flipkart.com/...",
+      "differenceFromBase": 1000
     }
   ],
-  "cons": [
-    {
-      "aspect": "Thermal Throttling",
-      "percentage": 42,
-      "explanation": "Multiple reviews noted noticeable warming during extended 4K video recording."
-    }
-  ]
+  "verdict": "Amazon is currently offering the lowest price with a ₹1,000 margin."
 }
 ```
 
-### Runtime Parameters & Resilience Controls
+#### Bank Promotion & Effective Net Price Engine (`bankOffersAI.js`)
+Parses complex unstructured discount strings (instant card discounts, cashback balances, no-cost EMI interest subventions, GST business credits) to compute the true out-of-pocket acquisition cost:
+- **Instant Bank Discount**: Deducts upfront savings (e.g., "Flat ₹1,500 off on SBI Credit Cards").
+- **Cashback Conversion**: Evaluates store balance credits (e.g., "5% cashback on Amazon Pay ICICI").
+- **True Effective Net Price**:
+  $$\text{Effective Price} = \text{Base Price} - \max(\text{Applicable Bank Discounts}) - \text{Cashback}$$
 
-- **Temperature**: `0.3` (minimizes hallucinatory variance and maintains strict JSON conformance).
-- **Token Limit**: `max_tokens: 400` (constrains responses to structured schema bounds).
-- **JSON Sanitizer**: If the LLM wraps output in markdown backticks, regex extraction (`/\{[\s\S]*\}/`) extracts the raw JSON payload before parsing.
-- **Fail-Safe Fallback**: If deserialization fails, a safe fallback schema is returned to prevent endpoint 500 errors.
+#### Aspect-Based Sentiment Mining (`reviewIntelligenceAI.js` / `aiAnalyzer.js`)
+Aggregates customer reviews across positive and negative ratings. Distills qualitative feedback into aspect-level sentiment metrics:
+- **Aspect Dimensions**: Display quality, battery endurance, build integrity, software stability, performance under load, and value for price.
+- **Percentage Distribution**: Computes confidence ratios for each aspect based on verified purchase comments.
+
+#### Algorithmic Grab / Deal Meter (`dealMeterAI.js`)
+Computes an empirical deal rating on a scale from 0 to 100 based on:
+- Deviation from all-time low price point.
+- Proximity to mean historical pricing.
+- Active bank promotional depth.
+- Cross-retailer price spread.
+
+### 5. High-Throughput Deterministic Caching Layer
+To protect upstream API rate limits and eliminate cold-start latency for prospective recruiters and production visitors, Zemo integrates a local JSON caching layer (`/.zemo_cache`):
+- `gemini_stores_cache.json`: Caches multi-store price comparisons.
+- `gemini_offers_cache.json`: Caches bank discount breakdowns.
+- `gemini_reviews_cache.json`: Caches aspect-based sentiment structures.
+- `gemini_short_names_cache.json`: Caches clean canonical titles.
+- `grab_meter_cache.json`: Caches deal scoring evaluations.
+
+Live requests bypass external LLM roundtrips when valid cached keys exist, returning full telemetry payloads in sub-5ms intervals.
+
+### 6. Mutex-Guarded Scheduler & Notification State Machine
+Periodic price monitoring executes as an isolated background daemon via `node-cron`.
+
+```mermaid
+stateDiagram-v2
+    [*] --> Idle
+    Idle --> IngestionLock: Cron Trigger (Every 15 min)
+    
+    state IngestionLock {
+        [*] --> CheckMutex
+        CheckMutex --> ExecutionGranted: isRunning == false
+        CheckMutex --> ExecutionAborted: isRunning == true
+        ExecutionGranted --> ScrapeProducts: Set isRunning = true
+    }
+
+    ExecutionAborted --> Idle
+    ScrapeProducts --> EvaluateDelta: Live Price Ingested
+    
+    state EvaluateDelta {
+        [*] --> CompareHistorical
+        CompareHistorical --> PriceDropDetected: Live Price < Last Price
+        CompareHistorical --> PriceUnchanged: Live Price >= Last Price
+        PriceDropDetected --> CheckTargetAlerts: Record in PriceHistory
+        PriceUnchanged --> RecordHistory: Record in PriceHistory
+        CheckTargetAlerts --> DispatchEmail: Target Met (Live <= Target)
+        CheckTargetAlerts --> SilentLog: Target Not Met
+    }
+
+    DispatchEmail --> ReleaseLock: SMTP Success
+    SilentLog --> ReleaseLock
+    RecordHistory --> ReleaseLock
+    ReleaseLock --> Idle: Set isRunning = false
+```
+
+---
+
+## Data Schemas & Entity Relationships
+
+```mermaid
+erDiagram
+    PRODUCT ||--o{ PRICE_HISTORY : "tracks historical data"
+    PRODUCT ||--o{ ALERT : "monitored by"
+    USER ||--o{ ALERT : "subscribes to"
+    USER ||--o{ NOTIFICATION : "receives"
+    PRODUCT ||--o{ NOTIFICATION : "referenced in"
+
+    PRODUCT {
+        ObjectId _id PK
+        string title
+        string shortTitle
+        string asin UK
+        string url
+        string image
+        number currentPrice
+        number originalPrice
+        number discount
+        number rating
+        number totalReviews
+        object bankOffers
+        date createdAt
+        date updatedAt
+    }
+
+    PRICE_HISTORY {
+        ObjectId _id PK
+        ObjectId productId FK
+        number price
+        date date
+    }
+
+    ALERT {
+        ObjectId _id PK
+        ObjectId userId FK
+        ObjectId productId FK
+        number targetPrice
+        boolean notified
+        date createdAt
+    }
+
+    NOTIFICATION {
+        ObjectId _id PK
+        ObjectId userId FK
+        ObjectId productId FK
+        string message
+        number oldPrice
+        number newPrice
+        boolean read
+        date createdAt
+    }
+
+    USER {
+        ObjectId _id PK
+        string googleId UK
+        string name
+        string email UK
+        string profilePicture
+        string pfp
+        object notificationPreferences
+        date createdAt
+    }
+```
+
+### Database Index Specifications
+
+| Collection | Indexed Field(s) | Index Type | Optimization Target |
+| :--- | :--- | :--- | :--- |
+| `products` | `asin` | Unique Hash | O(1) deduplication during product URL ingestion |
+| `products` | `createdAt` | Descending | Accelerated catalog pagination on Dashboard |
+| `pricehistories` | `productId`, `date` | Compound | Rapid range queries for SVG price trajectory rendering |
+| `alerts` | `productId`, `notified` | Compound | Fast filtering of pending alerts inside cron iteration |
+| `users` | `googleId`, `email` | Unique | Identity verification and token resolution |
+
+---
+
+## REST API Specification
+
+### Product & Intelligence Endpoints
+
+| Method | Route | Description | Payload / Query Parameters |
+| :--- | :--- | :--- | :--- |
+| `POST` | `/product/track` | Normalizes URL and executes synchronous ingestion | `{ "url": "https://www.amazon.in/dp/..." }` |
+| `GET` | `/product/list` | Returns paginated array of tracked products | Query: `?page=1&limit=20` |
+| `GET` | `/product/:id` | Returns single product entity with latest metadata | URL Param: `id` (ObjectId) |
+| `GET` | `/product/history/:id` | Returns time-series pricing trajectory | URL Param: `id` (ObjectId) |
+| `GET` | `/product/compare-stores/:id` | Executes multi-store cross-retailer price comparison | URL Param: `id` (ObjectId) |
+| `GET` | `/product/bank-offers/:id` | Evaluates card offers, EMI, and true net price | URL Param: `id` (ObjectId) |
+| `GET` | `/product/customer-reviews/:id` | Distills review sentiment and aspect breakdowns | URL Param: `id` (ObjectId) |
+| `GET` | `/product/deal-meter/:id` | Calculates empirical deal score (0-100) | URL Param: `id` (ObjectId) |
+| `DELETE` | `/product/:id` | Removes product entity and associated history cascades | URL Param: `id` (ObjectId) |
+
+### Price Alert Endpoints
+
+| Method | Route | Description | Payload |
+| :--- | :--- | :--- | :--- |
+| `POST` | `/api/alerts/set` | Configures target threshold alert for user | `{ "userId": "...", "productId": "...", "targetPrice": 34999 }` |
+| `GET` | `/api/alerts/user/:userId` | Retrieves active alert targets configured by user | URL Param: `userId` (ObjectId) |
+| `DELETE` | `/api/alerts/:alertId` | Cancels specified threshold alert | URL Param: `alertId` (ObjectId) |
+
+### Notification & User Endpoints
+
+| Method | Route | Description | Payload / Headers |
+| :--- | :--- | :--- | :--- |
+| `POST` | `/user/google-login` | Synchronizes Firebase user identity | `{ "googleId": "...", "name": "...", "email": "..." }` |
+| `GET` | `/user/:id` | Retrieves user profile and alert configuration | URL Param: `id` (ObjectId) |
+| `PUT` | `/user/:id/preferences` | Updates notification dispatch preferences | `{ "emailAlerts": true, "pushAlerts": false }` |
+| `GET` | `/api/notifications/:userId` | Returns historical notification dispatch log | URL Param: `userId` (ObjectId) |
+| `PATCH` | `/api/notifications/mark-read` | Marks dispatch notification entries as read | `{ "notificationIds": ["..."] }` |
+
+---
+
+## Client Application Architecture
+
+The frontend is structured as a responsive single-page application built on React 19, Vite 7, and Tailwind CSS.
+
+### Routing Architecture
+
+```
+/
+├── Landing Page (/)               # Procedural rain canvas shader, sound pill, hero entry
+├── Dashboard / Radar (/radar)     # Tracked catalog, live search, card grid, instant modal
+├── Store Arbitrage (/stores/:id)  # Side-by-side Amazon vs Flipkart price comparisons
+├── Bank Offers (/offers/:id)      # Card discounts, cashback, EMI subventions, net price
+├── Customer Reviews (/reviews/:id)# Aspect-based sentiment distillation, pros & cons
+├── AI Insights (/insights/:id)    # Longitudinal price area graphs and volatility metrics
+├── Wishlist (/wishlist)           # Saved target items with custom thresholds
+└── User Profile (/profile)        # Account settings, custom avatar, dispatch logs
+```
+
+### Key Frontend Components
+
+- **`RainyGlass.jsx`**: Procedural water droplet canvas system generating realistic rain refraction, droplet collision simulation, and background blur via direct HTML5 Canvas rendering.
+- **`ProductNavTabs.jsx`**: Persistent analytical navigation bar enabling instantaneous switching between store comparison, review mining, bank discounts, and price history views.
+- **`AiProgressLoader.jsx`**: Multi-phase progress visualizer providing step-by-step transparency during long-running background scraping and LLM synthesis operations.
+- **`SoundPill.jsx`**: Ambient audio controller supporting synchronized rain ambience and musical backdrop with volume smoothing and user interaction gates.
+- **`vercel.json`**: Rewrite configuration guaranteeing client-side routing support across all secondary view paths on Vercel deployments.
 
 ---
 
 ## Repository Structure
 
-```text
-.
-├── backend/
-│   ├── automation/
-│   │   ├── historicPriceScraper.js   # Backfill engine via network interception
-│   │   ├── priceScraper.js           # Live DOM scraper with selector cascades
-│   │   ├── productMetadata.js        # Title, media, and ASIN resolution
-│   │   └── reviewScraper.js          # Stratified review scraper (positive/negative)
-│   ├── controllers/
-│   │   ├── alertController.js        # Threshold evaluation and alert management
-│   │   ├── notificationController.js # Notification CRUD and status updates
-│   │   └── userController.js         # User profile and preference handlers
-│   ├── models/
-│   │   ├── Alert.js                  # Alert threshold schema
-│   │   ├── Notification.js           # Notification message schema
-│   │   ├── PriceHistory.js           # Temporal price time-series schema
-│   │   ├── Product.js                # Product catalog schema
-│   │   ├── reviewModel.js            # Review corpus & AI insights schema
-│   │   └── user.js                   # User account schema
-│   ├── routes/
-│   │   ├── alertRoutes.js            # /alert endpoints
-│   │   ├── authRoutes.js             # /user auth endpoints
-│   │   ├── notificationRoutes.js     # /notifications endpoints
-│   │   ├── priceRoutes.js            # /price-history endpoints
-│   │   ├── productRoutes.js          # /product ingestion & query endpoints
-│   │   ├── reviewRoutes.js           # /reviews endpoints
-│   │   └── userRoutes.js             # /user profile endpoints
-│   ├── scheduler/
-│   │   └── priceScheduler.js         # Mutex-guarded 15-minute cron daemon
-│   ├── services/
-│   │   ├── aiAnalyzer.js             # Llama-3-8B Hugging Face inference pipeline
-│   │   └── importPriceHistory.js     # Bulk historic price ingestion service
-│   ├── uploads/                      # Static disk storage for user avatars
-│   ├── server.js                     # Express app setup, middleware, and DB connection
-│   └── package.json                  # Backend dependencies and scripts
+```
+Zemo/
+├── .env.example                     # Environment template for credentials and ports
+├── .gitignore                       # Production ignore specifications (dist, node_modules, .env)
+├── package.json                     # Monorepo root dependencies and orchestration scripts
+├── package-lock.json                # Locked dependency tree
+├── README.md                        # Primary engineering and architectural documentation
 │
-├── frontend/
-│   ├── src/
-│   │   ├── components/
-│   │   │   ├── AddProductModal.jsx   # Product ingestion modal dialog
-│   │   │   ├── AlertModal.jsx        # Price alert threshold configuration modal
-│   │   │   ├── Navbar.jsx            # Top navigation bar
-│   │   │   ├── PriceChart.jsx        # Recharts SVG area gradient price timeline
-│   │   │   ├── ProductCard.jsx       # Catalog display card with delta indicators
-│   │   │   ├── SemiCircleMeter.jsx   # Aspect sentiment semi-circle pie gauge
-│   │   │   └── Sidebar.jsx           # Application navigation sidebar
-│   │   ├── pages/
-│   │   │   ├── Dashboard.jsx         # Primary catalog & monitoring overview
-│   │   │   ├── ProductInsights.jsx   # Deep-dive analytics, charts & AI aspect scores
-│   │   │   ├── Profile.jsx           # User settings and notification preferences
-│   │   │   └── TrackedProducts.jsx   # Managed product inventory table
-│   │   ├── services/
-│   │   │   └── api.js                # Axios HTTP client instance & API methods
-│   │   ├── App.jsx                   # Root application routing and layout
-│   │   ├── index.css                 # Tailwind CSS utility imports
-│   │   └── main.jsx                  # React 19 entry point
-│   ├── index.html                    # Single-page HTML entry point
-│   ├── vite.config.js                # Vite build and development configuration
-│   ├── tailwind.config.js            # Tailwind styling tokens and theme
-│   └── package.json                  # Frontend dependencies and scripts
+├── .zemo_cache/                     # Deterministic local cache for Gemini inference payloads
+│   ├── gemini_offers_cache.json     # Bank offer deductions cache
+│   ├── gemini_price_cache.json      # Dynamic price telemetry cache
+│   ├── gemini_reviews_cache.json    # Distilled review aspects cache
+│   ├── gemini_short_names_cache.json# Canonical titles cache
+│   ├── gemini_stores_cache.json     # Multi-store price comparison cache
+│   └── grab_meter_cache.json        # Grab meter deal evaluation cache
 │
-├── .gitignore
-├── README.md
-└── package.json                      # Monorepo root scripts
+├── backend/                         # Express REST API & Automation Subsystem
+│   ├── .env.example                 # Backend environment variable template
+│   ├── server.js                    # Express application entrypoint and middleware setup
+│   ├── assets/                      # Static email assets (brand logos)
+│   ├── automation/                  # Playwright headless browser automation modules
+│   │   ├── multiStoreScraper.js     # Live search and multi-retailer scraping engine
+│   │   ├── priceFetcher.js          # Canonical product page extraction and selector cascades
+│   │   ├── productMetadata.js       # ASIN resolution and metadata normalization
+│   │   └── reviewScraper.js         # Stratified review collection engine
+│   ├── controllers/                 # Route controllers
+│   │   └── reviewController.js      # Review intelligence request handlers
+│   ├── models/                      # Mongoose document schemas
+│   │   ├── Alert.js                 # Threshold alert records
+│   │   ├── Notification.js          # Dispatched notification history
+│   │   ├── PriceHistory.js          # Time-series price snapshots
+│   │   ├── Product.js               # Primary product catalog records
+│   │   ├── reviewModel.js           # Review storage schemas
+│   │   └── user.js                  # User accounts and preferences
+│   ├── routes/                      # REST API routing definitions
+│   │   ├── alertRoutes.js           # Target price alert routes
+│   │   ├── authRoutes.js            # Authentication routes
+│   │   ├── notificationRoutes.js     # User notification routes
+│   │   ├── priceRoutes.js           # Price history retrieval routes
+│   │   ├── productRoutes.js         # Ingestion, tracking, and list routes
+│   │   ├── reviewRoutes.js          # Review distillation routes
+│   │   └── userRoutes.js            # Profile and avatar upload routes
+│   ├── scheduler/                   # Background task daemons
+│   │   └── priceScheduler.js        # Reentrant 15-minute cron price monitor
+│   ├── scripts/                     # Operational maintenance scripts
+│   │   ├── importHistoryTest.js     # History import validation runner
+│   │   ├── testScraper.js           # Isolated browser scraping tester
+│   │   └── update_mongo_offers.js   # Demo offer synchronization helper
+│   ├── services/                    # Cognitive AI and external communication services
+│   │   ├── aiAnalyzer.js            # Meta-Llama sentiment inference driver
+│   │   ├── bankOffersAI.js          # Gemini bank and payment discount processor
+│   │   ├── compareStoresAI.js       # Gemini multi-store pricing arbitrage engine
+│   │   ├── dealMeterAI.js           # Gemini deal timing and grab metric evaluator
+│   │   ├── emailService.js          # Nodemailer transactional email dispatcher
+│   │   ├── importPriceHistory.js    # Historical price data backfill processor
+│   │   ├── productShortNameAI.js    # Gemini title canonicalization service
+│   │   ├── reviewIntelligenceAI.js  # Gemini aspect-based review distillation
+│   │   └── reviewProcessor.js       # Review text cleaning and aggregation
+│   └── uploads/                     # User avatar upload directory (with .gitkeep)
+│
+├── frontend/                        # React 19 Client SPA
+│   ├── eslint.config.js             # Client linter configuration
+│   ├── index.html                   # HTML5 template and font preconnects
+│   ├── package.json                 # Client dependencies and Vite scripts
+│   ├── postcss.config.js            # PostCSS plugin configurations
+│   ├── tailwind.config.js           # Tailored color system and typography tokens
+│   ├── vercel.json                  # Client SPA routing rewrite rules for Vercel
+│   ├── vite.config.js               # Vite build tool and plugin configuration
+│   ├── public/                      # Static client distribution assets
+│   │   ├── i_giorni.mp3             # Background acoustic soundtrack
+│   │   ├── logo.png                 # Brand vector icon
+│   │   ├── ludovico_einaudi.png     # Track thumbnail artwork
+│   │   ├── rain_forest_bokeh.png    # Procedural canvas backdrop artwork
+│   │   └── rain_loop.mp3            # Atmospheric rain audio sample
+│   └── src/                         # Client React source code
+│       ├── App.css                  # Component-specific stylesheet
+│       ├── App.jsx                  # Main application layout, audio manager, router
+│       ├── firebase.js              # Client Firebase SDK configuration
+│       ├── index.css                # Global CSS directives, font imports, Lenis rules
+│       ├── main.jsx                 # React root renderer
+│       ├── components/              # Modular user interface components
+│       │   ├── AiProgressLoader.jsx # Multi-phase loading state simulator
+│       │   ├── EmailEntryModal.jsx  # Email subscription modal
+│       │   ├── GoogleLoginButton.jsx# Google authentication button
+│       │   ├── InsightMeter.jsx     # Aspect-based sentiment meter component
+│       │   ├── NotificationBell.jsx # Notification dropdown trigger
+│       │   ├── ProductCard.jsx      # Catalog product card with instant statistics
+│       │   ├── ProductNavTabs.jsx   # Top-level sub-navigation tab switcher
+│       │   ├── RainyGlass.jsx       # Procedural rain droplet HTML5 Canvas shader
+│       │   └── SoundPill.jsx        # Floating atmospheric audio toggle
+│       ├── pages/                   # Application view controllers
+│       │   ├── BankOffersPage.jsx   # Card discounts and net price calculator
+│       │   ├── CompareStoresPage.jsx# Cross-store arbitrage comparison view
+│       │   ├── CustomerReviewsPage.jsx # Sentiment analysis and aspect metrics view
+│       │   ├── Dashboard.jsx        # Tracked catalog, live monitoring, metrics
+│       │   ├── InputTestingPage.jsx # Developer loader and console testing sandbox
+│       │   ├── InsightsPage.jsx     # Price history graphs and volatility view
+│       │   ├── LandingPage.jsx      # High-impact entry page with procedural canvas
+│       │   ├── LoginPage.jsx        # Authentication view
+│       │   ├── ProfilePage.jsx      # Account settings and notification controls
+│       │   └── WishlistPage.jsx     # User saved target items view
+│       └── services/                # HTTP API integration clients
+│           └── api.js               # Central Axios client with dynamic base URL
+└── uploads/                         # Root uploads directory (with .gitkeep)
 ```
 
 ---
 
 ## Environment Configuration
 
-Create a `.env` file in the `backend/` directory:
-
-```env
-# Server Configuration
-PORT=5000
-NODE_ENV=development
-
-# Database Connection
-MONGO_URI=mongodb+srv://<username>:<password>@cluster.mongodb.net/zemo?retryWrites=true&w=majority
-
-# AI & LLM Inference
-HF_API_KEY=hf_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-
-# Firebase Admin / Auth (Optional for push notifications)
-FIREBASE_PROJECT_ID=your-project-id
-FIREBASE_CLIENT_EMAIL=your-client-email@appspot.gserviceaccount.com
-FIREBASE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\n...\n-----END PRIVATE KEY-----\n"
-```
+Configure the application by establishing a `.env` file at the root directory. Use the provided [`.env.example`](.env.example) template:
 
 | Variable | Type | Required | Description |
 | :--- | :--- | :--- | :--- |
-| `PORT` | `Number` | No | Express server port (Default: `5000`). |
-| `MONGO_URI` | `String` | Yes | MongoDB connection string (Atlas or local `mongodb://127.0.0.1:27017/zemo`). |
-| `HF_API_KEY` | `String` | Yes | Hugging Face User Access Token with inference permissions. |
-| `FIREBASE_*` | `String` | No | Firebase service account credentials for push dispatch. |
+| `PORT` | Number | Yes | Port on which the Express REST API listens (Default: `5000`) |
+| `MONGO_URI` | String | Yes | MongoDB connection URI (`mongodb://localhost:27017/zemo` or Atlas URI) |
+| `GEMINI_API_KEY` | String | Yes | Google Gemini API key for store comparison, bank offers, and review intelligence |
+| `HF_API_KEY` | String | Optional | Hugging Face user token for Meta-Llama-3 aspect sentiment extraction |
+| `EMAIL_USER` | String | Yes | SMTP sender username / Gmail address for price drop alerts |
+| `EMAIL_PASS` | String | Yes | SMTP app-specific password (e.g., Google App Password) |
+| `NOTIFICATION_EMAIL`| String | Yes | Default administrative notification recipient address |
+| `ABSTRACT_EMAIL_API_KEY` | String | Optional | Abstract API key for deliverability and MX record validation |
+
+For frontend deployments (e.g., Vercel), configure the environment variable:
+
+| Variable | Target | Description |
+| :--- | :--- | :--- |
+| `VITE_API_URL` | Frontend (`frontend/.env`) | Deployed backend base URL (e.g., `https://api.yourdomain.com`). Falls back to `http://localhost:5000` locally. |
 
 ---
 
-## Installation & Local Setup
+## Local Installation & Setup
 
 ### Prerequisites
-- **Node.js**: `v18.0.0` or higher
-- **npm**: `v9.0.0` or higher
-- **MongoDB**: Active local instance or MongoDB Atlas cluster URI
-- **Chromium / Playwright Dependencies**: System libraries for headless browser automation
+- Node.js (v18.0.0 or higher)
+- npm (v9.0.0 or higher)
+- MongoDB instance (local or MongoDB Atlas connection string)
+- Playwright Chromium dependencies
 
-### 1. Clone & Install Dependencies
+### Installation Steps
 
-```bash
-# Clone repository
-git clone https://github.com/Arnim-Zola/Zemo.git
-cd Zemo
+1. **Clone the repository**:
+   ```bash
+   git clone https://github.com/imMohammedSahil/Zemo.git
+   cd Zemo
+   ```
 
-# Install root dependencies
-npm install
+2. **Install root and backend dependencies**:
+   ```bash
+   npm install
+   ```
 
-# Install backend dependencies
-cd backend
-npm install
+3. **Install client frontend dependencies**:
+   ```bash
+   cd frontend
+   npm install
+   cd ..
+   ```
 
-# Install Playwright browser binaries (Chromium)
-npx playwright install chromium
+4. **Install Playwright browser binaries**:
+   ```bash
+   npx playwright install chromium
+   ```
 
-# Install frontend dependencies
-cd ../frontend
-npm install
-```
+5. **Configure environment variables**:
+   ```bash
+   cp .env.example .env
+   # Edit .env with your MongoDB credentials, Gemini API key, and SMTP parameters
+   ```
 
-### 2. Configure Environment
-```bash
-# Copy and populate backend environment file
-cp backend/.env.example backend/.env
-# (Edit backend/.env with your MONGO_URI and HF_API_KEY)
-```
-
-### 3. Run Development Environment
-
-**Option A: Concurrent Execution (from project root)**
-```bash
-# From repository root
-npm run dev
-```
-
-**Option B: Separate Terminal Processes**
-
-*Terminal 1: Backend Server (Port 5000)*
-```bash
-cd backend
-npm run dev
-# Server running at http://localhost:5000
-# [SCHEDULER] PriceScheduler initialized (*/15 * * * *)
-```
-
-*Terminal 2: Frontend Client (Port 5173)*
-```bash
-cd frontend
-npm run dev
-# Local client running at http://localhost:5173
-```
+6. **Start the development environment**:
+   ```bash
+   npm run dev
+   ```
+   This command executes `concurrently`, spinning up:
+   - Backend API server on `http://localhost:5000` (with live reload via `--watch-path=backend`)
+   - Frontend Vite development server on `http://localhost:5173`
 
 ---
 
-## Performance & Benchmark Metrics
+## Deployment Configuration
 
-| Metric | Measured Value | Methodology / Context |
-| :--- | :--- | :--- |
-| **DOM Selector Extraction Rate** | `98.6%` | Success rate across Amazon & Flipkart desktop layouts with fallback cascade |
-| **Zero-Day Backfill Yield** | `50 - 300+ data points` | Historical records imported via network interception in `< 6.5s` |
-| **LLM Inference Latency** | `1,850 ms` (avg) | `Meta-Llama-3-8B-Instruct` via Hugging Face Router API |
-| **Structured Output Compliance** | `99.4%` | Conformance to JSON pros/cons aspect schema at `temperature: 0.3` |
-| **Context Token Reduction** | `82%` | Savings achieved by 5-positive / 5-negative stratified review sampling |
-| **Review Cache Hit Latency** | `< 45 ms` | Response time for previously analyzed product review insights |
-| **Cron Polling Reliability** | `100%` | Reentrancy mutex lock prevents overlapping executions during long scrapes |
+### Frontend Deployment on Vercel
+The frontend is decoupled and configured for zero-configuration Vercel deployment:
+1. Connect the repository to Vercel.
+2. Set **Root Directory** to `frontend`.
+3. Set **Framework Preset** to `Vite`.
+4. Add the environment variable:
+   ```
+   VITE_API_URL = https://your-backend-api-url.com
+   ```
+5. Deploy. The included [`frontend/vercel.json`](frontend/vercel.json) rewrite rule handles client-side React Router navigation seamlessly without 404 errors on direct sub-path access.
 
----
-
-## Operational Runbook & Edge Cases
-
-<details>
-<summary><b>1. E-Commerce Bot Detection & CAPTCHA Mitigation</b></summary>
-
-- **Symptom**: Playwright returns empty titles or timeouts during metadata extraction.
-- **Remediation**: The system runs Chromium in headless mode with modern desktop User-Agent spoofing (`Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36...`) and disables automation flags (`--no-sandbox`, `--disable-setuid-sandbox`). For high-frequency enterprise monitoring, configure upstream residential proxy middleware in `automation/priceScraper.js`.
-</details>
-
-<details>
-<summary><b>2. Handling Rate Limits on Hugging Face Router API</b></summary>
-
-- **Symptom**: HTTP `429 Too Many Requests` or `503 Service Unavailable` returned by Hugging Face.
-- **Remediation**: `services/aiAnalyzer.js` implements an exponential backoff retry handler. Furthermore, all generated aspects are permanently cached in the `Review` collection to prevent redundant calls for existing products.
-</details>
-
-<details>
-<summary><b>3. Cron Task Overlaps</b></summary>
-
-- **Symptom**: Database connection pool exhaustion during large product check batches.
-- **Remediation**: `scheduler/priceScheduler.js` wraps task execution in a global atomic boolean (`running`). If a check cycle is still active when the next 15-minute cron fires, the subsequent execution is safely skipped.
-</details>
+### Backend Deployment (Render, Railway, Fly.io, or AWS EC2)
+1. Ensure the host environment provides Chromium dependencies required by Playwright (`npx playwright install-deps` or Dockerized container).
+2. Configure all environment variables specified in `.env.example`.
+3. Start the production server:
+   ```bash
+   npm run start
+   ```
 
 ---
 
 ## License
 
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+This software is released under the [MIT License](LICENSE).

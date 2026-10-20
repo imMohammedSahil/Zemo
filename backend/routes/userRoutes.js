@@ -17,7 +17,117 @@ const storage = multer.diskStorage({
 });
 
 const upload = multer({ storage });
+const Notification = require("../models/Notification");
+const { sendWelcomeEmail } = require("../services/emailService");
 
+/* REAL-TIME EMAIL DELIVERABILITY CHECKER (AbstractAPI) */
+async function verifyEmailDeliverability(email) {
+  const apiKey = process.env.ABSTRACT_EMAIL_API_KEY;
+  if (!apiKey) return { valid: true };
+
+  try {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 3500);
+
+    const response = await fetch(
+      `https://emailreputation.abstractapi.com/v1/?api_key=${apiKey}&email=${encodeURIComponent(email)}`,
+      { signal: controller.signal }
+    );
+    clearTimeout(timeout);
+
+    if (!response.ok) {
+      console.warn(`[AbstractAPI] HTTP ${response.status}. Falling open to not block user.`);
+      return { valid: true };
+    }
+
+    const data = await response.json();
+
+    // Verify if mailbox exists and domain accepts mail
+    if (data?.email_deliverability?.status === "undeliverable") {
+      let reason = "This email does not seem to exist. Please double-check your spelling.";
+      if (data.email_deliverability.status_detail === "dns_record_not_found") {
+        reason = "Domain not found. Please check for typos (e.g. @gmail.com).";
+      } else if (data.email_deliverability.status_detail === "invalid_mailbox") {
+        reason = "This mailbox does not exist. Please check your username.";
+      }
+      return {
+        valid: false,
+        reason,
+        suggestion: data.suggested_correction
+      };
+    }
+
+    return {
+      valid: true,
+      senderName: data?.email_sender?.first_name
+        ? `${data.email_sender.first_name} ${data.email_sender.last_name || ''}`.trim()
+        : null
+    };
+  } catch (err) {
+    console.warn("[AbstractAPI] Verification skipped (timeout/network):", err.message);
+    // Fail-open: Never block user on network glitch
+    return { valid: true };
+  }
+}
+
+/* ENTER EMAIL & DISPATCH NOTIFICATION */
+router.post("/enter-email", async (req, res) => {
+  try {
+    const { email } = req.body;
+    if (!email || typeof email !== "string" || !email.includes("@")) {
+      return res.status(400).json({ error: "Please provide a valid email address." });
+    }
+
+    const cleanEmail = email.trim().toLowerCase();
+
+    // Check if user exists or create new user
+    let user = await User.findOne({ email: cleanEmail });
+    let isNewUser = false;
+    if (!user) {
+      // Verify email actually exists before creating user or dispatching email
+      const verification = await verifyEmailDeliverability(cleanEmail);
+      if (!verification.valid) {
+        return res.status(400).json({ error: verification.reason });
+      }
+
+      isNewUser = true;
+      user = new User({
+        googleId: "guest-" + Date.now(),
+        name: verification.senderName || cleanEmail.split("@")[0],
+        username: cleanEmail.split("@")[0],
+        email: cleanEmail
+      });
+      await user.save();
+    }
+
+    // Dispatch welcome notification email strictly ONCE for brand new users
+    if (isNewUser) {
+      user.hasReceivedWelcomeEmail = true;
+      await user.save();
+
+      // Record in-app notification for the Wish Bell
+      await Notification.create({
+        title: "Connected with Care",
+        message: `Your inbox (${cleanEmail}) is now tuned in for gentle price drop alerts.`,
+        sentAt: new Date()
+      });
+
+      sendWelcomeEmail({ to: cleanEmail })
+        .catch(err => console.warn("[EmailService] Welcome email error:", err.message));
+    }
+
+    res.json({
+      success: true,
+      email: cleanEmail,
+      isNewUser,
+      welcomeSent: isNewUser,
+      message: isNewUser ? `Welcome notification dispatched to ${cleanEmail}` : "Welcome back"
+    });
+  } catch (error) {
+    console.error("Error in /enter-email:", error);
+    res.status(500).json({ error: "Failed to register email" });
+  }
+});
 
 /* GET CURRENT USER */
 

@@ -1,0 +1,235 @@
+{
+  "B0F29P9CKJ": [
+    {
+      "price": 49999,
+      "recordedAt": "2025-07-01T00:00:00.000Z",
+      "source": "amazon"
+    },
+    {
+      "price": 42999,
+      "recordedAt": "2025-07-21T00:00:00.000Z",
+      "source": "amazon"
+    },
+    {
+      "price": 40490,
+      "recordedAt": "2025-09-23T00:00:00.000Z",
+      "source": "amazon"
+    },
+    {
+      "price": 34999,
+      "recordedAt": "2025-11-01T00:00:00.000Z",
+      "source": "amazon"
+    },
+    {
+      "price": 39999,
+      "recordedAt": "2025-12-30T00:00:00.000Z",
+      "source": "amazon"
+    },
+    {
+      "price": 45350,
+      "recordedAt": "2026-01-15T00:00:00.000Z",
+      "source": "amazon"
+    },
+    {
+      "price": 39999,
+      "recordedAt": "2026-01-16T00:00:00.000Z",
+      "source": "amazon"
+    },
+    {
+      "price": 45299,
+      "recordedAt": "2026-01-21T00:00:00.000Z",
+      "source": "amazon"
+    },
+    {
+      "price": 39999,
+      "recordedAt": "2026-01-22T00:00:00.000Z",
+      "source": "amazon"
+    },
+    {
+      "price": 45005,
+      "recordedAt": "2026-02-04T00:00:00.000Z",
+      "source": "amazon"
+    },
+    {
+      "price": 39999,
+      "recordedAt": "2026-02-05T00:00:00.000Z",
+      "source": "amazon"
+    },
+    {
+      "price": 42990,
+      "recordedAt": "2026-02-10T00:00:00.000Z",
+      "source": "amazon"
+    },
+    {
+      "price": 39999,
+      "recordedAt": "2026-02-11T00:00:00.000Z",
+      "source": "amazon"
+    },
+    {
+      "price": 47990,
+      "recordedAt": "2026-05-27T00:00:00.000Z",
+      "source": "amazon"
+    },
+    {
+      "price": 39999,
+      "recordedAt": "2026-05-28T00:00:00.000Z",
+      "source": "amazon"
+    },
+    {
+      "price": 45005,
+      "recordedAt": "2026-10-03T00:00:00.000Z",
+      "source": "amazon"
+    },
+    {
+      "price": 43999,
+      "recordedAt": "2026-10-11T00:00:00.000Z",
+      "source": "amazon"
+    }
+  ],
+  "B0GTV5WMSD": [
+    {
+      "productId": "6ad0e62b676d45d362a7d22e",
+      "price": 88990,
+      "source": "amazon",
+      "recordedAt": "2026-07-05T00:00:00.000Z"
+    },
+    {
+      "productId": "6ad0e62b676d45d362a7d22e",
+      "price": 109990,
+      "source": "amazon",
+      "recordedAt": "2026-09-29T00:00:00.000Z"
+    },
+    {
+      "productId": "6ad0e62b676d45d362a7d22e",
+      "price": 94990,
+      "source": "amazon",
+      "recordedAt": "2026-10-14T00:00:00.000Z"
+    },
+    {
+      "productId": "6ad0e62b676d45d362a7d22e",
+      "price": 99900,
+      "source": "amazon",
+      "recordedAt": "2026-10-15T00:00:00.000Z"
+    }
+  ],
+  "B0H2J3PRKV": [
+    {
+      "productId": "6ad0ea02b2720467086fd88e",
+      "price": 80999,
+      "source": "amazon",
+      "recordedAt": "2025-02-07T00:00:00.000Z"
+    },
+    {
+      "productId": "6ad0ea02b2720467086fd88e",
+      "price": 63690,
+      "source": "amazon",
+      "recordedAt": "2025-11-11T00:00:00.000Z"
+    },
+    {
+      "productId": "6ad0ea02b2720467086fd88e",
+      "price": 66592,
+      "source": "amazon",
+      "recordedAt": "2026-09-14T00:00:00.000Z"
+    },
+    {
+      "productId": "6ad0ea02b2720467086fd88e",
+      "price": 64999,
+      "source": "amazon",
+      "recordedAt": "2026-10-14T00:00:00.000Z"
+    }
+  ],
+  "B0H25X3W7F": [
+    {
+      "productId": "6ad37322a61c2a5c116d7c8f",
+      "price": 115990,
+      "source": "amazon",
+      "recordedAt": "2026-08-25T00:00:00.000Z"
+    },
+    {
+      "productId": "6ad37322a61c2a5c116d7c8f",
+      "price": 110161,
+      "source": "amazon",
+      "recordedAt": "2026-09-17T00:00:00.000Z"
+    },
+    {
+      "productId": "6ad37322a61c2a5c116d7c8f",
+      "price": 104990,
+      "source": "amazon",
+      "recordedAt": "2026-10-12T00:00:00.000Z"
+    },
+    {
+      "productId": "6ad37322a61c2a5c116d7c8f",
+      "price": 104990,
+      "source": "amazon",
+      "recordedAt": "2026-10-16T00:00:00.000Z"
+    },
+    {
+      "productId": "6ad37322a61c2a5c116d7c8f",
+      "price": 93990,
+      "source": "amazon",
+      "recordedAt": "2026-10-16T00:00:00.000Z"
+    },
+    {
+      "productId": "6ad37322a61c2a5c116d7c8f",
+      "price": 99990,
+      "source": "amazon",
+      "recordedAt": "2026-10-17T00:00:00.000Z"
+    }
+  ],
+  "B0GR64G4H6": [
+    {
+      "productId": "6ad38a8646f5b99056af6675",
+      "price": 79900,
+      "source": "amazon",
+      "recordedAt": "2026-03-15T00:00:00.000Z"
+    },
+    {
+      "productId": "6ad38a8646f5b99056af6675",
+      "price": 76990,
+      "source": "amazon",
+      "recordedAt": "2026-05-04T00:00:00.000Z"
+    },
+    {
+      "productId": "6ad38a8646f5b99056af6675",
+      "price": 74990,
+      "source": "amazon",
+      "recordedAt": "2026-07-15T00:00:00.000Z"
+    },
+    {
+      "productId": "6ad38a8646f5b99056af6675",
+      "price": 76990,
+      "source": "amazon",
+      "recordedAt": "2026-08-01T00:00:00.000Z"
+    },
+    {
+      "productId": "6ad38a8646f5b99056af6675",
+      "price": 72990,
+      "source": "amazon",
+      "recordedAt": "2026-09-23T00:00:00.000Z"
+    },
+    {
+      "productId": "6ad38a8646f5b99056af6675",
+      "price": 74990,
+      "source": "amazon",
+      "recordedAt": "2026-10-02T00:00:00.000Z"
+    },
+    {
+      "productId": "6ad38a8646f5b99056af6675",
+      "price": 69990,
+      "source": "amazon",
+      "recordedAt": "2026-10-09T00:00:00.000Z"
+    },
+    {
+      "productId": "6ad38a8646f5b99056af6675",
+      "price": 67990,
+      "source": "amazon",
+      "recordedAt": "2026-10-13T00:00:00.000Z"
+    },
+    {
+      "productId": "6ad38a8646f5b99056af6675",
+      "price": 67990,
+      "source": "amazon",
+      "recordedAt": "2026-10-17T00:00:00.000Z"
+    }
+  ]
+}
