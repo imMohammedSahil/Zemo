@@ -184,7 +184,37 @@ flowchart LR
 ```
 
 #### Multi-Store Price Comparison Engine (`compareStoresAI.js`)
-Normalizes prices across retail platforms. Extracts lowest cross-store base price, identifies matching variant offerings, and yields structured comparison payloads:
+Normalizes prices across retail platforms, verifies variant specifications, extracts the lowest cross-store base price, and synthesizes structured arbitrage intelligence:
+
+```mermaid
+flowchart LR
+    subgraph Inputs["Scraped Competitor Listings"]
+        Amz["Amazon India<br/>Live Price: ₹38,999"]
+        Fk["Flipkart Search<br/>Live Price: ₹39,999"]
+    end
+
+    subgraph Engine["Gemini Arbitrage Engine"]
+        Fuzzy["Variant & Spec Verification<br/>(RAM, Storage, Cellular)"]
+        Delta["Cross-Store Delta Calculation<br/>(Base vs Competitor Spread)"]
+        Fuzzy --> Delta
+    end
+
+    subgraph Synthesis["Deal Intelligence Output"]
+        Verdict["Optimal Store: Amazon India<br/>Arbitrage Margin: ₹1,000"]
+    end
+
+    Inputs --> Engine
+    Engine --> Synthesis
+```
+
+| Retailer | Detected Price | In Stock | Spread vs Baseline | Arbitrage Verdict |
+| :--- | :--- | :--- | :--- | :--- |
+| **Amazon India** | ₹38,999 | Yes | Baseline (₹0) | **Lowest Price Offering** |
+| **Flipkart** | ₹39,999 | Yes | +₹1,000 | ₹1,000 Premium |
+
+<details>
+<summary>View Structured JSON API Payload</summary>
+
 ```json
 {
   "bestStore": "Amazon",
@@ -208,6 +238,9 @@ Normalizes prices across retail platforms. Extracts lowest cross-store base pric
   "verdict": "Amazon is currently offering the lowest price with a ₹1,000 margin."
 }
 ```
+
+</details>
+
 
 #### Bank Promotion & Effective Net Price Engine (`bankOffersAI.js`)
 Parses complex unstructured discount strings (instant card discounts, cashback balances, no-cost EMI interest subventions, GST business credits) to compute the true out-of-pocket acquisition cost:
