@@ -7,7 +7,7 @@ const API = axios.create({
 export default API;
 
 export const getProfile = (googleId) =>
-  axios.get(`/api/profile/${googleId}`);
+  API.get(`/api/profile/${googleId}`);
 
 export const updateProfile = (googleId, data) =>
-  axios.put(`/api/profile/${googleId}`, data);
+  API.put(`/api/profile/${googleId}`, data);
