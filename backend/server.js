@@ -35,12 +35,13 @@ app.use(express.json());
 app.use("/user", authRoutes);
 
 
-/* Database Connection */
+const { seedDemoProductIfEmpty } = require("./services/seedService");
 
 const mongoUri = process.env.MONGO_URI || process.env.MONGO_URL;
 mongoose.connect(mongoUri)
-.then(() => {
+.then(async () => {
     console.log("MongoDB Connected");
+    await seedDemoProductIfEmpty();
     startScheduler();
 })
 .catch((err) => {

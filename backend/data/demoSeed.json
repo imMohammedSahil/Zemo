@@ -1,0 +1,302 @@
+{
+  "product": {
+    "_id": "6ad71e366b2c6422ae682ab4",
+    "asin": "B0F29P9CKJ",
+    "title": "Samsung Galaxy Tab S10 FE [Smartchoice], S Pen in-Box, 27.7 cm (10.9 inch) Display, AI Writing, Desktop Mode, Pre Loaded Pro Apps, 8 GB RAM, 128 GB Storage, Wi-Fi Tablet, Gray",
+    "shortTitle": "Samsung Galaxy Tab S10",
+    "warmPhrase": "Chasing Samsung Galaxy Tab S10 around the clock until it surrenders",
+    "image": "https://m.media-amazon.com/images/I/31qIlikAcVL._SY300_SX300_QL70_FMwebp_.jpg",
+    "productUrl": "https://www.amazon.in/dp/B0F29P9CKJ",
+    "source": "amazon",
+    "currentPrice": 43999,
+    "historicLow": 43999,
+    "mrp": 49999,
+    "rating": 4.4,
+    "ratingsCount": "259 reviews",
+    "ratingDistribution": {
+      "1": 5,
+      "2": 3,
+      "3": 3,
+      "4": 19,
+      "5": 70
+    },
+    "bankOffers": [
+      {
+        "title": "Bank Offer: Upto ₹3,000.00 discount on SBI Credit Cards, SBI Debit Cards",
+        "description": "Upto ₹3,000.00 discount on SBI Credit Cards, SBI Debit Cards",
+        "type": "bank_discount",
+        "bank": "SBI Card",
+        "discountAmount": 3000
+      },
+      {
+        "title": "No Cost EMI: Upto ₹1,147.05 EMI interest savings on Amazon Pay ICICI Bank Credit Ca",
+        "description": "Upto ₹1,147.05 EMI interest savings on Amazon Pay ICICI Bank Credit Cards, Bajaj Finserv EMI cards",
+        "type": "emi",
+        "bank": "ICICI Bank",
+        "discountAmount": 1147
+      },
+      {
+        "title": "Cashback: Upto ₹1,319.00 cashback as Amazon Pay Balance when you pay with Amazon",
+        "description": "Upto ₹1,319.00 cashback as Amazon Pay Balance when you pay with Amazon Pay ICICI Bank Credit Cards",
+        "type": "cashback",
+        "bank": "ICICI Bank",
+        "discountAmount": 1319
+      },
+      {
+        "title": "Partner Offers: Get GST invoice and save up to 18% on business purchases. Sign up for ",
+        "description": "Get GST invoice and save up to 18% on business purchases. Sign up for free",
+        "type": "bank_discount",
+        "bank": "Amazon Partner Bank",
+        "discountAmount": 0
+      }
+    ],
+    "coupon": null,
+    "inStock": true,
+    "stockStatus": "In Stock",
+    "lastCheckedAt": "2026-10-20T07:54:30.923Z",
+    "createdAt": "2026-10-20T07:54:30.923Z",
+    "__v": 0
+  },
+  "priceHistory": [
+    {
+      "_id": "6ad71fb36b2c6422ae68300b",
+      "productId": "6ad71e366b2c6422ae682ab4",
+      "price": 43999,
+      "source": "amazon",
+      "recordedAt": "2026-10-20T08:00:51.080Z",
+      "__v": 0
+    },
+    {
+      "_id": "6ad726bde50a20eca905dfea",
+      "productId": "6ad71e366b2c6422ae682ab4",
+      "price": 43999,
+      "source": "amazon",
+      "recordedAt": "2026-10-20T08:30:53.976Z",
+      "__v": 0
+    },
+    {
+      "_id": "6ad72dc8f65f6901c361ea6e",
+      "productId": "6ad71e366b2c6422ae682ab4",
+      "price": 43999,
+      "source": "amazon",
+      "recordedAt": "2026-10-20T09:00:56.221Z",
+      "__v": 0
+    },
+    {
+      "_id": "6ad7314a83efe32c0bad242d",
+      "productId": "6ad71e366b2c6422ae682ab4",
+      "price": 43999,
+      "source": "amazon",
+      "recordedAt": "2026-10-20T09:15:54.104Z",
+      "__v": 0
+    },
+    {
+      "_id": "6ad73bd6a01eaaae145404af",
+      "productId": "6ad71e366b2c6422ae682ab4",
+      "price": 43999,
+      "source": "amazon",
+      "recordedAt": "2026-10-20T10:00:54.551Z",
+      "__v": 0
+    },
+    {
+      "_id": "6ad73f5aa01eaaae1454130e",
+      "productId": "6ad71e366b2c6422ae682ab4",
+      "price": 43999,
+      "source": "amazon",
+      "recordedAt": "2026-10-20T10:15:54.070Z",
+      "__v": 0
+    },
+    {
+      "_id": "6ad742de136fff48d6029237",
+      "productId": "6ad71e366b2c6422ae682ab4",
+      "price": 43999,
+      "source": "amazon",
+      "recordedAt": "2026-10-20T10:30:54.012Z",
+      "__v": 0
+    },
+    {
+      "_id": "6ad74662253a082a1ac8a36b",
+      "productId": "6ad71e366b2c6422ae682ab4",
+      "price": 43999,
+      "source": "amazon",
+      "recordedAt": "2026-10-20T10:45:54.099Z",
+      "__v": 0
+    },
+    {
+      "_id": "6ad749e67b5d36b6426285f9",
+      "productId": "6ad71e366b2c6422ae682ab4",
+      "price": 43999,
+      "source": "amazon",
+      "recordedAt": "2026-10-20T11:00:54.394Z",
+      "__v": 0
+    },
+    {
+      "_id": "6ad74d6790ba2fde33fb556d",
+      "productId": "6ad71e366b2c6422ae682ab4",
+      "price": 43999,
+      "source": "amazon",
+      "recordedAt": "2026-10-20T11:15:51.360Z",
+      "__v": 0
+    },
+    {
+      "_id": "6ad7544b6189ccfee60d09cb",
+      "productId": "6ad71e366b2c6422ae682ab4",
+      "price": 43999,
+      "source": "amazon",
+      "recordedAt": "2026-10-20T11:45:15.426Z",
+      "__v": 0
+    },
+    {
+      "_id": "6ad757cf4c7cd5a5d96e9bb3",
+      "productId": "6ad71e366b2c6422ae682ab4",
+      "price": 43999,
+      "source": "amazon",
+      "recordedAt": "2026-10-20T12:00:15.614Z",
+      "__v": 0
+    },
+    {
+      "_id": "6ad75b534c7cd5a5d96ea258",
+      "productId": "6ad71e366b2c6422ae682ab4",
+      "price": 43999,
+      "source": "amazon",
+      "recordedAt": "2026-10-20T12:15:15.444Z",
+      "__v": 0
+    },
+    {
+      "_id": "6ad75ed74c7cd5a5d96eaabf",
+      "productId": "6ad71e366b2c6422ae682ab4",
+      "price": 43999,
+      "source": "amazon",
+      "recordedAt": "2026-10-20T12:30:15.431Z",
+      "__v": 0
+    },
+    {
+      "_id": "6ad7625b11dedb9a6dde87fe",
+      "productId": "6ad71e366b2c6422ae682ab4",
+      "price": 43999,
+      "source": "amazon",
+      "recordedAt": "2026-10-20T12:45:15.481Z",
+      "__v": 0
+    },
+    {
+      "_id": "6ad765dfb8fa64ccbe9777e3",
+      "productId": "6ad71e366b2c6422ae682ab4",
+      "price": 43999,
+      "source": "amazon",
+      "recordedAt": "2026-10-20T13:00:15.546Z",
+      "__v": 0
+    },
+    {
+      "_id": "6ad76963b8fa64ccbe97851f",
+      "productId": "6ad71e366b2c6422ae682ab4",
+      "price": 43999,
+      "source": "amazon",
+      "recordedAt": "2026-10-20T13:15:15.409Z",
+      "__v": 0
+    },
+    {
+      "_id": "6ad7706b148ddd02fb3123d4",
+      "productId": "6ad71e366b2c6422ae682ab4",
+      "price": 43999,
+      "source": "amazon",
+      "recordedAt": "2026-10-20T13:45:15.457Z",
+      "__v": 0
+    },
+    {
+      "_id": "6ad773ef2406cc8ad0c40ffa",
+      "productId": "6ad71e366b2c6422ae682ab4",
+      "price": 43999,
+      "source": "amazon",
+      "recordedAt": "2026-10-20T14:00:15.496Z",
+      "__v": 0
+    },
+    {
+      "_id": "6ad7777372ca2521c7403334",
+      "productId": "6ad71e366b2c6422ae682ab4",
+      "price": 43999,
+      "source": "amazon",
+      "recordedAt": "2026-10-20T14:15:15.373Z",
+      "__v": 0
+    },
+    {
+      "_id": "6ad77af772ca2521c74033d0",
+      "productId": "6ad71e366b2c6422ae682ab4",
+      "price": 43999,
+      "source": "amazon",
+      "recordedAt": "2026-10-20T14:30:15.554Z",
+      "__v": 0
+    },
+    {
+      "_id": "6ad77e7b34a41326afe14a62",
+      "productId": "6ad71e366b2c6422ae682ab4",
+      "price": 43999,
+      "source": "amazon",
+      "recordedAt": "2026-10-20T14:45:15.852Z",
+      "__v": 0
+    },
+    {
+      "_id": "6ad781ffa7f1141d7e0388fe",
+      "productId": "6ad71e366b2c6422ae682ab4",
+      "price": 43999,
+      "source": "amazon",
+      "recordedAt": "2026-10-20T15:00:15.760Z",
+      "__v": 0
+    },
+    {
+      "_id": "6ad78583a7f1141d7e038904",
+      "productId": "6ad71e366b2c6422ae682ab4",
+      "price": 43999,
+      "source": "amazon",
+      "recordedAt": "2026-10-20T15:15:15.485Z",
+      "__v": 0
+    },
+    {
+      "_id": "6ad78907a7f1141d7e03890a",
+      "productId": "6ad71e366b2c6422ae682ab4",
+      "price": 43999,
+      "source": "amazon",
+      "recordedAt": "2026-10-20T15:30:15.694Z",
+      "__v": 0
+    },
+    {
+      "_id": "6ad78c8b5c62b8f9e424a801",
+      "productId": "6ad71e366b2c6422ae682ab4",
+      "price": 43999,
+      "source": "amazon",
+      "recordedAt": "2026-10-20T15:45:15.502Z",
+      "__v": 0
+    },
+    {
+      "_id": "6ad7900f2b290cb9f22cf513",
+      "productId": "6ad71e366b2c6422ae682ab4",
+      "price": 43999,
+      "source": "amazon",
+      "recordedAt": "2026-10-20T16:00:15.712Z",
+      "__v": 0
+    },
+    {
+      "_id": "6ad793942b290cb9f22cf5af",
+      "productId": "6ad71e366b2c6422ae682ab4",
+      "price": 43999,
+      "source": "amazon",
+      "recordedAt": "2026-10-20T16:15:16.380Z",
+      "__v": 0
+    },
+    {
+      "_id": "6ad797182b290cb9f22cf6e9",
+      "productId": "6ad71e366b2c6422ae682ab4",
+      "price": 43999,
+      "source": "amazon",
+      "recordedAt": "2026-10-20T16:30:16.020Z",
+      "__v": 0
+    },
+    {
+      "_id": "6ad79a9c7604c5574cf72f4c",
+      "productId": "6ad71e366b2c6422ae682ab4",
+      "price": 43999,
+      "source": "amazon",
+      "recordedAt": "2026-10-20T16:45:16.021Z",
+      "__v": 0
+    }
+  ]
+}
