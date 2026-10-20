@@ -16,6 +16,6 @@ jobs:
     steps:
       - name: Confirm Production Deployment
         run: |
-          echo "🚀 Zemo Production is Active!"
-          echo "🌐 Frontend URL: https://zemo-official.vercel.app"
-          echo "⚡ Backend API: https://zemo-backend.onrender.com"
+          echo "Zemo Production is Active"
+          echo "Frontend URL: https://zemo-official.vercel.app"
+          echo "Backend API: https://zemo-backend.onrender.com"
