@@ -70,12 +70,14 @@ flowchart TD
         GeminiEngine --> ShortNameAI["Product Title Canonicalizer"]
         GeminiEngine --> DealMeterAI["Algorithmic Grab Meter Scoring"]
         LlamaEngine --> AspectSentimentAI["Aspect-Based Sentiment Distillation"]
+
         LocalCache <--> GeminiEngine
+        LocalCache <--> AspectSentimentAI
     end
 
     subgraph PersistenceTier["Persistence Tier (MongoDB Atlas / Local)"]
         DB[(MongoDB 6.x Database)]
-        ColProducts[("products (Catalog & Metadata)")]
+        ColProducts[("products (Catalog, Aspects & Metadata)")]
         ColPriceHistory[("pricehistories (Time-Series Data)")]
         ColAlerts[("alerts (Target Triggers)")]
         ColNotifications[("notifications (User Dispatch Queue)")]
@@ -100,7 +102,11 @@ flowchart TD
     GatewayTier <--> PersistenceTier
     GatewayTier <--> IngestionTier
     GatewayTier <--> CognitiveTier
+
     IngestionTier --> PersistenceTier
+    ReviewMiner -->|Raw Review Corpus| AspectSentimentAI
+    AspectSentimentAI -->|Distilled Aspects & Scores| ColProducts
+
     NotificationDispatch -->|SMTP / TLS| UserInbox["User Email Inbox"]
 ```
 
