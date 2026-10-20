@@ -2,6 +2,13 @@
 
 **Autonomous E-Commerce Price Intelligence, Cross-Store Arbitrage & Aspect-Based Sentiment Analysis Platform**
 
+[![Live Demo](https://img.shields.io/badge/Live_Demo-zemo--official.vercel.app-00df8f?style=for-the-badge&logo=vercel&logoColor=black)](https://zemo-official.vercel.app/)
+[![Backend API](https://img.shields.io/badge/API_Status-Online-brightgreen?style=for-the-badge&logo=render&logoColor=white)](https://zemo-backend.onrender.com)
+[![GitHub License](https://img.shields.io/badge/license-MIT-blue?style=for-the-badge)](LICENSE)
+
+> 🚀 **Live Production Application**: [https://zemo-official.vercel.app](https://zemo-official.vercel.app/)  
+> ⚡ **Live API Service**: [https://zemo-backend.onrender.com](https://zemo-backend.onrender.com)
+
 Zemo is a distributed e-commerce intelligence system engineered for automated web extraction, cross-retailer pricing arbitrage, historical price trajectory modeling, and large language model (LLM) cognitive distillation. The platform monitors high-turnover retail platforms (Amazon India, Flipkart), normalizes unstructured product metadata, reconstructs longitudinal pricing trends, and synthesizes aspect-level consumer sentiment and banking promotions into actionable consumer telemetry.
 
 ---
