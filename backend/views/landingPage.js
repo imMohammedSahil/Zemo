@@ -1353,7 +1353,8 @@ function renderLandingPage(data = {}) {
 
     function copyAddProductCurl() {
       const fullUrl = window.location.origin + '/product/add';
-      const cmd = 'curl -X POST "' + fullUrl + '" \\\\\n  -H "Content-Type: application/json" \\\\\n  -d \'{"productUrl":"https://www.amazon.in/dp/B0DG26ZJNP"}\'';
+      const q = String.fromCharCode(39);
+      const cmd = 'curl -X POST "' + fullUrl + '" -H "Content-Type: application/json" -d ' + q + '{"productUrl":"https://www.amazon.in/dp/B0DG26ZJNP"}' + q;
       navigator.clipboard.writeText(cmd);
       showToast("POST /product/add cURL copied");
     }
