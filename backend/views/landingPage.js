@@ -845,10 +845,10 @@ function renderLandingPage(data = {}) {
         <a href="https://zemo-official.vercel.app" target="_blank" rel="noopener noreferrer" class="btn-primary" style="padding: 10px 22px; font-size: 13px;">
           Open Web Application
         </a>
-        <button onclick="testEndpoint('/health', 'GET', this)" class="btn-secondary" style="padding: 10px 20px; font-size: 13px;">
+        <button onclick="runHeroDiagnostics(this)" class="btn-secondary" style="padding: 10px 20px; font-size: 13px;">
           Run Diagnostics
         </button>
-        <button onclick="testEndpoint('/product', 'GET', this)" class="btn-secondary" style="padding: 10px 20px; font-size: 13px;">
+        <button onclick="runHeroCatalog(this)" class="btn-secondary" style="padding: 10px 20px; font-size: 13px;">
           Explore Catalog JSON
         </button>
       </div>
@@ -1275,6 +1275,7 @@ function renderLandingPage(data = {}) {
         statusBadge.textContent = response.status + ' ' + response.statusText + ' • ' + duration + 'ms';
         if (response.ok) {
           statusBadge.className = 'console-status-pill status-ok';
+          if (triggerBtn) showToast(endpoint + ' executed • ' + response.status + ' OK');
         } else {
           statusBadge.style.background = 'rgba(239, 68, 68, 0.15)';
           statusBadge.style.color = '#F87171';
@@ -1364,6 +1365,26 @@ function renderLandingPage(data = {}) {
       }
       navigator.clipboard.writeText(latestJsonResponse);
       showToast("JSON payload copied");
+    }
+
+    function runHeroDiagnostics(btn) {
+      testEndpoint('/health', 'GET', btn);
+      showToast('Running health diagnostics...');
+      const consoleBox = document.querySelector('.console-box');
+      if (consoleBox) {
+        const y = consoleBox.getBoundingClientRect().top + window.pageYOffset - 40;
+        window.scrollTo({ top: Math.max(0, y), behavior: 'smooth' });
+      }
+    }
+
+    function runHeroCatalog(btn) {
+      testEndpoint('/product', 'GET', btn);
+      showToast('Loading product catalog JSON...');
+      const consoleBox = document.querySelector('.console-box');
+      if (consoleBox) {
+        const y = consoleBox.getBoundingClientRect().top + window.pageYOffset - 40;
+        window.scrollTo({ top: Math.max(0, y), behavior: 'smooth' });
+      }
     }
 
     // Ensure refresh maintains exact scroll position without hash-jumping
