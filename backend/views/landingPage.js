@@ -848,9 +848,6 @@ function renderLandingPage(data = {}) {
         <button onclick="runHeroDiagnostics(this)" class="btn-secondary" style="padding: 10px 20px; font-size: 13px;">
           Run Diagnostics
         </button>
-        <button onclick="runHeroCatalog(this)" class="btn-secondary" style="padding: 10px 20px; font-size: 13px;">
-          Explore Catalog JSON
-        </button>
       </div>
     </section>
 
@@ -1371,19 +1368,10 @@ function renderLandingPage(data = {}) {
     function runHeroDiagnostics(btn) {
       testEndpoint('/health', 'GET', btn);
       showToast('Running health diagnostics...');
-      const consoleBox = document.querySelector('.console-box');
-      if (consoleBox) {
-        const y = consoleBox.getBoundingClientRect().top + window.pageYOffset - 40;
-        window.scrollTo({ top: Math.max(0, y), behavior: 'smooth' });
-      }
-    }
-
-    function runHeroCatalog(btn) {
-      testEndpoint('/product', 'GET', btn);
-      showToast('Loading product catalog JSON...');
-      const consoleBox = document.querySelector('.console-box');
-      if (consoleBox) {
-        const y = consoleBox.getBoundingClientRect().top + window.pageYOffset - 40;
+      const targetEl = document.querySelector('#endpoints');
+      if (targetEl) {
+        const headerOffset = 16;
+        const y = targetEl.getBoundingClientRect().top + window.pageYOffset - headerOffset;
         window.scrollTo({ top: Math.max(0, y), behavior: 'smooth' });
       }
     }
