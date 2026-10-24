@@ -168,22 +168,26 @@ async function sendWishSetEmail({ to, productTitle, warmPhrase, targetPrice, cur
             </div>
 
             <!-- Product Showcase Card -->
-            <div style="background: #08150D; border: 1px solid #163E26; border-radius: 20px; padding: 22px; margin-bottom: 24px;">
-              <div style="display: flex; gap: 16px; align-items: flex-start; margin-bottom: 16px;">
-                ${productImage ? `
-                  <div style="flex-shrink: 0; width: 68px; height: 68px; background: #060E08; border: 1px solid #143E26; border-radius: 14px; overflow: hidden; display: flex; align-items: center; justify-content: center; padding: 4px;">
-                    <img src="${productImage}" alt="${productTitle}" style="max-width: 100%; max-height: 100%; object-fit: contain;" />
-                  </div>
-                ` : ''}
-                <div style="flex-grow: 1;">
-                  <div style="font-family: monospace; font-size: 10px; color: #6D8274; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px;">
-                    Target Listing • ${storeLabel}
-                  </div>
-                  <h3 style="color: #F5F2EA; font-size: 16px; margin: 0; font-weight: 700; line-height: 1.35;">
-                    ${productTitle}
-                  </h3>
-                </div>
-              </div>
+            <div style="background: #08150D; border: 1px solid #163E26; border-radius: 20px; padding: 20px; margin-bottom: 24px;">
+              <table width="100%" border="0" cellspacing="0" cellpadding="0" style="width: 100%; border-collapse: collapse; margin-bottom: 18px;">
+                <tr>
+                  ${productImage ? `
+                    <td width="76" valign="middle" align="left" style="width: 76px; min-width: 76px; padding: 0 16px 0 0; vertical-align: middle;">
+                      <div style="width: 72px; height: 72px; background: #060E08; border: 1px solid #143E26; border-radius: 14px; text-align: center; line-height: 72px; font-size: 0; box-sizing: border-box; padding: 6px;">
+                        <img src="${productImage}" alt="${productTitle}" style="max-width: 100%; max-height: 100%; width: auto; height: auto; object-fit: contain; vertical-align: middle; display: inline-block; border-radius: 8px;" />
+                      </div>
+                    </td>
+                  ` : ''}
+                  <td valign="middle" align="left" style="vertical-align: middle; text-align: left; padding: 0;">
+                    <div style="font-family: monospace; font-size: 11px; color: #6D8274; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 6px; line-height: 1.2;">
+                      TARGET LISTING &bull; ${storeLabel}
+                    </div>
+                    <h3 style="color: #F5F2EA; font-size: 18px; margin: 0; font-weight: 700; line-height: 1.35; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+                      ${productTitle}
+                    </h3>
+                  </td>
+                </tr>
+              </table>
 
               <!-- Price Comparison Strip -->
               <div style="background: #061009; border: 1px solid #123320; border-radius: 14px; padding: 14px 18px;">
