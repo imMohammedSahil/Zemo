@@ -358,11 +358,11 @@ stateDiagram-v2
     
     state EvaluateDelta {
         [*] --> CompareHistorical
-        CompareHistorical --> PriceDropDetected: Live Price < Last Price
-        CompareHistorical --> PriceUnchanged: Live Price >= Last Price
+        CompareHistorical --> PriceDropDetected: Price Decreased
+        CompareHistorical --> PriceUnchanged: Price Same / Higher
         PriceDropDetected --> CheckTargetAlerts: Record in PriceHistory
         PriceUnchanged --> RecordHistory: Record in PriceHistory
-        CheckTargetAlerts --> DispatchEmail: Target Met (Live <= Target)
+        CheckTargetAlerts --> DispatchEmail: Target Met
         CheckTargetAlerts --> SilentLog: Target Not Met
     }
 
