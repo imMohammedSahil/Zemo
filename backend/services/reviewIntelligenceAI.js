@@ -158,12 +158,29 @@ function generateFallbackReviews(product) {
     aspectSummary: { pros, cons },
     bestieVerdict: `I distilled verified customer feedback for "${displayTitle}"! Buyers love the snappy day-to-day performance, premium build, and reliable all-day battery life. With ${totalCount} and a solid ${rating}★ rating, it is a confident purchase!`,
     decisionMatrix: {
-      buyIf: [
-        "You want proven all-day battery life and seamless everyday performance",
-        "You prioritize build quality and a gorgeous screen for work and entertainment"
+      buyIf: isMacOrLaptop ? [
+        "You want snappy everyday performance and whisper-quiet thermals during work or study",
+        "You prioritize reliable all-day battery endurance without staying tethered to a charger",
+        "You want a crisp, glare-resistant display comfortable for extended screen time",
+        "You value a durable, lightweight build that slips easily into a backpack for commuting",
+        "You appreciate a tactile keyboard and responsive trackpad for smooth daily productivity"
+      ] : [
+        "You want proven day-to-day reliability backed by hundreds of satisfied verified buyers",
+        "You prioritize high build quality and premium materials in this price tier",
+        "You want maximum value for money without overpaying for unnecessary gimmick features",
+        "You value smooth, hassle-free operation straight out of the box with zero learning curve",
+        "You prefer products with dependable brand warranty and strong after-sales support"
       ],
-      skipIf: [
-        "You require extensive legacy ports without relying on dongles/hubs"
+      skipIf: isMacOrLaptop ? [
+        "You require extensive legacy ports without relying on external USB-C dongles or hubs",
+        "You plan on heavy 4K video rendering or AAA gaming demanding a dedicated high-TGP graphics card",
+        "You need maximum RAM and storage headroom for complex virtualization or heavy local AI models",
+        "You prefer an ultra-bright OLED touch panel with active stylus support for digital illustration"
+      ] : [
+        "You expect luxury flagship extras usually reserved for twice this price bracket",
+        "You frequently perform intensive professional tasks requiring top-tier specialized hardware",
+        "You are extremely particular about ultra-compact dimensions and featherlight form factors",
+        "You need specialized modular accessories that are not included in the box"
       ]
     },
     reviews: isMacOrLaptop ? [
@@ -303,10 +320,15 @@ Return strictly valid JSON with this exact structure:
   "decisionMatrix": {
     "buyIf": [
       "Key reason 1 to buy",
-      "Key reason 2 to buy"
+      "Key reason 2 to buy",
+      "Key reason 3 to buy",
+      "Key reason 4 to buy"
     ],
     "skipIf": [
-      "Key reason 1 to reconsider"
+      "Key reason 1 to reconsider",
+      "Key reason 2 to reconsider",
+      "Key reason 3 to reconsider",
+      "Key reason 4 to reconsider"
     ]
   },
   "reviews": [
@@ -329,15 +351,17 @@ Return strictly valid JSON with this exact structure:
 
 Make sure:
 - In bestieVerdict, write a completely natural, warm, personal takeaway ("I") without claiming to have read an exact count of reviews. Let your wording flow organically.
+- For decisionMatrix, STRICTLY return exactly 4 to 5 bullet points for "buyIf" and exactly 4 to 5 bullet points for "skipIf" (sweet spot: 4-5 items). Never provide fewer than 4 or more than 5.
 - Provide 4 to 6 realistic, detailed customer reviews with helpfulCount, badge, and aspectTags.
 - Ensure all numbers are valid integers/floats.
 - bestieVerdict is personal ("I"), warm, supportive, and kind to the shopper's wallet.`;
 
       const geminiRes = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent?key=${process.env.GEMINI_API_KEY}`,
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${process.env.GEMINI_API_KEY}`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
+          signal: AbortSignal.timeout(12000),
           body: JSON.stringify({
             contents: [{ parts: [{ text: prompt }] }],
             generationConfig: { response_mime_type: "application/json" }
@@ -358,6 +382,35 @@ Make sure:
             2: 0,
             1: 2
           };
+
+          // Strictly enforce sweet spot of 4-5 items for both decision columns
+          const fallbackDM = generateFallbackReviews(product).decisionMatrix;
+          const rawBuyIf = Array.isArray(parsed.decisionMatrix?.buyIf) ? parsed.decisionMatrix.buyIf : [];
+          const rawSkipIf = Array.isArray(parsed.decisionMatrix?.skipIf) ? parsed.decisionMatrix.skipIf : [];
+
+          let finalBuyIf = [...rawBuyIf];
+          if (finalBuyIf.length < 4) {
+            for (const fb of fallbackDM.buyIf) {
+              if (finalBuyIf.length >= 4) break;
+              if (!finalBuyIf.includes(fb)) finalBuyIf.push(fb);
+            }
+          }
+          if (finalBuyIf.length > 5) finalBuyIf = finalBuyIf.slice(0, 5);
+
+          let finalSkipIf = [...rawSkipIf];
+          if (finalSkipIf.length < 4) {
+            for (const fs of fallbackDM.skipIf) {
+              if (finalSkipIf.length >= 4) break;
+              if (!finalSkipIf.includes(fs)) finalSkipIf.push(fs);
+            }
+          }
+          if (finalSkipIf.length > 5) finalSkipIf = finalSkipIf.slice(0, 5);
+
+          parsed.decisionMatrix = {
+            buyIf: finalBuyIf,
+            skipIf: finalSkipIf
+          };
+
           const result = {
             productId: product._id,
             productTitle: product.title,
