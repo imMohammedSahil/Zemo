@@ -495,7 +495,7 @@ async function sendVerificationCodeEmail({ to, code }) {
 
   return await deliverEmail({
     to: recipient,
-    defaultSenderName: "Zemo Security",
+    defaultSenderName: "Zemo",
     subject: `${code} is your Zemo verification code`,
     html: htmlContent
   });
