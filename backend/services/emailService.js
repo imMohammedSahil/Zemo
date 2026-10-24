@@ -3,18 +3,6 @@ const nodemailer = require("nodemailer");
 const path = require("path");
 const fs = require("fs");
 
-function getLogoAttachment() {
-  const logoPath = path.join(__dirname, "../assets/logo.png");
-  if (fs.existsSync(logoPath)) {
-    return [{
-      filename: "logo.png",
-      path: logoPath,
-      content: fs.readFileSync(logoPath),
-      cid: "zemologo"
-    }];
-  }
-  return [];
-}
 
 const LOGO_URL = process.env.EMAIL_LOGO_URL || "https://raw.githubusercontent.com/imMohammedSahil/Zemo/main/frontend/public/logo.png";
 
@@ -249,8 +237,7 @@ async function sendWishSetEmail({ to, productTitle, warmPhrase, targetPrice, cur
     to: recipient,
     defaultSenderName: "Zemo Wish Bell",
     subject: `Your wish is safely locked in: Chasing ${productTitle} for you at ₹${formattedTarget}!`,
-    html: htmlContent,
-    attachments: getLogoAttachment()
+    html: htmlContent
   });
 }
 
@@ -373,8 +360,7 @@ async function sendWelcomeEmail({ to }) {
     to: recipient,
     defaultSenderName: "Zemo",
     subject: `Welcome to the family — Happy savings ahead!`,
-    html: htmlContent,
-    attachments: getLogoAttachment()
+    html: htmlContent
   });
 }
 

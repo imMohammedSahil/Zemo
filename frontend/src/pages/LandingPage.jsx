@@ -10,7 +10,7 @@ export default function LandingPage() {
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     if (params.get("focusProduct")) {
-      navigate(`/radar?${params.toString()}`, { replace: true });
+      navigate(`/dashboard?${params.toString()}`, { replace: true });
     }
   }, [navigate]);
 
@@ -22,7 +22,7 @@ export default function LandingPage() {
     sessionStorage.removeItem("last_viewed_product_id");
     sessionStorage.removeItem("last_dashboard_scroll_y");
     setIsEmailModalOpen(false);
-    navigate("/radar");
+    navigate("/dashboard");
   };
 
   const handleScrollToPillars = () => {

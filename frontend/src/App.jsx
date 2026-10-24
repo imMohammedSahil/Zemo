@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { BrowserRouter as Router, Routes, Route, useNavigate, useLocation } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate, useLocation } from "react-router-dom";
 import Lenis from "lenis";
 import gsap from "gsap";
 import LoginPage from "./pages/LoginPage";
@@ -251,10 +251,10 @@ function AppLayout() {
   }, []);
 
   useEffect(() => {
-    // When navigating to /radar:
+    // When navigating to /dashboard:
     // If returning to a focused product or restoring previous position, Dashboard handles it.
     // But if entering from landing page or fresh navigation, ensure it starts at the top immediately.
-    if (location.pathname === "/radar") {
+    if (location.pathname === "/dashboard" || location.pathname === "/radar") {
       const hasRestoredProduct = sessionStorage.getItem("last_viewed_product_id");
       if (!hasRestoredProduct) {
         window.scrollTo({ top: 0, behavior: "instant" });
@@ -280,14 +280,14 @@ function AppLayout() {
           {/* Brand Logo */}
           <div 
             onClick={() => {
-              if (location.pathname === "/" || location.pathname === "/radar") {
+              if (location.pathname === "/" || location.pathname === "/dashboard") {
                 window.scrollTo({ top: 0, behavior: "smooth" });
                 if (window.__lenis) {
                   window.__lenis.scrollTo(0, { immediate: false });
                 }
               } else {
                 sessionStorage.removeItem("last_viewed_product_id");
-                navigate("/radar");
+                navigate("/dashboard");
                 window.scrollTo({ top: 0, behavior: "smooth" });
                 if (window.__lenis) {
                   window.__lenis.scrollTo(0, { immediate: false });
@@ -355,7 +355,7 @@ function AppLayout() {
             {location.pathname === "/" ? (
               <button
                 onClick={() => {
-                  navigate("/radar");
+                  navigate("/dashboard");
                   window.scrollTo({ top: 0, behavior: "smooth" });
                   if (window.__lenis) {
                     window.__lenis.scrollTo(0, { immediate: false });
@@ -407,8 +407,8 @@ function AppLayout() {
         <div key={location.pathname} className="page-cinematic-enter">
           <Routes location={location}>
             <Route path="/" element={<LandingPage />} />
-            <Route path="/radar" element={<Dashboard />} />
             <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/radar" element={<Navigate to="/dashboard" replace />} />
             <Route path="/product/:id/reviews" element={<CustomerReviewsPage />} />
             <Route path="/product/:id/insights" element={<CustomerReviewsPage />} />
             <Route path="/product/:id/compare" element={<CompareStoresPage />} />

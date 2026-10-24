@@ -19,7 +19,7 @@ export default function ProductNavTabs({ productId, activeTab, isLoading = false
           if (productId) {
             sessionStorage.setItem("last_viewed_product_id", productId);
           }
-          navigate(productId ? `/radar?focusProduct=${productId}` : "/radar", {
+          navigate(productId ? `/dashboard?focusProduct=${productId}` : "/dashboard", {
             state: { scrollToProductId: productId }
           });
         }}
