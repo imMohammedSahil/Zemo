@@ -2,16 +2,16 @@
 
 **Autonomous E-Commerce Price Intelligence, Cross-Store Arbitrage & Aspect-Based Sentiment Analysis Platform**
 
-> Live Demo: [zemo-official.vercel.app](https://zemo-official.vercel.app)  
-> Backend API: [zemo-backend.onrender.com](https://zemo-backend.onrender.com)
+> Live Application: [zemo-official.vercel.app](https://zemo-official.vercel.app)  
+> API Service: [zemo-backend.onrender.com](https://zemo-backend.onrender.com)
 
-Zemo is a distributed e-commerce intelligence system engineered for automated web extraction, cross-retailer pricing arbitrage, historical price trajectory modeling, and large language model (LLM) cognitive distillation. The platform monitors high-turnover retail platforms (Amazon India, Flipkart), normalizes unstructured product metadata, reconstructs longitudinal pricing trends, and synthesizes aspect-level consumer sentiment and banking promotions into actionable consumer telemetry.
+Zemo is a distributed e-commerce intelligence system engineered for automated web extraction, cross-retailer pricing arbitrage, historical price trajectory modeling, and large language model cognitive distillation. The platform monitors high-turnover retail platforms (Amazon India, Flipkart), normalizes unstructured product metadata, reconstructs longitudinal pricing trends, and synthesizes aspect-level consumer sentiment and banking promotions into actionable consumer telemetry.
 
 ---
 
 ## Architectural Specification
 
-| Dimension | Specification | Architecture Context |
+| Dimension | Specification | Engineering Context |
 | :--- | :--- | :--- |
 | **API Runtime** | Node.js (v18+) / Express 5.x | Non-blocking asynchronous REST API gateway and request routing |
 | **Persistence Engine** | MongoDB (v6+) / Mongoose 9.x | Document datastore for product catalogs, alerts, and time-series history |
@@ -19,7 +19,9 @@ Zemo is a distributed e-commerce intelligence system engineered for automated we
 | **Cognitive Intelligence** | Google Gemini API + Meta-Llama-3-8B | Dual-model LLM pipeline for price comparison, review aspect mining, bank discount logic |
 | **Client Application** | React 19 / Vite 7 / Tailwind CSS | Single-page reactive interface, procedural canvas shaders, fluid audio engine |
 | **Task Scheduling** | Node-Cron 4.2 | Mutex-guarded cron daemon executing periodic multi-threaded scraping |
-| **Alert & Messaging** | Nodemailer / Abstract API | Transactional SMTP engine with multipart CID asset rendering |
+| **Production Email Engine** | Brevo HTTPS REST API (Port 443) | Multi-tier failover dispatcher bypassing cloud egress SMTP port blocks |
+| **Secondary Email Engines**| Resend API / Nodemailer (SMTP) | Secondary cloud REST API and local development fallback |
+| **Deliverability Engine** | Abstract API Mailbox Verification | Real-time MX record, disposable domain, and mailbox existence validation |
 | **Caching Layer** | Local High-Throughput JSON Store | Deterministic filesystem cache for zero-latency inference on critical demo products |
 | **Target Retailers** | Amazon India (`amazon.in`), Flipkart (`flipkart.com`) | Canonical ASIN and FSN normalization pipelines |
 
@@ -36,17 +38,21 @@ flowchart TD
         SubRoutes["Sub-Navigation Routing (/stores, /reviews, /offers, /insights)"]
         CanvasFX["Procedural Rainy Glass Canvas Shader"]
         AudioEng["Audio Subsystem (Atmospheric Audio + SoundPill)"]
+        OptimisticState["Optimistic Wish Bell State Machine"]
         UI --- SubRoutes
         UI --- CanvasFX
         UI --- AudioEng
+        UI --- OptimisticState
     end
 
     subgraph GatewayTier["API Gateway & Middleware Tier"]
         Express["Express 5.x REST API Gateway"]
         CORS["Cross-Origin Resource Sharing (CORS)"]
-        StaticSvc["Static Asset Provider (/uploads)"]
-        AuthMiddleware["Firebase Auth & Session Verification"]
+        RateLimiter["Sliding-Window IP Rate Limiter (60 req/min)"]
+        StaticSvc["Static Asset Provider (/uploads, /assets)"]
+        AuthMiddleware["OTP Verification & Deliverability Gate"]
         Express --> CORS
+        Express --> RateLimiter
         Express --> StaticSvc
         Express --> AuthMiddleware
     end
@@ -84,21 +90,33 @@ flowchart TD
         ColPriceHistory[("pricehistories (Time-Series Data)")]
         ColAlerts[("alerts (Target Triggers)")]
         ColNotifications[("notifications (User Dispatch Queue)")]
+        ColOtps[("otps (TTL Verification Codes)")]
         ColUsers[("users (Profiles & Preferences)")]
         DB --- ColProducts
         DB --- ColPriceHistory
         DB --- ColAlerts
         DB --- ColNotifications
+        DB --- ColOtps
         DB --- ColUsers
+    end
+
+    subgraph DispatchTier["Multi-Tier Transactional Messaging Tier"]
+        DeliverabilityGate["Abstract API Mailbox Validator"]
+        BrevoEngine["Tier 1: Brevo HTTPS REST API (Port 443)"]
+        ResendEngine["Tier 2: Resend HTTPS REST API (Port 443)"]
+        SmtpEngine["Tier 3: Nodemailer SMTP (Local Fallback)"]
+
+        DeliverabilityGate --> BrevoEngine
+        BrevoEngine -.->|Fallback on Failure| ResendEngine
+        ResendEngine -.->|Fallback on Local| SmtpEngine
     end
 
     subgraph SchedulerTier["Scheduler & Notification Tier"]
         CronDaemon["Node-Cron Scheduler (15-min intervals)"]
         ReentrantLock["Reentrant Mutex Guard (atomic flag)"]
-        NotificationDispatch["Email Notification Service (Nodemailer)"]
         CronDaemon --> ReentrantLock
         ReentrantLock --> IngestionTier
-        ReentrantLock --> NotificationDispatch
+        ReentrantLock --> DispatchTier
     end
 
     ClientTier <-->|REST API / JSON| GatewayTier
@@ -110,7 +128,7 @@ flowchart TD
     ReviewMiner -->|Raw Review Corpus| AspectSentimentAI
     AspectSentimentAI -->|Distilled Aspects & Scores| ColProducts
 
-    NotificationDispatch -->|SMTP / TLS| UserInbox["User Email Inbox"]
+    DispatchTier -->|HTTPS / Port 443| UserInbox["User Email Inbox (Gmail)"]
 ```
 
 ---
@@ -127,7 +145,7 @@ E-commerce retail domains rely on single-page JavaScript architectures, obfuscat
   https://www.amazon.in/dp/B0GR64G4H6/ref=... -> B0GR64G4H6
   ```
 
-### 2. Zero-Cold-Start Historical Backfill
+### 2. Zero-Cold-Start Historical Price Trajectory & Stream Interception
 Newly tracked items traditionally lack historical price points. Zemo circumvents this cold-start limitation by listening to and intercepting price-index network streams during initial product ingestion.
 
 ```mermaid
@@ -139,7 +157,7 @@ sequenceDiagram
     participant Interceptor as Network Listener
     participant DB as MongoDB
 
-    User->>API: POST /product/track { url }
+    User->>API: POST /product/add { productUrl }
     API->>Scraper: Launch Headless Browser Session
     Scraper->>Scraper: Navigate to Normalized Product Page
     Scraper->>Interceptor: Register Stream Listener (XHR/Fetch)
@@ -212,38 +230,8 @@ flowchart LR
 
 | Retailer | Detected Price | In Stock | Spread vs Baseline | Arbitrage Verdict |
 | :--- | :--- | :--- | :--- | :--- |
-| **Amazon India** | ₹38,999 | Yes | Baseline (₹0) | **Lowest Price Offering** |
+| **Amazon India** | ₹38,999 | Yes | Baseline (₹0) | Lowest Price Offering |
 | **Flipkart** | ₹39,999 | Yes | +₹1,000 | ₹1,000 Premium |
-
-<details>
-<summary>View Structured JSON API Payload</summary>
-
-```json
-{
-  "bestStore": "Amazon",
-  "lowestPrice": 38999,
-  "stores": [
-    {
-      "store": "Amazon",
-      "price": 38999,
-      "inStock": true,
-      "link": "https://www.amazon.in/dp/B0GR64G4H6",
-      "differenceFromBase": 0
-    },
-    {
-      "store": "Flipkart",
-      "price": 39999,
-      "inStock": true,
-      "link": "https://www.flipkart.com/...",
-      "differenceFromBase": 1000
-    }
-  ],
-  "verdict": "Amazon is currently offering the lowest price with a ₹1,000 margin."
-}
-```
-
-</details>
-
 
 #### Bank Promotion & Effective Net Price Engine (`bankOffersAI.js`)
 Parses complex unstructured discount strings (instant card discounts, cashback balances, no-cost EMI interest subventions, GST business credits) to compute the true out-of-pocket acquisition cost:
@@ -258,14 +246,76 @@ Aggregates customer reviews across positive and negative ratings. Distills quali
 - **Percentage Distribution**: Computes confidence ratios for each aspect based on verified purchase comments.
 
 #### Algorithmic Grab / Deal Meter (`dealMeterAI.js`)
-Computes an empirical deal rating on a scale from 0 to 100 based on:
+Computes an empirical deal rating on a scale from 0 to 10 based on:
 - Deviation from all-time low price point.
 - Proximity to mean historical pricing.
 - Active bank promotional depth.
 - Cross-retailer price spread.
 
-### 5. High-Throughput Deterministic Caching Layer
-To protect upstream API rate limits and eliminate cold-start latency for prospective recruiters and production visitors, Zemo integrates a local JSON caching layer (`/.zemo_cache`):
+### 5. Multi-Tier Production Transactional Email Subsystem
+Cloud hosting platforms (such as Render's free tier) block outbound SMTP ports (465, 587, 25) to mitigate spam, causing native SMTP sockets to time out. Zemo resolves this via a multi-tier failover dispatcher operating entirely over secure HTTPS port 443:
+
+```mermaid
+flowchart TD
+    Trigger["Email Dispatch Event<br/>(OTP, Welcome, Wish Set, Price Drop)"]
+    Deliverability["Abstract API Deliverability Check"]
+    Trigger --> Deliverability
+
+    Deliverability --> IsValid{Mailbox Valid?}
+    IsValid -->|No| Reject["400 Bad Request (Actionable Suggestion)"]
+    IsValid -->|Yes| Tier1{"Tier 1: BREVO_API_KEY Configured?"}
+
+    Tier1 -->|Yes| Brevo["Brevo HTTPS REST API Engine<br/>POST api.brevo.com/v3/smtp/email (Port 443)"]
+    Brevo --> BrevoResult{200 OK?}
+    BrevoResult -->|Success| Dispatched["Dispatched (Sub-1s Delivery)"]
+    BrevoResult -->|Fail| Tier2{"Tier 2: RESEND_API_KEY Configured?"}
+
+    Tier1 -->|No| Tier2
+    Tier2 -->|Yes| Resend["Resend HTTPS REST API Engine<br/>POST api.resend.com/emails (Port 443)"]
+    Resend --> ResendResult{Success?}
+    ResendResult -->|Success| Dispatched
+    ResendResult -->|Fail| Tier3["Tier 3: Nodemailer SMTP Fallback"]
+
+    Tier2 -->|No| Tier3
+    Tier3 --> SMTP["Direct Gmail SMTP Relay<br/>(smtp.gmail.com with App Password)"]
+    SMTP --> Dispatched
+```
+
+- **Dedicated Sender Identity**: Emails originate from `Zemo <zemo.desk@gmail.com>`, maintaining sender consistency across transactional messages.
+- **Responsive Dark-Locked HTML Templates**: Email templates utilize inline styles and dark `#060D09` palettes with high-contrast `#CEFF00` brand tokens that render consistently across desktop and mobile email clients.
+
+### 6. Non-Blocking Wish Bell & Instant Optimistic State Machine
+Creating a threshold alert involves multiple external dependencies: MongoDB writes, Gemini title canonicalization, in-app notification insertion, and email dispatch. 
+
+To eliminate UI latency, Zemo implements an optimistic state machine on the client paired with a non-blocking asynchronous worker on the server:
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor User as Client (React SPA)
+    participant API as Express API (/alert/create)
+    participant DB as MongoDB (Alerts & Notifications)
+    participant Worker as Background Worker
+    participant Brevo as Brevo HTTPS API
+
+    User->>API: POST /alert/create { productId, targetPrice }
+    API->>DB: Upsert Alert Document
+    API-->>User: 200 OK (Alert Object) [Latency: < 50ms]
+    User->>User: Optimistic Update: Set Button to "Wish Set!" Immediately
+    
+    rect rgb(20, 35, 25)
+    Note over API,Worker: Asynchronous Background Execution (Non-Blocking)
+    API->>Worker: Spawn Asynchronous Task
+    Worker->>DB: Fetch Product Details
+    Worker->>Worker: Compute Canonical Title & Feel-Good Message
+    Worker->>DB: Create Notification Document
+    Worker->>Brevo: Dispatch Branded HTML Email Confirmation
+    Brevo-->>Worker: Message Dispatched (200 OK)
+    end
+```
+
+### 7. High-Throughput Deterministic Caching Layer
+To protect upstream API rate limits and eliminate cold-start latency for prospective evaluators and production visitors, Zemo integrates a local JSON caching layer (`/.zemo_cache`):
 - `gemini_stores_cache.json`: Caches multi-store price comparisons.
 - `gemini_offers_cache.json`: Caches bank discount breakdowns.
 - `gemini_reviews_cache.json`: Caches aspect-based sentiment structures.
@@ -274,8 +324,8 @@ To protect upstream API rate limits and eliminate cold-start latency for prospec
 
 Live requests bypass external LLM roundtrips when valid cached keys exist, returning full telemetry payloads in sub-5ms intervals.
 
-### 6. Mutex-Guarded Scheduler & Notification State Machine
-Periodic price monitoring executes as an isolated background daemon via `node-cron`.
+### 8. Mutex-Guarded Scheduler & Notification State Machine
+Periodic price monitoring executes as an isolated background daemon via `node-cron`:
 
 ```mermaid
 stateDiagram-v2
@@ -302,7 +352,7 @@ stateDiagram-v2
         CheckTargetAlerts --> SilentLog: Target Not Met
     }
 
-    DispatchEmail --> ReleaseLock: SMTP Success
+    DispatchEmail --> ReleaseLock: Delivery Confirmed
     SilentLog --> ReleaseLock
     RecordHistory --> ReleaseLock
     ReleaseLock --> Idle: Set isRunning = false
@@ -316,23 +366,26 @@ stateDiagram-v2
 erDiagram
     PRODUCT ||--o{ PRICE_HISTORY : "tracks historical data"
     PRODUCT ||--o{ ALERT : "monitored by"
-    USER ||--o{ ALERT : "subscribes to"
-    USER ||--o{ NOTIFICATION : "receives"
     PRODUCT ||--o{ NOTIFICATION : "referenced in"
+    USER ||--o{ ALERT : "configures"
+    USER ||--o{ NOTIFICATION : "receives"
+    USER ||--o{ OTP : "verifies via"
 
     PRODUCT {
         ObjectId _id PK
         string title
         string shortTitle
         string asin UK
-        string url
+        string productUrl
         string image
+        string source
         number currentPrice
         number originalPrice
-        number discount
-        number rating
-        number totalReviews
-        object bankOffers
+        number mrp
+        number historicLow
+        string stockStatus
+        boolean inStock
+        date lastCheckedAt
         date createdAt
         date updatedAt
     }
@@ -346,10 +399,12 @@ erDiagram
 
     ALERT {
         ObjectId _id PK
-        ObjectId userId FK
         ObjectId productId FK
+        string email
         number targetPrice
-        boolean notified
+        number tolerance
+        boolean triggered
+        boolean acknowledged
         date createdAt
     }
 
@@ -357,10 +412,20 @@ erDiagram
         ObjectId _id PK
         ObjectId userId FK
         ObjectId productId FK
+        string email
+        string title
         string message
-        number oldPrice
-        number newPrice
-        boolean read
+        boolean acknowledged
+        boolean emailSent
+        date sentAt
+        date createdAt
+    }
+
+    OTP {
+        ObjectId _id PK
+        string email
+        string code
+        string senderName
         date createdAt
     }
 
@@ -368,10 +433,11 @@ erDiagram
         ObjectId _id PK
         string googleId UK
         string name
+        string username
         string email UK
         string profilePicture
         string pfp
-        object notificationPreferences
+        boolean hasReceivedWelcomeEmail
         date createdAt
     }
 ```
@@ -383,7 +449,8 @@ erDiagram
 | `products` | `asin` | Unique Hash | O(1) deduplication during product URL ingestion |
 | `products` | `createdAt` | Descending | Accelerated catalog pagination on Dashboard |
 | `pricehistories` | `productId`, `date` | Compound | Rapid range queries for SVG price trajectory rendering |
-| `alerts` | `productId`, `notified` | Compound | Fast filtering of pending alerts inside cron iteration |
+| `alerts` | `productId`, `triggered` | Compound | Fast filtering of active alerts during scheduler cycles |
+| `otps` | `createdAt` (expireAfterSeconds: 600) | TTL Index | Automatic database-level expiration of one-time codes after 10 minutes |
 | `users` | `googleId`, `email` | Unique | Identity verification and token resolution |
 
 ---
@@ -394,33 +461,52 @@ erDiagram
 
 | Method | Route | Description | Payload / Query Parameters |
 | :--- | :--- | :--- | :--- |
-| `POST` | `/product/track` | Normalizes URL and executes synchronous ingestion | `{ "url": "https://www.amazon.in/dp/..." }` |
-| `GET` | `/product/list` | Returns paginated array of tracked products | Query: `?page=1&limit=20` |
-| `GET` | `/product/:id` | Returns single product entity with latest metadata | URL Param: `id` (ObjectId) |
-| `GET` | `/product/history/:id` | Returns time-series pricing trajectory | URL Param: `id` (ObjectId) |
-| `GET` | `/product/compare-stores/:id` | Executes multi-store cross-retailer price comparison | URL Param: `id` (ObjectId) |
-| `GET` | `/product/bank-offers/:id` | Evaluates card offers, EMI, and true net price | URL Param: `id` (ObjectId) |
-| `GET` | `/product/customer-reviews/:id` | Distills review sentiment and aspect breakdowns | URL Param: `id` (ObjectId) |
-| `GET` | `/product/deal-meter/:id` | Calculates empirical deal score (0-100) | URL Param: `id` (ObjectId) |
-| `DELETE` | `/product/:id` | Removes product entity and associated history cascades | URL Param: `id` (ObjectId) |
+| `POST` | `/product/add` | Normalizes product URL, extracts metadata, backfills history | `{ "productUrl": "https://www.amazon.in/dp/..." }` |
+| `GET` | `/product` | Returns all tracked products with deal scores and active alerts | Query: `?email=user@example.com` |
+| `POST` | `/product/metadata` | Quick-extracts product metadata before tracking | `{ "productUrl": "https://www.amazon.in/dp/..." }` |
+| `POST` | `/product/sync/:id` | Executes on-demand real-time price scrape for single item | URL Param: `id` (ObjectId) |
+| `GET` | `/product/grab-meter/:id` | Calculates Gemini deal score, stock scarcity, and drop probability | URL Param: `id` (ObjectId) |
+| `GET` | `/product/compare-stores/:id` | Executes multi-store price arbitrage comparison | URL Param: `id` (ObjectId), Query: `?refresh=true` |
+| `POST` | `/product/compare-stores/:id/clear-cache` | Clears local cache for store comparison | URL Param: `id` (ObjectId) |
+| `GET` | `/product/reviews/:id` | Returns aspect-based sentiment metrics and review breakdown | URL Param: `id` (ObjectId), Query: `?refresh=true` |
+| `POST` | `/product/reviews/:id/clear-cache` | Clears local cache for reviews | URL Param: `id` (ObjectId) |
+| `GET` | `/product/offers/:id` | Calculates bank discounts, card savings, and true net price | URL Param: `id` (ObjectId), Query: `?refresh=true` |
+| `POST` | `/product/offers/:id/clear-cache` | Clears local cache for bank offers | URL Param: `id` (ObjectId) |
+| `DELETE` | `/product/remove/:id` | Removes product and associated alerts/caches | URL Param: `id` (ObjectId), Query: `?email=...` |
 
-### Price Alert Endpoints
+### Price History Endpoints
+
+| Method | Route | Description | Parameters |
+| :--- | :--- | :--- | :--- |
+| `GET` | `/price-history/:id` | Returns historical price records sorted chronologically | URL Param: `id` (ObjectId) |
+
+### Wish Bell & Alert Endpoints
 
 | Method | Route | Description | Payload |
 | :--- | :--- | :--- | :--- |
-| `POST` | `/api/alerts/set` | Configures target threshold alert for user | `{ "userId": "...", "productId": "...", "targetPrice": 34999 }` |
-| `GET` | `/api/alerts/user/:userId` | Retrieves active alert targets configured by user | URL Param: `userId` (ObjectId) |
-| `DELETE` | `/api/alerts/:alertId` | Cancels specified threshold alert | URL Param: `alertId` (ObjectId) |
+| `POST` | `/alert/create` | Configures target price threshold alert with non-blocking dispatch | `{ "productId": "...", "targetPrice": 34999, "tolerance": 0, "email": "..." }` |
+| `GET` | `/alert/:productId` | Retrieves all active alerts associated with product | URL Param: `productId` (ObjectId) |
+| `DELETE` | `/alert/:alertId` | Removes specified price alert | URL Param: `alertId` (ObjectId) |
 
-### Notification & User Endpoints
+### Notification Endpoints
 
-| Method | Route | Description | Payload / Headers |
+| Method | Route | Description | Query / Payload |
 | :--- | :--- | :--- | :--- |
-| `POST` | `/user/google-login` | Synchronizes Firebase user identity | `{ "googleId": "...", "name": "...", "email": "..." }` |
-| `GET` | `/user/:id` | Retrieves user profile and alert configuration | URL Param: `id` (ObjectId) |
-| `PUT` | `/user/:id/preferences` | Updates notification dispatch preferences | `{ "emailAlerts": true, "pushAlerts": false }` |
-| `GET` | `/api/notifications/:userId` | Returns historical notification dispatch log | URL Param: `userId` (ObjectId) |
-| `PATCH` | `/api/notifications/mark-read` | Marks dispatch notification entries as read | `{ "notificationIds": ["..."] }` |
+| `GET` | `/notifications` | Returns user notification list with unread counter | Query: `?email=user@example.com` |
+| `POST` | `/notifications/read` | Marks notifications as read | `{ "email": "user@example.com" }` |
+| `DELETE` | `/notifications/:id` | Deletes single notification record | URL Param: `id` (ObjectId) |
+
+### Authentication & User Endpoints
+
+| Method | Route | Description | Payload |
+| :--- | :--- | :--- | :--- |
+| `POST` | `/user/send-otp` | Validates deliverability via Abstract API and dispatches 6-digit OTP | `{ "email": "user@example.com" }` |
+| `POST` | `/user/verify-otp` | Validates submitted OTP and provisions/retrieves user profile | `{ "email": "user@example.com", "code": "123456" }` |
+| `POST` | `/user/enter-email` | Direct email submission handler with single-dispatch welcome email | `{ "email": "user@example.com" }` |
+| `POST` | `/user/google-login` | Synchronizes Google OAuth identity | `{ "googleId": "...", "name": "...", "email": "..." }` |
+| `GET` | `/user/profile/:id` | Retrieves user profile data | URL Param: `id` (ObjectId) |
+| `PUT` | `/user/profile/:id` | Updates user profile and notification preferences | Multipart form or JSON payload |
+| `POST` | `/user/upload-avatar` | Uploads custom user profile image via Multer | Multipart field: `avatar` |
 
 ---
 
@@ -432,20 +518,22 @@ The frontend is structured as a responsive single-page application built on Reac
 
 ```
 /
-├── Landing Page (/)               # Procedural rain canvas shader, sound pill, hero entry
-├── Dashboard / Radar (/radar)     # Tracked catalog, live search, card grid, instant modal
-├── Store Arbitrage (/stores/:id)  # Side-by-side Amazon vs Flipkart price comparisons
-├── Bank Offers (/offers/:id)      # Card discounts, cashback, EMI subventions, net price
-├── Customer Reviews (/reviews/:id)# Aspect-based sentiment distillation, pros & cons
-├── AI Insights (/insights/:id)    # Longitudinal price area graphs and volatility metrics
-├── Wishlist (/wishlist)           # Saved target items with custom thresholds
-└── User Profile (/profile)        # Account settings, custom avatar, dispatch logs
+├── Landing Page (/)               # Procedural rain canvas shader, sound pill, email modal
+├── Dashboard (/radar, /)          # Catalog overview, live URL tracker, Grab-o-Meter cards
+├── Store Arbitrage (/compare/:id) # Cross-retailer Amazon vs Flipkart arbitrage view
+├── Bank Offers (/offers/:id)      # Credit card discounts, EMI breakdown, effective net price
+├── Customer Reviews (/reviews/:id)# Aspect-based sentiment analysis and feature breakdowns
+├── AI Insights (/insights/:id)    # Longitudinal price trajectory charts and volatility metrics
+└── User Profile (/profile)        # User profile, custom avatar management, notification controls
 ```
 
 ### Key Frontend Components
 
 - **`RainyGlass.jsx`**: Procedural water droplet canvas system generating realistic rain refraction, droplet collision simulation, and background blur via direct HTML5 Canvas rendering.
 - **`ProductNavTabs.jsx`**: Persistent analytical navigation bar enabling instantaneous switching between store comparison, review mining, bank discounts, and price history views.
+- **`ProductCard.jsx`**: High-density product display card presenting real-time price, Grab-o-Meter rating, preset discount triggers, fine-tune range slider, and instant Wish Bell save button.
+- **`EmailEntryModal.jsx`**: Clean dark-mode email verification modal featuring real-time deliverability checks, OTP submission, and dark-locked autofill inputs.
+- **`NotificationBell.jsx`**: Header notification trigger displaying real-time alert count, unread badge pulses, and timestamped drop histories.
 - **`AiProgressLoader.jsx`**: Multi-phase progress visualizer providing step-by-step transparency during long-running background scraping and LLM synthesis operations.
 - **`SoundPill.jsx`**: Ambient audio controller supporting synchronized rain ambience and musical backdrop with volume smoothing and user interaction gates.
 - **`vercel.json`**: Rewrite configuration guaranteeing client-side routing support across all secondary view paths on Vercel deployments.
@@ -458,7 +546,7 @@ The frontend is structured as a responsive single-page application built on Reac
 Zemo/
 ├── .env.example                     # Environment template for credentials and ports
 ├── .gitignore                       # Production ignore specifications (dist, node_modules, .env)
-├── package.json                     # Monorepo root dependencies and orchestration scripts
+├── package.json                     # Root orchestrator dependencies and scripts
 ├── package-lock.json                # Locked dependency tree
 ├── README.md                        # Primary engineering and architectural documentation
 │
@@ -472,7 +560,7 @@ Zemo/
 │
 ├── backend/                         # Express REST API & Automation Subsystem
 │   ├── .env.example                 # Backend environment variable template
-│   ├── server.js                    # Express application entrypoint and middleware setup
+│   ├── server.js                    # Express application entrypoint, middleware, health routes
 │   ├── assets/                      # Static email assets (brand logos)
 │   ├── automation/                  # Playwright headless browser automation modules
 │   │   ├── multiStoreScraper.js     # Live search and multi-retailer scraping engine
@@ -484,18 +572,19 @@ Zemo/
 │   ├── models/                      # Mongoose document schemas
 │   │   ├── Alert.js                 # Threshold alert records
 │   │   ├── Notification.js          # Dispatched notification history
+│   │   ├── Otp.js                   # Time-to-live verification codes (10-min expiration)
 │   │   ├── PriceHistory.js          # Time-series price snapshots
 │   │   ├── Product.js               # Primary product catalog records
 │   │   ├── reviewModel.js           # Review storage schemas
 │   │   └── user.js                  # User accounts and preferences
 │   ├── routes/                      # REST API routing definitions
-│   │   ├── alertRoutes.js           # Target price alert routes
+│   │   ├── alertRoutes.js           # Target price alert routes (non-blocking)
 │   │   ├── authRoutes.js            # Authentication routes
-│   │   ├── notificationRoutes.js     # User notification routes
+│   │   ├── notificationRoutes.js    # User notification routes
 │   │   ├── priceRoutes.js           # Price history retrieval routes
 │   │   ├── productRoutes.js         # Ingestion, tracking, and list routes
 │   │   ├── reviewRoutes.js          # Review distillation routes
-│   │   └── userRoutes.js            # Profile and avatar upload routes
+│   │   └── userRoutes.js            # Profile, OTP verification, avatar routes
 │   ├── scheduler/                   # Background task daemons
 │   │   └── priceScheduler.js        # Reentrant 15-minute cron price monitor
 │   ├── scripts/                     # Operational maintenance scripts
@@ -507,11 +596,14 @@ Zemo/
 │   │   ├── bankOffersAI.js          # Gemini bank and payment discount processor
 │   │   ├── compareStoresAI.js       # Gemini multi-store pricing arbitrage engine
 │   │   ├── dealMeterAI.js           # Gemini deal timing and grab metric evaluator
-│   │   ├── emailService.js          # Nodemailer transactional email dispatcher
+│   │   ├── emailService.js          # Multi-tier transactional email dispatcher (Brevo/Resend/SMTP)
 │   │   ├── importPriceHistory.js    # Historical price data backfill processor
 │   │   ├── productShortNameAI.js    # Gemini title canonicalization service
 │   │   ├── reviewIntelligenceAI.js  # Gemini aspect-based review distillation
-│   │   └── reviewProcessor.js       # Review text cleaning and aggregation
+│   │   ├── reviewProcessor.js       # Review text cleaning and aggregation
+│   │   └── seedService.js           # Zero-delay demo product database seeder
+│   ├── views/                       # Server-side HTML renderers
+│   │   └── landingPage.js           # Lightweight root landing page
 │   └── uploads/                     # User avatar upload directory (with .gitkeep)
 │
 ├── frontend/                        # React 19 Client SPA
@@ -527,16 +619,17 @@ Zemo/
 │   │   ├── logo.png                 # Brand vector icon
 │   │   ├── ludovico_einaudi.png     # Track thumbnail artwork
 │   │   ├── rain_forest_bokeh.png    # Procedural canvas backdrop artwork
-│   │   └── rain_loop.mp3            # Atmospheric rain audio sample
+│   │   ├── rain_loop.mp3            # Atmospheric rain audio sample
+│   │   └── zemo_avatar.png          # High-resolution circular-safe avatar asset
 │   └── src/                         # Client React source code
 │       ├── App.css                  # Component-specific stylesheet
 │       ├── App.jsx                  # Main application layout, audio manager, router
 │       ├── firebase.js              # Client Firebase SDK configuration
-│       ├── index.css                # Global CSS directives and font imports
+│       ├── index.css                # Global CSS directives and dark autofill lock
 │       ├── main.jsx                 # React root renderer
 │       ├── components/              # Modular user interface components
 │       │   ├── AiProgressLoader.jsx # Multi-phase loading state simulator
-│       │   ├── EmailEntryModal.jsx  # Email subscription modal
+│       │   ├── EmailEntryModal.jsx  # Email subscription modal with OTP verification
 │       │   ├── GoogleLoginButton.jsx# Google authentication button
 │       │   ├── InsightMeter.jsx     # Aspect-based sentiment meter component
 │       │   ├── NotificationBell.jsx # Notification dropdown trigger
@@ -569,11 +662,13 @@ Configure the application by establishing a `.env` file at the root directory. U
 | Variable | Type | Required | Description |
 | :--- | :--- | :--- | :--- |
 | `PORT` | Number | Yes | Port on which the Express REST API listens (Default: `5000`) |
-| `MONGO_URI` | String | Yes | MongoDB connection URI (`mongodb://localhost:27017/zemo` or Atlas URI) |
+| `MONGO_URI` | String | Yes | MongoDB connection URI (`mongodb://127.0.0.1:27017/zemo` or MongoDB Atlas URI) |
 | `GEMINI_API_KEY` | String | Yes | Google Gemini API key for store comparison, bank offers, and review intelligence |
 | `HF_API_KEY` | String | Optional | Hugging Face user token for Meta-Llama-3 aspect sentiment extraction |
-| `EMAIL_USER` | String | Yes | SMTP sender username / Gmail address for price drop alerts |
-| `EMAIL_PASS` | String | Yes | SMTP app-specific password (e.g., Google App Password) |
+| `BREVO_API_KEY` | String | Yes | Brevo HTTPS REST API key for zero-port-block production email delivery |
+| `RESEND_API_KEY` | String | Optional | Secondary HTTPS REST API key for fallback cloud email delivery |
+| `EMAIL_USER` | String | Yes | Dedicated sender address (Default: `zemo.desk@gmail.com`) |
+| `EMAIL_PASS` | String | Yes | Google App Password for local Nodemailer SMTP fallback |
 | `NOTIFICATION_EMAIL`| String | Yes | Default administrative notification recipient address |
 | `ABSTRACT_EMAIL_API_KEY` | String | Optional | Abstract API key for deliverability and MX record validation |
 
@@ -581,7 +676,7 @@ For frontend deployments (e.g., Vercel), configure the environment variable:
 
 | Variable | Target | Description |
 | :--- | :--- | :--- |
-| `VITE_API_URL` | Frontend (`frontend/.env`) | Deployed backend base URL (e.g., `https://api.yourdomain.com`). Falls back to `http://localhost:5000` locally. |
+| `VITE_API_URL` | Frontend (`frontend/.env`) | Deployed backend base URL (e.g., `https://zemo-backend.onrender.com`). Defaults to `http://localhost:5000` locally. |
 
 ---
 
@@ -621,7 +716,7 @@ For frontend deployments (e.g., Vercel), configure the environment variable:
 5. **Configure environment variables**:
    ```bash
    cp .env.example .env
-   # Edit .env with your MongoDB credentials, Gemini API key, and SMTP parameters
+   # Populate .env with MongoDB credentials, Brevo API key, and Gemini API key
    ```
 
 6. **Start the development environment**:
@@ -643,13 +738,16 @@ The frontend is decoupled and configured for zero-configuration Vercel deploymen
 3. Set **Framework Preset** to `Vite`.
 4. Add the environment variable:
    ```
-   VITE_API_URL = https://your-backend-api-url.com
+   VITE_API_URL = https://zemo-backend.onrender.com
    ```
-5. Deploy. The included [`frontend/vercel.json`](frontend/vercel.json) rewrite rule handles client-side React Router navigation seamlessly without 404 errors on direct sub-path access.
+5. Deploy. The included [`frontend/vercel.json`](frontend/vercel.json) rewrite rule handles client-side React Router navigation without 404 errors on direct sub-path access.
 
 ### Backend Deployment (Render, Railway, Fly.io, or AWS EC2)
 1. Ensure the host environment provides Chromium dependencies required by Playwright (`npx playwright install-deps` or Dockerized container).
-2. Configure all environment variables specified in `.env.example`.
+2. Configure all environment variables specified in `.env.example`:
+   - `BREVO_API_KEY` (guarantees delivery over port 443 HTTPS without SMTP socket blocks).
+   - `EMAIL_USER = zemo.desk@gmail.com`.
+   - `MONGO_URI`, `GEMINI_API_KEY`.
 3. Start the production server:
    ```bash
    npm run start
