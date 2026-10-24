@@ -30,6 +30,7 @@ function AppLayout() {
   const audioRef = useRef(null);
   const musicRef = useRef(null);
   const userMutedRef = useRef(false);
+  const GIORNI_VOLUME = 0.25; // Elevated volume for Ludovico Einaudi - I Giorni
 
   useEffect(() => {
     // Clean up any old session storage flag so refresh always shows it
@@ -66,7 +67,7 @@ function AppLayout() {
         if (musicRef.current.paused) {
           musicRef.current.play().catch(() => {});
         }
-        musicRef.current.volume = Math.max(0, Math.min(1, +(0.06 * progress).toFixed(3)));
+        musicRef.current.volume = Math.max(0, Math.min(1, +(GIORNI_VOLUME * progress).toFixed(3)));
       } else {
         // At the top of hero:
         // Rain masks the music (volume 0), but if it was already playing, let it keep flowing silently
@@ -87,7 +88,7 @@ function AppLayout() {
         }
         musicRef.current.play().catch(() => {});
       }
-      musicRef.current.volume = 0.06;
+      musicRef.current.volume = GIORNI_VOLUME;
     }
   };
 
@@ -123,7 +124,7 @@ function AppLayout() {
         if (musicRef.current.currentTime < 1.0) {
           musicRef.current.currentTime = 1.0;
         }
-        musicRef.current.volume = 0.06;
+        musicRef.current.volume = GIORNI_VOLUME;
         const pMusic = musicRef.current.play();
         if (pMusic !== undefined) {
           pMusic.then(() => {
@@ -176,13 +177,13 @@ function AppLayout() {
             setIsPlayingSound(true);
             let vol = 0;
             const fade = setInterval(() => {
-              if (vol < 0.06 && musicRef.current) {
-                vol = Math.min(0.06, +(vol + 0.01).toFixed(3));
+              if (vol < GIORNI_VOLUME && musicRef.current) {
+                vol = Math.min(GIORNI_VOLUME, +(vol + 0.02).toFixed(3));
                 musicRef.current.volume = vol;
               } else {
                 clearInterval(fade);
               }
-            }, 80);
+            }, 60);
           }).catch((err) => console.warn("Autoplay blocked:", err));
         }
       }

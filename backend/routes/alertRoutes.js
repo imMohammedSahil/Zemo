@@ -47,14 +47,21 @@ router.post("/create", async (req, res) => {
         sentAt: new Date()
       });
 
-      // Find recipient email: check req.body first, then latest saved user
+      // Find recipient email: check req.body first, then latest saved user, then env
       let recipientEmail = email;
       if (!recipientEmail) {
-        const User = require("../models/user");
-        const latestUser = await User.findOne({ email: { $exists: true, $ne: "" } }).sort({ createdAt: -1 });
-        if (latestUser && latestUser.email) {
-          recipientEmail = latestUser.email;
+        try {
+          const User = require("../models/user");
+          const latestUser = await User.findOne({ email: { $exists: true, $ne: "" } }).sort({ createdAt: -1 });
+          if (latestUser && latestUser.email) {
+            recipientEmail = latestUser.email;
+          }
+        } catch (e) {
+          console.warn("[Alert] Failed to find fallback user:", e.message);
         }
+      }
+      if (!recipientEmail) {
+        recipientEmail = process.env.NOTIFICATION_EMAIL || process.env.EMAIL_USER;
       }
 
       // Dispatch warm feel-good email notification

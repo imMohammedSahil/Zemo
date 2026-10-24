@@ -21,17 +21,25 @@ function getLogoAttachment() {
 function getTransporter() {
   const user = process.env.EMAIL_USER || process.env.SMTP_USER;
   const pass = process.env.EMAIL_PASS || process.env.SMTP_PASS;
-  const host = process.env.SMTP_HOST || "smtp.gmail.com";
-  const port = Number(process.env.SMTP_PORT) || 587;
 
   if (!user || !pass) {
     return null;
   }
 
+  // If custom SMTP host provided (non-Gmail)
+  if (process.env.SMTP_HOST && process.env.SMTP_HOST !== "smtp.gmail.com") {
+    const port = Number(process.env.SMTP_PORT) || 587;
+    return nodemailer.createTransport({
+      host: process.env.SMTP_HOST,
+      port,
+      secure: port === 465,
+      auth: { user, pass }
+    });
+  }
+
+  // Standard Gmail configuration (works seamlessly on Render/cloud)
   return nodemailer.createTransport({
-    host,
-    port,
-    secure: port === 465,
+    service: "gmail",
     auth: { user, pass }
   });
 }

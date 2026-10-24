@@ -375,12 +375,18 @@ export default function Dashboard() {
     }
 
     try {
-      const savedEmail = localStorage.getItem("zemo_user_email") || undefined;
+      let savedEmail = localStorage.getItem("zemo_user_email");
+      if (!savedEmail) {
+        try {
+          const userObj = JSON.parse(localStorage.getItem("user") || "null");
+          savedEmail = userObj?.email;
+        } catch (_) {}
+      }
       await API.post("/alert/create", {
         productId,
         targetPrice: Number(targetPrice),
         tolerance: Number(tolerance),
-        email: savedEmail
+        email: savedEmail || undefined
       });
 
       window.dispatchEvent(new Event("notificationUpdated"));
@@ -403,12 +409,18 @@ export default function Dashboard() {
     }
 
     try {
-      const savedEmail = localStorage.getItem("zemo_user_email") || undefined;
+      let savedEmail = localStorage.getItem("zemo_user_email");
+      if (!savedEmail) {
+        try {
+          const userObj = JSON.parse(localStorage.getItem("user") || "null");
+          savedEmail = userObj?.email;
+        } catch (_) {}
+      }
       await API.post("/alert/create", {
         productId,
         targetPrice: Number(price),
         tolerance: Number(tolerance),
-        email: savedEmail
+        email: savedEmail || undefined
       });
 
       window.dispatchEvent(new Event("notificationUpdated"));
