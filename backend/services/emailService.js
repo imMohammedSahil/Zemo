@@ -23,12 +23,14 @@ function getTransporter() {
   const pass = process.env.EMAIL_PASS || process.env.SMTP_PASS;
 
   if (!user || !pass) {
+    console.warn(`[EmailService] SMTP Transporter NOT configured. EMAIL_USER=${user ? "SET" : "MISSING"}, EMAIL_PASS=${pass ? "SET" : "MISSING"}`);
     return null;
   }
 
   // If custom SMTP host provided (non-Gmail)
   if (process.env.SMTP_HOST && process.env.SMTP_HOST !== "smtp.gmail.com") {
     const port = Number(process.env.SMTP_PORT) || 587;
+    console.log(`[EmailService] Creating custom SMTP transport (${process.env.SMTP_HOST}:${port}) for ${user}`);
     return nodemailer.createTransport({
       host: process.env.SMTP_HOST,
       port,
@@ -38,6 +40,7 @@ function getTransporter() {
   }
 
   // Standard Gmail configuration (works seamlessly on Render/cloud)
+  console.log(`[EmailService] Creating Gmail transport for user: ${user}`);
   return nodemailer.createTransport({
     service: "gmail",
     auth: { user, pass }
@@ -168,12 +171,15 @@ async function sendWishSetEmail({ to, productTitle, warmPhrase, targetPrice, cur
     </table>
   `;
 
+  console.log(`[EmailService] sendWishSetEmail invoked for product="${productTitle}", recipient="${recipient}"`);
+
   if (!transporter || !recipient) {
-    console.log(`[EmailService] Warm Wish Email simulated for ${recipient} on "${productTitle}" (Target: ₹${formattedTarget}). Set EMAIL_USER & EMAIL_PASS in .env to deliver real emails.`);
+    console.warn(`[EmailService] CANNOT SEND: transporterReady=${Boolean(transporter)}, recipient="${recipient}". Simulating email.`);
     return { success: true, simulated: true };
   }
 
   try {
+    console.log(`[EmailService] Sending email to ${recipient} via nodemailer...`);
     const info = await transporter.sendMail({
       from: `"Zemo Wish Bell" <${process.env.EMAIL_USER || process.env.SMTP_USER}>`,
       to: recipient,
@@ -184,7 +190,12 @@ async function sendWishSetEmail({ to, productTitle, warmPhrase, targetPrice, cur
     console.log("[EmailService] Real wish set email dispatched successfully to", recipient, ":", info.messageId);
     return { success: true, messageId: info.messageId };
   } catch (err) {
-    console.warn("[EmailService] Wish email dispatch failed:", err.message);
+    console.error("[EmailService] Wish email dispatch failed with error details:", {
+      message: err.message,
+      code: err.code,
+      response: err.response,
+      responseCode: err.responseCode
+    });
     return { success: false, error: err.message };
   }
 }

@@ -9,10 +9,9 @@ const { sendWishSetEmail } = require("../services/emailService");
 /* CREATE ALERT */
 
 router.post("/create", async (req, res) => {
-
   try {
-
     const { productId, targetPrice, tolerance, email } = req.body;
+    console.log("[Alert] /create called with payload:", { productId, targetPrice, tolerance, email });
 
     const alert = await Alert.findOneAndUpdate(
       { productId },
@@ -28,7 +27,7 @@ router.post("/create", async (req, res) => {
       }
     );
 
-    console.log("ALERT UPSERTED:", alert);
+    console.log("[Alert] Alert saved to DB:", alert._id);
 
     // Create warm feel-good notification for the top-right Wish Bell
     const prod = await Product.findById(productId);
@@ -55,6 +54,7 @@ router.post("/create", async (req, res) => {
           const latestUser = await User.findOne({ email: { $exists: true, $ne: "" } }).sort({ createdAt: -1 });
           if (latestUser && latestUser.email) {
             recipientEmail = latestUser.email;
+            console.log("[Alert] Found fallback user email from DB:", recipientEmail);
           }
         } catch (e) {
           console.warn("[Alert] Failed to find fallback user:", e.message);
@@ -62,7 +62,10 @@ router.post("/create", async (req, res) => {
       }
       if (!recipientEmail) {
         recipientEmail = process.env.NOTIFICATION_EMAIL || process.env.EMAIL_USER;
+        console.log("[Alert] Falling back to env email:", recipientEmail);
       }
+
+      console.log(`[Alert] Dispatching sendWishSetEmail to: "${recipientEmail}"`);
 
       // Dispatch warm feel-good email notification
       sendWishSetEmail({
@@ -75,11 +78,14 @@ router.post("/create", async (req, res) => {
         productImage: prod.image,
         productUrl: prod.productUrl,
         source: prod.source
-      }).catch(err => console.warn("[Alert] Email send warning:", err.message));
+      }).then(result => {
+        console.log("[Alert] sendWishSetEmail result:", result);
+      }).catch(err => console.error("[Alert] Email send warning:", err));
+    } else {
+      console.warn("[Alert] Product not found in DB for productId:", productId);
     }
 
     res.json(alert);
-
   } catch (error) {
 
     console.error(error);
