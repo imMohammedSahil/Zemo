@@ -57,7 +57,59 @@ async function deliverEmail({ to, defaultSenderName, subject, html, attachments 
     return { success: true, simulated: true };
   }
 
-  // 1. Prioritize Resend HTTP API (works 100% on Render Free tier over HTTPS)
+  // 1. Prioritize Brevo HTTP API (Port 443 HTTPS - sends to ANY recipient with zemo.desk@gmail.com and Zemo logo)
+  const brevoApiKey = (process.env.BREVO_API_KEY || "").trim();
+  if (brevoApiKey) {
+    console.log(`[EmailService] Dispatching via Brevo HTTP API to ${recipient}...`);
+    try {
+      const senderEmail = (process.env.EMAIL_USER || "zemo.desk@gmail.com").trim();
+      const senderName = defaultSenderName || "Zemo";
+      
+      const brevoPayload = {
+        sender: { name: senderName, email: senderEmail },
+        to: [{ email: recipient }],
+        subject,
+        htmlContent: html
+      };
+
+      if (attachments && attachments.length > 0) {
+        brevoPayload.attachment = attachments.map(att => {
+          let base64Content = "";
+          if (att.content) {
+            base64Content = Buffer.isBuffer(att.content) ? att.content.toString("base64") : Buffer.from(att.content).toString("base64");
+          } else if (att.path && fs.existsSync(att.path)) {
+            base64Content = fs.readFileSync(att.path).toString("base64");
+          }
+          return {
+            name: att.filename,
+            content: base64Content
+          };
+        }).filter(att => att.content);
+      }
+
+      const response = await fetch("https://api.brevo.com/v3/smtp/email", {
+        method: "POST",
+        headers: {
+          "accept": "application/json",
+          "api-key": brevoApiKey,
+          "content-type": "application/json"
+        },
+        body: JSON.stringify(brevoPayload)
+      });
+
+      const data = await response.json();
+      if (response.ok && data.messageId) {
+        console.log(`[EmailService] Delivered successfully via Brevo to ${recipient}:`, data.messageId);
+        return { success: true, messageId: data.messageId };
+      } else {
+        console.warn("[EmailService] Brevo API error:", data.message || JSON.stringify(data));
+      }
+    } catch (brevoErr) {
+      console.error("[EmailService] Brevo HTTP call failed:", brevoErr.message);
+    }
+  }
+
+  // 2. Resend HTTP API (works over HTTPS port 443)
   const resend = getResendClient();
   if (resend) {
     console.log(`[EmailService] Dispatching via Resend HTTP API to ${recipient}...`);
