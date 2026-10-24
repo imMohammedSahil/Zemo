@@ -82,7 +82,31 @@ async function deliverEmail({ to, defaultSenderName, subject, html, attachments 
       });
 
       if (response.error) {
-        console.warn("[EmailService] Resend API error (falling back to Nodemailer SMTP):", response.error.message || response.error);
+        console.warn("[EmailService] Resend API error:", response.error.message || response.error);
+
+        // When testing with Resend's free onboarding@resend.dev sandbox, emails to addresses
+        // other than the account owner return 403 validation_error.
+        // On cloud platforms like Render where SMTP ports are blocked, deliver over HTTPS to owner:
+        const ownerEmail = (process.env.NOTIFICATION_EMAIL || process.env.EMAIL_USER || "").trim().toLowerCase();
+        if (response.error.statusCode === 403 && ownerEmail && recipient.toLowerCase() !== ownerEmail) {
+          console.log(`[EmailService] Resend sandbox restriction: routing code for ${recipient} to account owner (${ownerEmail})...`);
+          try {
+            const fallbackRes = await resend.emails.send({
+              from: fromAddress,
+              to: [ownerEmail],
+              subject: `[Zemo Code for ${recipient}] ${subject}`,
+              html: `<div style="padding:12px;background:#061009;color:#CEFF00;border:1px solid #163E26;border-radius:10px;margin-bottom:18px;font-family:sans-serif;font-size:12px;line-height:1.5;">
+                <strong>Sandbox Delivery Notice:</strong> This code was requested for <u>${recipient}</u>. Because your Resend account is currently in test mode (<code>onboarding@resend.dev</code>), Resend delivered this copy directly to your developer inbox.
+              </div>` + html
+            });
+            if (fallbackRes.data?.id) {
+              console.log(`[EmailService] Delivered sandbox copy to ${ownerEmail}:`, fallbackRes.data.id);
+              return { success: true, messageId: fallbackRes.data.id };
+            }
+          } catch (rerouteErr) {
+            console.warn("[EmailService] Sandbox reroute failed:", rerouteErr.message);
+          }
+        }
       } else {
         console.log(`[EmailService] Delivered successfully via Resend to ${recipient}:`, response.data?.id);
         return { success: true, messageId: response.data?.id };
