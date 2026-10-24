@@ -750,8 +750,6 @@ export default function BankOffersPage() {
             )}
           </div>
 
-        </>
-      )}
 
       {/* ========================================================= */}
       {/* 5. HEARTWARMING MUSICAL CREDITS & TRIBUTE DECK */}
@@ -857,6 +855,8 @@ export default function BankOffersPage() {
           </div>
         </div>
       </div>
+      </>
+    )}
 
     </div>
   );

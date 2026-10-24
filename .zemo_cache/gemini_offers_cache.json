@@ -713,5 +713,223 @@
       "pathwayInsight": "Best checkout route across stores is on Amazon India with SBI Card at ₹40,999 net."
     },
     "cachedAt": "2026-10-20T07:59:16.655Z"
+  },
+  "B0H8PBGTSC": {
+    "productTitle": "ASUS Vivobook 15 (2026),Intel Core 3",
+    "currentTrackedPrice": 58990,
+    "mrp": 73738,
+    "summary": {
+      "totalOffersCount": 4,
+      "maxSingleDiscount": 1500,
+      "bestSingleEffectivePrice": 57490,
+      "totalStackedSavings": 1500,
+      "bestStackedPrice": 57490,
+      "bestBankPartner": "HDFC Bank",
+      "bestieStackingAdvice": "Oh wow, you've picked a fantastic ASUS Vivobook 15! To sprinkle a little extra joy on your purchase, I'd say the HDFC Bank Credit Card EMI offer is a sweet deal, instantly bringing your checkout price down. Imagine getting this beauty for just ₹57,490 – that's a lovely saving right there!",
+      "stackingFormula": {
+        "basePrice": 58990,
+        "couponSavings": 0,
+        "bankDiscount": 1500,
+        "finalCheckoutPrice": 57490
+      }
+    },
+    "emiPlans": [
+      {
+        "durationMonths": 3,
+        "monthlyEmi": 19663,
+        "totalInterest": 0,
+        "isNoCost": true,
+        "bank": "Amazon Pay ICICI / Major Banks",
+        "note": "Zero processing fee, interest refunded upfront"
+      },
+      {
+        "durationMonths": 6,
+        "monthlyEmi": 9832,
+        "totalInterest": 0,
+        "isNoCost": true,
+        "bank": "All Major Credit Cards",
+        "note": "Split across 6 months with zero extra cost"
+      },
+      {
+        "durationMonths": 12,
+        "monthlyEmi": 5211,
+        "totalInterest": 3539,
+        "isNoCost": false,
+        "bank": "All Major Banks & Bajaj Finserv",
+        "note": "Budget friendly extended installment plan"
+      }
+    ],
+    "offers": [
+      {
+        "id": "std-amazon-icici",
+        "bank": "Amazon Pay ICICI Bank",
+        "bankCode": "icici",
+        "accentColor": "#CEFF00",
+        "badge": "LIVE AMAZON PROMO",
+        "type": "cashback",
+        "title": "5% Unlimited Cashback with Amazon Pay ICICI Credit Card",
+        "description": "Earn flat 5% cashback on this order with Amazon Pay ICICI credit card, credited directly as Amazon Pay balance.",
+        "discountAmount": 2950,
+        "effectivePrice": 56041,
+        "stores": [
+          "Amazon India"
+        ],
+        "code": "NO CODE REQUIRED",
+        "validTill": "Active on Amazon India",
+        "cardTypes": [
+          "Amazon Pay ICICI Credit Card",
+          "ICICI Bank"
+        ],
+        "storePathways": [
+          {
+            "store": "Amazon India",
+            "basePrice": 58990,
+            "discount": 2950,
+            "netPrice": 56040
+          }
+        ],
+        "bestStoreRoute": {
+          "store": "Amazon India",
+          "basePrice": 58990,
+          "discount": 2950,
+          "netPrice": 56040
+        }
+      },
+      {
+        "id": "std-hdfc-card",
+        "bank": "HDFC Bank",
+        "bankCode": "hdfc",
+        "accentColor": "#004C8F",
+        "badge": "LIVE AMAZON PROMO",
+        "type": "bank_discount",
+        "title": "₹1,500 Instant Discount on HDFC Bank Credit Card EMI",
+        "description": "Flat ₹1,500 instant discount on 6-month or 9-month EMI transactions on HDFC Bank Credit Cards.",
+        "discountAmount": 1500,
+        "effectivePrice": 57490,
+        "stores": [
+          "Amazon India"
+        ],
+        "code": "INSTANT AUTO-APPLIED",
+        "validTill": "Active on Amazon India",
+        "cardTypes": [
+          "HDFC Bank Credit Card",
+          "HDFC Bank Debit Card"
+        ],
+        "storePathways": [
+          {
+            "store": "Amazon India",
+            "basePrice": 58990,
+            "discount": 1500,
+            "netPrice": 57490
+          }
+        ],
+        "bestStoreRoute": {
+          "store": "Amazon India",
+          "basePrice": 58990,
+          "discount": 1500,
+          "netPrice": 57490
+        }
+      },
+      {
+        "id": "std-sbi-card",
+        "bank": "SBI Card",
+        "bankCode": "sbi",
+        "accentColor": "#00E599",
+        "badge": "LIVE AMAZON PROMO",
+        "type": "bank_discount",
+        "title": "₹1,250 Instant Discount on SBI Credit Cards",
+        "description": "Get ₹1,250 instant discount on minimum purchase value of ₹15,000 using SBI Credit Cards.",
+        "discountAmount": 1250,
+        "effectivePrice": 57740,
+        "stores": [
+          "Amazon India"
+        ],
+        "code": "INSTANT AUTO-APPLIED",
+        "validTill": "Active on Amazon India",
+        "cardTypes": [
+          "SBI Credit Card"
+        ],
+        "storePathways": [
+          {
+            "store": "Amazon India",
+            "basePrice": 58990,
+            "discount": 1250,
+            "netPrice": 57740
+          }
+        ],
+        "bestStoreRoute": {
+          "store": "Amazon India",
+          "basePrice": 58990,
+          "discount": 1250,
+          "netPrice": 57740
+        }
+      },
+      {
+        "id": "std-axis-card",
+        "bank": "Axis Bank",
+        "bankCode": "axis",
+        "accentColor": "#97144D",
+        "badge": "LIVE AMAZON PROMO",
+        "type": "bank_discount",
+        "title": "₹1,000 Instant Discount on Axis Bank Credit Cards",
+        "description": "Flat ₹1,000 discount on non-EMI Axis Bank Credit Card transactions.",
+        "discountAmount": 1000,
+        "effectivePrice": 57990,
+        "stores": [
+          "Amazon India"
+        ],
+        "code": "INSTANT AUTO-APPLIED",
+        "validTill": "Active on Amazon India",
+        "cardTypes": [
+          "Axis Bank Credit Card"
+        ],
+        "storePathways": [
+          {
+            "store": "Amazon India",
+            "basePrice": 58990,
+            "discount": 1000,
+            "netPrice": 57990
+          }
+        ],
+        "bestStoreRoute": {
+          "store": "Amazon India",
+          "basePrice": 58990,
+          "discount": 1000,
+          "netPrice": 57990
+        }
+      }
+    ],
+    "liveStorePrices": {
+      "Flipkart": 52990
+    },
+    "scannedAt": "2026-10-24T14:06:37.287Z",
+    "isCached": false,
+    "crossStoreOptimizer": {
+      "bestPathway": {
+        "store": "Amazon India",
+        "basePrice": 58990,
+        "offerId": "std-amazon-icici",
+        "offerTitle": "5% Unlimited Cashback with Amazon Pay ICICI Credit Card",
+        "bank": "Amazon Pay ICICI Bank",
+        "discount": 2950,
+        "netPrice": 56040,
+        "code": "NO CODE REQUIRED",
+        "badge": "LIVE AMAZON PROMO"
+      },
+      "trackedPathway": {
+        "store": "Amazon India",
+        "basePrice": 58990,
+        "offerId": "std-amazon-icici",
+        "offerTitle": "5% Unlimited Cashback with Amazon Pay ICICI Credit Card",
+        "bank": "Amazon Pay ICICI Bank",
+        "discount": 2950,
+        "netPrice": 56040,
+        "code": "NO CODE REQUIRED",
+        "badge": "LIVE AMAZON PROMO"
+      },
+      "extraSavingsVsTracked": 0,
+      "pathwayInsight": "Best checkout route across stores is on Amazon India with Amazon Pay ICICI Bank at ₹56,040 net."
+    },
+    "cachedAt": "2026-10-24T14:06:37.292Z"
   }
 }
