@@ -14,6 +14,7 @@ try {
 export default function Dashboard() {
   const [url, setUrl] = useState("");
   const [products, setProducts] = useState(cachedProducts);
+  const [isInitialLoading, setIsInitialLoading] = useState(cachedProducts.length === 0);
   const [loading, setLoading] = useState(false);
   const [syncingId, setSyncingId] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
@@ -263,9 +264,21 @@ export default function Dashboard() {
     setTimeout(() => setToast(""), 4500);
   };
 
+  const getCurrentUserEmail = () => {
+    let email = localStorage.getItem("zemo_user_email");
+    if (!email) {
+      try {
+        const userObj = JSON.parse(localStorage.getItem("user") || "null");
+        email = userObj?.email;
+      } catch (_) {}
+    }
+    return email ? email.toLowerCase().trim() : null;
+  };
+
   async function loadProducts() {
     try {
-      const res = await API.get("/product");
+      const email = getCurrentUserEmail();
+      const res = await API.get("/product", { params: email ? { email } : {} });
       cachedProducts = res.data;
       try {
         sessionStorage.setItem("zemo_cached_products", JSON.stringify(res.data));
@@ -273,6 +286,8 @@ export default function Dashboard() {
       setProducts([...res.data]);
     } catch (error) {
       console.error("PRODUCT LOAD ERROR:", error);
+    } finally {
+      setIsInitialLoading(false);
     }
   }
 
@@ -301,9 +316,11 @@ export default function Dashboard() {
     setLoading(true);
     trackCompletedRef.current = false;
     try {
+      const email = getCurrentUserEmail();
       const res = await API.post("/product/add", {
         productUrl: targetUrl,
-        source: detectedSource
+        source: detectedSource,
+        email
       });
 
       // 1. Immediately cancel the timer interval so it can never overwrite 100%!
@@ -446,7 +463,8 @@ export default function Dashboard() {
     setIsDeleting(true);
 
     try {
-      await API.delete(`/product/remove/${targetId}`);
+      const email = getCurrentUserEmail();
+      await API.delete(`/product/remove/${targetId}`, { params: email ? { email } : {} });
       showToast("Product purged from surveillance");
       setProductToDelete(null);
       await loadProducts();
@@ -809,17 +827,25 @@ export default function Dashboard() {
       {/* Tracked Products Grid */}
       <div>
         {filteredProducts.length === 0 ? (
-          <div className="bg-[#0A130E] border border-[#163E26] rounded-3xl p-12 text-center max-w-lg mx-auto my-8">
-            <div className="w-14 h-14 rounded-2xl bg-[#0E2A1B] border border-[#227A4E] flex items-center justify-center mx-auto mb-4 text-[#CEFF00]">
-              <svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-              </svg>
+          isInitialLoading ? (
+            <div className="relative overflow-hidden bg-gradient-to-b from-[#0B1E14]/80 to-[#050E09]/95 border border-[#1A472E]/60 rounded-3xl p-10 sm:p-14 text-center max-w-lg mx-auto my-8 shadow-xl">
+              <h3 className="text-xl sm:text-2xl font-bold text-[#F5F2EA] font-serif tracking-tight leading-snug">
+                Quietly tuning into the market for you.
+              </h3>
+              <p className="text-sm text-[#A6A095] max-w-md mx-auto leading-relaxed mt-3">
+                Reconnecting with the cloud and preparing your watch list... Almost ready.
+              </p>
             </div>
-            <h3 className="text-base font-bold text-[#EAE5D9] mb-1 font-mono">No Products in Surveillance</h3>
-            <p className="text-xs text-[#A6A095] max-w-sm mx-auto leading-relaxed">
-              Drop an Amazon link into the console above to begin automated price tracking and AI synthesis.
-            </p>
-          </div>
+          ) : (
+            <div className="relative overflow-hidden bg-gradient-to-b from-[#0B1E14]/80 to-[#050E09]/95 border border-[#1A472E]/60 rounded-3xl p-10 sm:p-14 text-center max-w-lg mx-auto my-8 shadow-xl">
+              <h3 className="text-xl sm:text-2xl font-bold text-[#F5F2EA] font-serif tracking-tight leading-snug">
+                Waiting for something special.
+              </h3>
+              <p className="text-sm text-[#A6A095] max-w-md mx-auto leading-relaxed mt-3">
+                Add a product you’ve been dreaming of, and I’ll alert you the moment the price drops.
+              </p>
+            </div>
+          )
         ) : (
         <div className="grid grid-cols-1 gap-5">
           {filteredProducts.map((product) => (

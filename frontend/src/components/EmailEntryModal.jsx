@@ -101,6 +101,10 @@ export default function EmailEntryModal({ isOpen, onClose, onEnterSuccess }) {
 
     try {
       await API.post("/user/enter-email", { email });
+      const previousEmail = localStorage.getItem("zemo_user_email");
+      if (previousEmail && previousEmail.toLowerCase() !== email.toLowerCase()) {
+        sessionStorage.removeItem("zemo_cached_products");
+      }
       localStorage.setItem("zemo_user_email", email);
       onEnterSuccess(email);
     } catch (err) {
@@ -111,6 +115,10 @@ export default function EmailEntryModal({ isOpen, onClose, onEnterSuccess }) {
       }
       console.warn("Backend unreachable, fallback locally:", err);
       // Fallback: save locally and proceed if server is offline
+      const previousEmail = localStorage.getItem("zemo_user_email");
+      if (previousEmail && previousEmail.toLowerCase() !== email.toLowerCase()) {
+        sessionStorage.removeItem("zemo_cached_products");
+      }
       localStorage.setItem("zemo_user_email", email);
       onEnterSuccess(email);
     } finally {

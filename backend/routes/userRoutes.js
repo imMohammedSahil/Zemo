@@ -108,7 +108,7 @@ router.post("/enter-email", async (req, res) => {
       // Record in-app notification for the Wish Bell
       await Notification.create({
         title: "Connected with Care",
-        message: `Your inbox (${cleanEmail}) is now tuned in for gentle price drop alerts.`,
+        message: `Your inbox (${cleanEmail}) is now tuned in for gentle price drop alerts — sent a warm welcome note to your Gmail.`,
         sentAt: new Date()
       });
 

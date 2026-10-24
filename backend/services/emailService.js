@@ -16,6 +16,8 @@ function getLogoAttachment() {
   return [];
 }
 
+const LOGO_URL = process.env.EMAIL_LOGO_URL || "https://raw.githubusercontent.com/imMohammedSahil/Zemo/main/frontend/public/logo.png";
+
 function getResendClient() {
   if (process.env.RESEND_API_KEY) {
     return new Resend(process.env.RESEND_API_KEY);
@@ -147,7 +149,7 @@ async function sendWishSetEmail({ to, productTitle, warmPhrase, targetPrice, cur
             <table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-bottom: 28px; width: 100%;">
               <tr>
                 <td align="left" valign="middle" style="padding: 0;">
-                  <img src="cid:zemologo" alt="Zemo" width="56" height="56" style="display: block; width: 56px; height: 56px; object-fit: contain;" />
+                  <img src="${LOGO_URL}" alt="Zemo" width="56" height="56" style="display: block; width: 56px; height: 56px; object-fit: contain;" />
                 </td>
                 <td align="right" valign="middle" style="padding: 0;">
                   <span style="background: #0E2A1B; color: #CEFF00; font-family: monospace; font-size: 10px; font-weight: 800; padding: 6px 14px; border-radius: 999px; border: 1px solid #163E26; text-transform: uppercase; letter-spacing: 1px; display: inline-block;">
@@ -315,7 +317,7 @@ async function sendWelcomeEmail({ to }) {
             <table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-bottom: 28px; width: 100%;">
               <tr>
                 <td align="left" valign="middle" style="padding: 0;">
-                  <img src="cid:zemologo" alt="Zemo" width="56" height="56" style="display: block; width: 56px; height: 56px; object-fit: contain;" />
+                  <img src="${LOGO_URL}" alt="Zemo" width="56" height="56" style="display: block; width: 56px; height: 56px; object-fit: contain;" />
                 </td>
                 <td align="right" valign="middle" style="padding: 0;">
                   <span style="background: #0E2A1B; color: #CEFF00; font-family: monospace; font-size: 10px; font-weight: 800; padding: 6px 14px; border-radius: 999px; border: 1px solid #163E26; text-transform: uppercase; letter-spacing: 1px; display: inline-block;">

@@ -13,16 +13,23 @@ router.post("/create", async (req, res) => {
     const { productId, targetPrice, tolerance, email } = req.body;
     console.log("[Alert] /create called with payload:", { productId, targetPrice, tolerance, email });
 
+    const cleanEmail = email ? email.toLowerCase().trim() : undefined;
+    const alertQuery = { productId };
+    if (cleanEmail) {
+      alertQuery.email = cleanEmail;
+    }
+
     const alert = await Alert.findOneAndUpdate(
-      { productId },
+      alertQuery,
       {
         productId,
+        ...(cleanEmail ? { email: cleanEmail } : {}),
         targetPrice,
         tolerance,
         triggered: false
       },
       {
-        new: true,
+        returnDocument: "after",
         upsert: true
       }
     );
@@ -36,8 +43,8 @@ router.post("/create", async (req, res) => {
       const { shortTitle, warmPhrase } = await getOrGenerateShortName(prod);
       const formattedTarget = Number(targetPrice).toLocaleString();
       const message = warmPhrase
-        ? `${warmPhrase} at ₹${formattedTarget}`
-        : `Chasing ${shortTitle} around the clock until it surrenders at ₹${formattedTarget}`;
+        ? `${warmPhrase} at ₹${formattedTarget} — all eyes on it, left a little postcard in your Gmail.`
+        : `Chasing ${shortTitle} around the clock until it surrenders at ₹${formattedTarget} — all eyes on it, left a little postcard in your Gmail.`;
 
       await Notification.create({
         productId,

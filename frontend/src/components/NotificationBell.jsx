@@ -185,7 +185,15 @@ export default function NotificationBell() {
                             msg = `Chasing ${short || titlePart} around the clock until it surrenders at ${trackMatch[2]}`;
                           }
                         }
-                        return msg.replace(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}]/gu, "").trim();
+                        let cleanMsg = msg.replace(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}]/gu, "").trim();
+                        if (cleanMsg.includes("tuned in for gentle price drop alerts")) {
+                          cleanMsg = cleanMsg.replace(/\s*[—•\-].*$/, "").replace(/[\.\s]+$/, "") + " — sent a warm welcome note to your Gmail.";
+                        } else if (cleanMsg.includes("• Sent to Gmail")) {
+                          cleanMsg = cleanMsg.replace(/\s*•\s*Sent to Gmail/g, " — all eyes on it, left a little postcard in your Gmail.");
+                        } else if (!cleanMsg.includes("postcard in your Gmail")) {
+                          cleanMsg = cleanMsg.replace(/[\.\s]+$/, "") + " — all eyes on it, left a little postcard in your Gmail.";
+                        }
+                        return cleanMsg;
                       })()}
                     </p>
                     <span className="text-[10px] text-[#A6A095] font-mono mt-1.5 block">

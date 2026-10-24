@@ -3,10 +3,17 @@ const mongoose = require("mongoose");
 const AlertSchema = new mongoose.Schema({
 
   userId: {
-  type: mongoose.Schema.Types.ObjectId,
-  ref: "User",
-  required: false
-},
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: false
+  },
+
+  email: {
+    type: String,
+    default: "",
+    lowercase: true,
+    trim: true
+  },
 
   productId: {
     type: mongoose.Schema.Types.ObjectId,

@@ -59,7 +59,8 @@ router.post("/add", async (req, res) => {
 
   try {
 
-    const { productUrl } = req.body;
+    const { productUrl, email } = req.body;
+    const cleanEmail = email ? email.toLowerCase().trim() : null;
 
     if (!productUrl) {
       return res.status(400).json({ message: "Product URL required" });
@@ -88,13 +89,18 @@ router.post("/add", async (req, res) => {
 
     }
 
-    console.log("Tracking product:", cleanUrl);
+    console.log("Tracking product:", cleanUrl, "for user:", cleanEmail || "anonymous");
 
     const existingProduct = asin
       ? await Product.findOne({ asin })
       : null;
 
     if (existingProduct) {
+      if (cleanEmail) {
+        await Product.findByIdAndUpdate(existingProduct._id, {
+          $addToSet: { trackedBy: cleanEmail }
+        });
+      }
       return res.json({ ...existingProduct.toObject(), alreadyTracked: true });
     }
 
@@ -122,7 +128,8 @@ router.post("/add", async (req, res) => {
       ratingDistribution: metadata.ratingDistribution || {},
       bankOffers: metadata.bankOffers || [],
       coupon: metadata.coupon || null,
-      historicLow: currentPrice
+      historicLow: currentPrice,
+      trackedBy: cleanEmail ? [cleanEmail] : []
     });
 
     const freshProduct = await Product.findById(newProduct._id);
@@ -373,15 +380,43 @@ router.post("/offers/:id/clear-cache", async (req, res) => {
 
 router.get("/", async (req, res) => {
   try {
-    const products = await Product.find();
+    const userEmail = req.query.email ? req.query.email.toLowerCase().trim() : null;
+
+    let query = {};
+    if (userEmail) {
+      query = {
+        $or: [
+          { trackedBy: userEmail },
+          { isDemo: true }
+        ]
+      };
+    }
+
+    let products = await Product.find(query);
+
+    // If a user has 0 products and no demo product marked yet, let's treat the first product as demo
+    if (products.length === 0 && userEmail) {
+      const anyProd = await Product.findOne();
+      if (anyProd && (!anyProd.trackedBy || anyProd.trackedBy.length === 0)) {
+        anyProd.isDemo = true;
+        await anyProd.save();
+        products = [anyProd];
+      }
+    }
+
     const result = [];
 
     for (const product of products) {
+      const alertQuery = {
+        productId: product._id,
+        triggered: false
+      };
+      if (userEmail) {
+        alertQuery.email = userEmail;
+      }
+
       const alert = await Alert
-        .findOne({
-          productId: product._id,
-          triggered: false
-        })
+        .findOne(alertQuery)
         .sort({ createdAt: -1 });
 
       let grabMeter = null;
@@ -408,10 +443,23 @@ router.get("/", async (req, res) => {
 router.delete("/remove/:id", async (req, res) => {
   try {
     const productId = req.params.id;
+    const userEmail = (req.query.email || req.body.email)
+      ? (req.query.email || req.body.email).toLowerCase().trim()
+      : null;
+
+    if (userEmail) {
+      await Product.findByIdAndUpdate(productId, {
+        $pull: { trackedBy: userEmail }
+      });
+      await Alert.deleteMany({ productId, email: userEmail });
+      return res.json({ message: "Product removed from your watchlist" });
+    }
+
     const product = await Product.findById(productId);
     const keysToPurge = [productId, product?.asin].filter(Boolean);
 
     await Product.deleteOne({ _id: productId });
+    await Alert.deleteMany({ productId });
 
     // Clean up disk caches for this product
     const fs = require("fs");
