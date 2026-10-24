@@ -15,9 +15,9 @@ Zemo is a distributed e-commerce intelligence system engineered for automated we
 | :--- | :--- | :--- |
 | **API Runtime** | Node.js (v18+) / Express 5.x | Non-blocking asynchronous REST API gateway and request routing |
 | **Persistence Engine** | MongoDB (v6+) / Mongoose 9.x | Document datastore for product catalogs, alerts, and time-series history |
-| **Browser Automation** | Playwright 1.58 (Chromium) | Headless browser automation, DOM selector cascades, network stream interception |
+| **Browser Automation** | Playwright 1.58 (Chromium) + Cheerio | Dual-tier extraction: sub-second Cheerio HTTP parsing with headless Playwright fallback |
 | **Cognitive Intelligence** | Google Gemini API + Meta-Llama-3-8B | Dual-model LLM pipeline for price comparison, review aspect mining, bank discount logic |
-| **Client Application** | React 19 / Vite 7 / Tailwind CSS | Single-page reactive interface, procedural canvas shaders, fluid audio engine |
+| **Client Application** | React 19 / Vite 7 / Tailwind CSS / Lenis | Single-page reactive interface, procedural canvas shaders, fluid audio engine, smooth inertia scrolling |
 | **Task Scheduling** | Node-Cron 4.2 | Mutex-guarded cron daemon executing periodic multi-threaded scraping |
 | **Production Email Engine** | Brevo HTTPS REST API (Port 443) | Multi-tier failover dispatcher bypassing cloud egress SMTP port blocks |
 | **Secondary Email Engines**| Resend API / Nodemailer (SMTP) | Secondary cloud REST API and local development fallback |
@@ -147,10 +147,11 @@ flowchart TD
 
 ## Core Engineering Subsystems
 
-### 1. Headless Browser Automation & Anti-Bot Mitigation
+### 1. Dual-Tier Scraping Architecture & Anti-Bot Mitigation
 E-commerce retail domains rely on single-page JavaScript architectures, obfuscated class structures, and dynamic rendering mechanisms. 
 
-- **Playwright Execution Engine**: Emulates native Chromium environments with tailored user-agent headers, viewpoint randomization, and locale settings to prevent fingerprint-based anti-bot blocks.
+- **Dual-Tier Extraction Pipeline (Cheerio + Playwright)**: Employs a low-latency Cheerio HTTP extraction engine for sub-second metadata fetching on clean HTTP responses, automatically escalating to headless Playwright Chromium with anti-bot headers and selector cascades when JavaScript hydration is required.
+- **Playwright Execution Engine**: Emulates native Chromium environments with tailored user-agent headers, viewport randomization, and locale settings to prevent fingerprint-based anti-bot blocks.
 - **Selector Cascade Strategy**: Employs redundant XPath, CSS selector lists, and microdata attributes (e.g., `#priceblock_ourprice`, `.a-price .a-offscreen`, `[data-asin]`) to guarantee extraction reliability when DOM targets shift.
 - **Resilient ASIN/FSN Resolution**: Normalizes raw, tracking-polluted referral URLs down to canonical identifiers:
   ```
@@ -249,12 +250,13 @@ flowchart LR
 Parses complex unstructured discount strings (instant card discounts, cashback balances, no-cost EMI interest subventions, GST business credits) to compute the true out-of-pocket acquisition cost:
 - **Instant Bank Discount**: Deducts upfront savings (e.g., "Flat ₹1,500 off on SBI Credit Cards").
 - **Cashback Conversion**: Evaluates store balance credits (e.g., "5% cashback on Amazon Pay ICICI").
+- **Verified Standard Promotions Fallback**: In the absence of live listing promotional banners, the engine automatically synthesizes verified standard bank promotions (e.g., standard 5–10% base card offers) to ensure reliable acquisition cost calculations.
 - **True Effective Net Price**:
   $$\text{Effective Price} = \text{Base Price} - \max(\text{Applicable Bank Discounts}) - \text{Cashback}$$
 
 #### Aspect-Based Sentiment Mining (`reviewIntelligenceAI.js` / `aiAnalyzer.js`)
 Aggregates customer reviews across positive and negative ratings. Distills qualitative feedback into aspect-level sentiment metrics:
-- **Aspect Dimensions**: Display quality, battery endurance, build integrity, software stability, performance under load, and value for price.
+- **Calibrated Aspect Dimensions**: Enforces a focused sweet spot of 4–5 core decision dimensions (e.g., Display, Battery Life, Performance, Build Integrity, Value) using AI-canonicalized short product titles.
 - **Percentage Distribution**: Computes confidence ratios for each aspect based on verified purchase comments.
 
 #### Algorithmic Grab / Deal Meter (`dealMeterAI.js`)
@@ -293,13 +295,13 @@ flowchart TD
     SMTP --> Dispatched
 ```
 
-- **Dedicated Sender Identity**: Emails originate from `Zemo <zemo.desk@gmail.com>`, maintaining sender consistency across transactional messages.
-- **Responsive Dark-Locked HTML Templates**: Email templates utilize inline styles and dark `#060D09` palettes with high-contrast `#CEFF00` brand tokens that render consistently across desktop and mobile email clients.
+- **Dedicated Sender Identity**: Emails originate strictly from `Zemo <zemo.desk@gmail.com>`, maintaining sender consistency across transactional messages.
+- **Responsive Dark-Locked HTML Templates**: Email templates utilize table-based layouts for rock-solid Gmail alignment, high-resolution circular-safe avatar assets (`zemo_avatar.png`), and dark `#060D09` palettes with high-contrast `#CEFF00` brand tokens.
 
 ### 6. Non-Blocking Wish Bell & Instant Optimistic State Machine
 Creating a threshold alert involves multiple external dependencies: MongoDB writes, Gemini title canonicalization, in-app notification insertion, and email dispatch. 
 
-To eliminate UI latency, Zemo implements an optimistic state machine on the client paired with a non-blocking asynchronous worker on the server:
+To eliminate UI latency, Zemo implements an optimistic state machine on the client paired with a non-blocking asynchronous worker on the server. Products and notifications are scoped to individual user accounts via `trackedBy` arrays, ensuring private per-email dashboards while sharing deduplicated cached catalogs:
 
 ```mermaid
 sequenceDiagram
@@ -473,7 +475,7 @@ erDiagram
 
 | Method | Route | Description | Payload / Query Parameters |
 | :--- | :--- | :--- | :--- |
-| `POST` | `/product/add` | Normalizes product URL, extracts metadata, backfills history | `{ "productUrl": "https://www.amazon.in/dp/..." }` |
+| `POST` | `/product/add` | Normalizes product URL, extracts metadata, backfills history, scopes to user | `{ "productUrl": "https://www.amazon.in/dp/...", "email": "user@example.com" }` |
 | `GET` | `/product` | Returns all tracked products with deal scores and active alerts | Query: `?email=user@example.com` |
 | `POST` | `/product/metadata` | Quick-extracts product metadata before tracking | `{ "productUrl": "https://www.amazon.in/dp/..." }` |
 | `POST` | `/product/sync/:id` | Executes on-demand real-time price scrape for single item | URL Param: `id` (ObjectId) |
@@ -484,6 +486,7 @@ erDiagram
 | `POST` | `/product/reviews/:id/clear-cache` | Clears local cache for reviews | URL Param: `id` (ObjectId) |
 | `GET` | `/product/offers/:id` | Calculates bank discounts, card savings, and true net price | URL Param: `id` (ObjectId), Query: `?refresh=true` |
 | `POST` | `/product/offers/:id/clear-cache` | Clears local cache for bank offers | URL Param: `id` (ObjectId) |
+| `POST` | `/product/reset-product-cache/:id` | Clears all cached intelligence layers (stores, offers, reviews) for item | URL Param: `id` (ObjectId) |
 | `DELETE` | `/product/remove/:id` | Removes product and associated alerts/caches | URL Param: `id` (ObjectId), Query: `?email=...` |
 
 ### Price History Endpoints
@@ -504,21 +507,23 @@ erDiagram
 
 | Method | Route | Description | Query / Payload |
 | :--- | :--- | :--- | :--- |
-| `GET` | `/notifications` | Returns user notification list with unread counter | Query: `?email=user@example.com` |
+| `GET` | `/notifications` | Returns user notification list filtered strictly to user email | Query: `?email=user@example.com` |
 | `POST` | `/notifications/read` | Marks notifications as read | `{ "email": "user@example.com" }` |
 | `DELETE` | `/notifications/:id` | Deletes single notification record | URL Param: `id` (ObjectId) |
 
 ### Authentication & User Endpoints
 
-| Method | Route | Description | Payload |
+| Method | Route | Description | Payload / Query Parameters |
 | :--- | :--- | :--- | :--- |
 | `POST` | `/user/send-otp` | Validates deliverability via Abstract API and dispatches 6-digit OTP | `{ "email": "user@example.com" }` |
 | `POST` | `/user/verify-otp` | Validates submitted OTP and provisions/retrieves user profile | `{ "email": "user@example.com", "code": "123456" }` |
 | `POST` | `/user/enter-email` | Direct email submission handler with single-dispatch welcome email | `{ "email": "user@example.com" }` |
-| `POST` | `/user/google-login` | Synchronizes Google OAuth identity | `{ "googleId": "...", "name": "...", "email": "..." }` |
-| `GET` | `/user/profile/:id` | Retrieves user profile data | URL Param: `id` (ObjectId) |
-| `PUT` | `/user/profile/:id` | Updates user profile and notification preferences | Multipart form or JSON payload |
-| `POST` | `/user/upload-avatar` | Uploads custom user profile image via Multer | Multipart field: `avatar` |
+| `POST` | `/user/google-login` | Synchronizes Google OAuth identity | `{ "googleId": "...", "name": "...", "email": "...", "profilePicture": "..." }` |
+| `GET` | `/user/me` | Retrieves user profile data and notification state | Query: `?email=user@example.com` |
+| `PUT` | `/user/update-profile` | Updates user profile metadata (name, username, location) | `{ "email": "...", "name": "...", "username": "...", "location": "..." }` |
+| `POST` | `/user/upload-pfp` | Uploads custom user profile avatar image via Multer | Multipart field: `pfp` |
+| `POST` | `/user/add-wishlist` | Adds custom product listing to user wishlist | `{ "email": "...", "productUrl": "...", "title": "...", "image": "...", "source": "..." }` |
+| `DELETE` | `/user/wishlist/:id` | Removes item from user wishlist | Query: `?email=user@example.com` |
 
 ---
 
@@ -530,13 +535,15 @@ The frontend is structured as a responsive single-page application built on Reac
 
 ```
 /
-├── Landing Page (/)               # Procedural rain canvas shader, sound pill, email modal
-├── Dashboard (/radar, /)          # Catalog overview, live URL tracker, Grab-o-Meter cards
-├── Store Arbitrage (/compare/:id) # Cross-retailer Amazon vs Flipkart arbitrage view
-├── Bank Offers (/offers/:id)      # Credit card discounts, EMI breakdown, effective net price
-├── Customer Reviews (/reviews/:id)# Aspect-based sentiment analysis and feature breakdowns
-├── AI Insights (/insights/:id)    # Longitudinal price trajectory charts and volatility metrics
-└── User Profile (/profile)        # User profile, custom avatar management, notification controls
+├── Landing Page (/)                         # Procedural rain canvas shader, sound pill, email modal
+├── Dashboard (/dashboard, /radar)           # Tracked catalog, live URL tracker, Grab-o-Meter cards
+├── Store Arbitrage (/product/:id/compare)   # Cross-retailer Amazon vs Flipkart arbitrage view
+├── Bank Offers (/product/:id/offers)        # Credit card discounts, EMI breakdown, effective net price
+├── Customer Reviews (/product/:id/reviews)  # Aspect-based sentiment analysis and feature breakdowns
+├── AI Insights (/product/:id/insights)      # Longitudinal price trajectory charts and review insights
+├── User Wishlist (/wishlist)                # User saved external target items
+├── Authentication (/login)                  # User login and identity entry
+└── Developer Sandbox (/test-input)          # Multi-phase loading simulation and testing sandbox
 ```
 
 ### Key Frontend Components
@@ -545,9 +552,10 @@ The frontend is structured as a responsive single-page application built on Reac
 - **`ProductNavTabs.jsx`**: Persistent analytical navigation bar enabling instantaneous switching between store comparison, review mining, bank discounts, and price history views.
 - **`ProductCard.jsx`**: High-density product display card presenting real-time price, Grab-o-Meter rating, preset discount triggers, fine-tune range slider, and instant Wish Bell save button.
 - **`EmailEntryModal.jsx`**: Clean dark-mode email verification modal featuring real-time deliverability checks, OTP submission, and dark-locked autofill inputs.
-- **`NotificationBell.jsx`**: Header notification trigger displaying real-time alert count, unread badge pulses, and timestamped drop histories.
+- **`NotificationBell.jsx`**: Header notification trigger displaying real-time alert count, unread badge pulses, and timestamped drop histories scoped to user.
 - **`AiProgressLoader.jsx`**: Multi-phase progress visualizer providing step-by-step transparency during long-running background scraping and LLM synthesis operations.
-- **`SoundPill.jsx`**: Ambient audio controller supporting synchronized rain ambience and musical backdrop with volume smoothing and user interaction gates.
+- **`SoundPill.jsx` & Audio Subsystem**: Dual-stream acoustic manager supporting atmospheric rain (`rain_loop.mp3`) during hero landing that crossfades seamlessly into Ludovico Einaudi's *I Giorni* piano soundtrack (`i_giorni.mp3`) as the user explores the application.
+- **`index.css`**: Global CSS directives including browser dark-locked autofill rules to prevent white flash highlights on credentials.
 - **`vercel.json`**: Rewrite configuration guaranteeing client-side routing support across all secondary view paths on Vercel deployments.
 
 ---
