@@ -84,9 +84,28 @@ async function deliverEmail({ to, defaultSenderName, subject, html, attachments 
       if (response.error) {
         console.warn("[EmailService] Resend API error:", response.error.message || response.error);
 
-        // When testing with Resend's free onboarding@resend.dev sandbox, emails to addresses
-        // other than the account owner return 403 validation_error.
-        // On cloud platforms like Render where SMTP ports are blocked, deliver over HTTPS to owner:
+        // 1. Try Nodemailer SMTP fallback first for direct delivery to recipient (works on local dev & SMTP-enabled clouds)
+        const transporter = getTransporter();
+        if (transporter) {
+          console.log(`[EmailService] Attempting direct delivery via Nodemailer SMTP to ${recipient}...`);
+          try {
+            const from = `"${defaultSenderName || 'Zemo'}" <${process.env.EMAIL_USER || process.env.SMTP_USER}>`;
+            const info = await transporter.sendMail({
+              from,
+              to: recipient,
+              subject,
+              html,
+              attachments
+            });
+            console.log(`[EmailService] Delivered successfully via SMTP to ${recipient}:`, info.messageId);
+            return { success: true, messageId: info.messageId };
+          } catch (smtpErr) {
+            console.warn("[EmailService] Nodemailer SMTP attempt failed (e.g. cloud port block):", smtpErr.message);
+          }
+        }
+
+        // 2. When on cloud platforms like Render where SMTP is blocked and Resend is in test sandbox (403):
+        // Route sandbox copy to account owner over HTTPS so developer can still access the code:
         const ownerEmail = (process.env.NOTIFICATION_EMAIL || process.env.EMAIL_USER || "").trim().toLowerCase();
         if (response.error.statusCode === 403 && ownerEmail && recipient.toLowerCase() !== ownerEmail) {
           console.log(`[EmailService] Resend sandbox restriction: routing code for ${recipient} to account owner (${ownerEmail})...`);
