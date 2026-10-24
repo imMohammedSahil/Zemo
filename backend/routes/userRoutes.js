@@ -105,17 +105,23 @@ router.post("/send-otp", async (req, res) => {
 
     console.log(`[OTP] Generated verification code ${code} for ${cleanEmail}`);
 
-    // Dispatch verification code email
-    const dispatchResult = await sendVerificationCodeEmail({ to: cleanEmail, code });
-    if (dispatchResult && dispatchResult.error) {
-      console.warn("[OTP] Email dispatch warning:", dispatchResult.error);
-    }
-
+    // Respond immediately to the frontend (< 200ms) so user is never stuck on a spinner
     res.json({
       success: true,
       email: cleanEmail,
       message: `Verification code sent to ${cleanEmail}`
     });
+
+    // Dispatch verification code email asynchronously in background
+    sendVerificationCodeEmail({ to: cleanEmail, code })
+      .then((dispatchResult) => {
+        if (dispatchResult && dispatchResult.error) {
+          console.warn("[OTP] Email dispatch warning:", dispatchResult.error);
+        }
+      })
+      .catch((err) => {
+        console.warn("[OTP] Email dispatch error:", err.message);
+      });
   } catch (error) {
     console.error("Error in /send-otp:", error);
     res.status(500).json({ error: "Failed to send verification code" });

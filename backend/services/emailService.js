@@ -30,13 +30,19 @@ function getTransporter() {
       host: process.env.SMTP_HOST,
       port,
       secure: port === 465,
-      auth: { user, pass }
+      auth: { user, pass },
+      connectionTimeout: 5000,
+      greetingTimeout: 5000,
+      socketTimeout: 8000
     });
   }
 
   return nodemailer.createTransport({
     service: "gmail",
-    auth: { user, pass }
+    auth: { user, pass },
+    connectionTimeout: 5000,
+    greetingTimeout: 5000,
+    socketTimeout: 8000
   });
 }
 
