@@ -15,6 +15,7 @@ export default function EmailEntryModal({ isOpen, onClose, onEnterSuccess }) {
 
   const inputRef = useRef(null);
   const otpRef = useRef(null);
+  const isVerifyingRef = useRef(false);
 
   // Lock body scroll and pause Lenis while modal is open
   useEffect(() => {
@@ -165,8 +166,6 @@ export default function EmailEntryModal({ isOpen, onClose, onEnterSuccess }) {
       setLoading(false);
     }
   };
-
-  const isVerifyingRef = useRef(false);
 
   // Step 2: Verify OTP and grant dashboard access
   const handleVerifyOtp = async (codeToSubmit = null) => {
