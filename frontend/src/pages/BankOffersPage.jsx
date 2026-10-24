@@ -376,7 +376,13 @@ export default function BankOffersPage() {
       {/* ========================================================= */}
       <div className="flex flex-wrap items-center justify-between gap-3">
         {/* Left navigation controls */}
-        <ProductNavTabs productId={productId} activeTab="offers" isLoading={loading} />
+        <ProductNavTabs
+          productId={productId}
+          activeTab="offers"
+          isLoading={loading}
+          onClearCache={handleClearCache}
+          isClearing={clearingCache}
+        />
       </div>
 
       {loading ? (

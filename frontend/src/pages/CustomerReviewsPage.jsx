@@ -178,7 +178,13 @@ export default function CustomerReviewsPage() {
       {/* ========================================================= */}
       <div className="flex flex-wrap items-center justify-between gap-3">
         {/* Navigation controls */}
-        <ProductNavTabs productId={productId} activeTab="reviews" isLoading={loading} />
+        <ProductNavTabs
+          productId={productId}
+          activeTab="reviews"
+          isLoading={loading}
+          onClearCache={handleClearCache}
+          isClearing={clearingCache}
+        />
       </div>
 
       {loading ? (

@@ -378,6 +378,50 @@ router.post("/offers/:id/clear-cache", async (req, res) => {
   }
 });
 
+/* Reset Customer Reviews & Bank Offers cache specifically for a product (keeps Compare Stores intact) */
+router.post("/reset-product-cache/:id", async (req, res) => {
+  try {
+    const id = req.params.id;
+    let product = null;
+    const mongoose = require("mongoose");
+    if (mongoose.Types.ObjectId.isValid(id)) {
+      product = await Product.findById(id);
+    }
+    if (!product) {
+      product = await Product.findOne({
+        $or: [{ asin: id }, { title: new RegExp(id, "i") }]
+      });
+    }
+
+    const keysToPurge = [
+      id,
+      product?._id ? String(product._id) : null,
+      product?.asin ? String(product.asin) : null
+    ].filter(Boolean);
+
+    // 1. Purge Reviews Cache
+    keysToPurge.forEach(k => clearReviewsCache(k));
+
+    // 2. Purge Bank Offers Cache
+    keysToPurge.forEach(k => clearOffersCache(k));
+
+    // 3. Clear scraped bankOffers in DB document
+    if (product) {
+      product.bankOffers = [];
+      await product.save();
+    }
+
+    res.json({
+      success: true,
+      message: `Cleared reviews and bank offers cache for: ${product?.title || id}`,
+      product: product ? { id: product._id, asin: product.asin, title: product.title } : null
+    });
+  } catch (err) {
+    console.error("[reset-product-cache error]:", err);
+    res.status(500).json({ message: "Failed to reset product cache", error: err.message });
+  }
+});
+
 router.get("/", async (req, res) => {
   try {
     const userEmail = req.query.email ? req.query.email.toLowerCase().trim() : null;
