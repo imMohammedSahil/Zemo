@@ -360,4 +360,20 @@ input[type="number"] {
   animation-play-state: running !important;
 }
 
+/* ========================================================= */
+/* Browser Autofill Dark Mode Lock                          */
+/* Prevents Chrome/Edge from turning inputs white/light blue */
+/* ========================================================= */
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus, 
+input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 1000px #061009 inset !important;
+  box-shadow: 0 0 0 1000px #061009 inset !important;
+  -webkit-text-fill-color: #F5F2EA !important;
+  caret-color: #CEFF00 !important;
+  transition: background-color 9999s ease-in-out 0s !important;
+  border-radius: inherit;
+}
+
 

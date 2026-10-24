@@ -354,7 +354,7 @@ export default function EmailEntryModal({ isOpen, onClose, onEnterSuccess }) {
                     </label>
                     
                     <div className="relative group p-[1.5px] rounded-2xl bg-gradient-to-r from-[#163E26] via-[#227A4E] to-[#163E26] hover:from-[#227A4E] hover:via-[#CEFF00] hover:to-[#227A4E] focus-within:from-[#227A4E] focus-within:via-[#CEFF00] focus-within:to-[#227A4E] transition-all duration-300">
-                      <div className="relative bg-[#061009] rounded-[15px] flex items-center">
+                      <div className="relative bg-[#061009] rounded-[15px] flex items-center overflow-hidden">
                         <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-[#6D8274] z-10">
                           <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
                             <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" />
