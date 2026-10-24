@@ -166,14 +166,19 @@ export default function EmailEntryModal({ isOpen, onClose, onEnterSuccess }) {
     }
   };
 
+  const isVerifyingRef = useRef(false);
+
   // Step 2: Verify OTP and grant dashboard access
   const handleVerifyOtp = async (codeToSubmit = null) => {
+    if (isVerifyingRef.current || loading) return;
+
     const code = String(codeToSubmit || otpCode).trim();
     if (code.length !== 6) {
       setError("Please enter the complete 6-digit verification code");
       return;
     }
 
+    isVerifyingRef.current = true;
     setLoading(true);
     setError("");
 
@@ -203,6 +208,7 @@ export default function EmailEntryModal({ isOpen, onClose, onEnterSuccess }) {
       }
     } finally {
       setLoading(false);
+      isVerifyingRef.current = false;
     }
   };
 

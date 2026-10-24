@@ -70,7 +70,7 @@ async function verifyEmailDeliverability(email) {
   }
 }
 
-const otpStore = new Map();
+const Otp = require("../models/Otp");
 
 /* SEND OTP TO GMAIL */
 router.post("/send-otp", async (req, res) => {
@@ -88,21 +88,19 @@ router.post("/send-otp", async (req, res) => {
       return res.status(400).json({ error: verification.reason });
     }
 
-    // Rate limiting: allow at most 1 OTP every 30 seconds
-    const existing = otpStore.get(cleanEmail);
-    if (existing && Date.now() - existing.createdAt < 30 * 1000) {
-      const waitSec = Math.ceil((30 * 1000 - (Date.now() - existing.createdAt)) / 1000);
+    // Rate limiting: allow at most 1 OTP request every 15 seconds
+    const recentOtp = await Otp.findOne({ email: cleanEmail }).sort({ createdAt: -1 });
+    if (recentOtp && Date.now() - new Date(recentOtp.createdAt).getTime() < 15 * 1000) {
+      const waitSec = Math.ceil((15 * 1000 - (Date.now() - new Date(recentOtp.createdAt).getTime())) / 1000);
       return res.status(429).json({ error: `Please wait ${waitSec}s before requesting a new code.` });
     }
 
     // Generate 6-digit numeric OTP
     const code = String(Math.floor(100000 + Math.random() * 900000));
-    otpStore.set(cleanEmail, {
+    await Otp.create({
+      email: cleanEmail,
       code,
-      senderName: verification.senderName,
-      createdAt: Date.now(),
-      expiresAt: Date.now() + 10 * 60 * 1000,
-      attempts: 0
+      senderName: verification.senderName
     });
 
     console.log(`[OTP] Generated verification code ${code} for ${cleanEmail}`);
@@ -133,30 +131,25 @@ router.post("/verify-otp", async (req, res) => {
     }
 
     const cleanEmail = email.trim().toLowerCase();
-    const cleanCode = String(code).trim();
+    const cleanCode = String(code).trim().replace(/\s+/g, "");
 
-    const record = otpStore.get(cleanEmail);
-    if (!record) {
-      return res.status(400).json({ error: "No verification code found. Please request a new code." });
-    }
+    console.log(`[Verify OTP] Checking code: "${cleanCode}" for "${cleanEmail}"`);
 
-    if (Date.now() > record.expiresAt) {
-      otpStore.delete(cleanEmail);
-      return res.status(400).json({ error: "Verification code has expired. Please request a new code." });
-    }
-
-    if (record.attempts >= 5) {
-      otpStore.delete(cleanEmail);
-      return res.status(429).json({ error: "Too many incorrect attempts. Please request a new code." });
-    }
-
-    if (record.code !== cleanCode) {
-      record.attempts += 1;
+    // Look for matching active OTP for this email
+    const match = await Otp.findOne({ email: cleanEmail, code: cleanCode });
+    if (!match) {
+      // Check if any active OTP exists for this email
+      const anyOtp = await Otp.find({ email: cleanEmail }).sort({ createdAt: -1 });
+      if (anyOtp.length === 0) {
+        return res.status(400).json({ error: "No active verification code found or it has expired. Please request a new code." });
+      }
       return res.status(400).json({ error: "Incorrect verification code. Please check your Gmail." });
     }
 
-    // Code verified successfully!
-    otpStore.delete(cleanEmail);
+    const senderName = match.senderName;
+
+    // Code verified successfully! Delete all OTPs for this email
+    await Otp.deleteMany({ email: cleanEmail });
 
     // Find or create User
     let user = await User.findOne({ email: cleanEmail });
@@ -165,7 +158,7 @@ router.post("/verify-otp", async (req, res) => {
       isNewUser = true;
       user = new User({
         googleId: "guest-" + Date.now(),
-        name: record.senderName || cleanEmail.split("@")[0],
+        name: senderName || cleanEmail.split("@")[0],
         username: cleanEmail.split("@")[0],
         email: cleanEmail
       });
