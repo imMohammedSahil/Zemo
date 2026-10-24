@@ -1,5 +1,6 @@
 const fs = require("fs");
 const path = require("path");
+const { localFallbackShortName } = require("./productShortNameAI");
 
 const CACHE_DIR = path.join(__dirname, "../../.zemo_cache");
 const CACHE_FILE = path.join(CACHE_DIR, "gemini_reviews_cache.json");
@@ -67,6 +68,7 @@ function clearReviewsCache(key = null) {
  */
 function generateFallbackReviews(product) {
   const title = product.title || "Tracked Product";
+  const displayTitle = product.shortTitle || (localFallbackShortName(title).shortTitle) || title.split(",")[0].trim();
   const isMacOrLaptop = /macbook|laptop|thinkpad|notebook|dell|asus|hp|acer/i.test(title);
   const totalCount = product.ratingsCount || "374 reviews";
   const rating = Number(product.rating) || 4.7;
@@ -154,7 +156,7 @@ function generateFallbackReviews(product) {
     recommendationRate: 93,
     ratingDistribution,
     aspectSummary: { pros, cons },
-    bestieVerdict: `I distilled verified customer feedback for "${title.slice(0, 45)}"! Buyers love the snappy day-to-day performance, premium build, and reliable all-day battery life. With ${totalCount} and a solid ${rating}★ rating, it is a confident purchase!`,
+    bestieVerdict: `I distilled verified customer feedback for "${displayTitle}"! Buyers love the snappy day-to-day performance, premium build, and reliable all-day battery life. With ${totalCount} and a solid ${rating}★ rating, it is a confident purchase!`,
     decisionMatrix: {
       buyIf: [
         "You want proven all-day battery life and seamless everyday performance",
