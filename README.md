@@ -34,6 +34,7 @@ The following diagram illustrates the component topology and data lifecycle acro
 ```mermaid
 flowchart TD
     subgraph ClientTier["Client Tier (React 19 SPA)"]
+        direction TB
         UI["React 19 SPA (Vite + Tailwind CSS)"]
         SubRoutes["Sub-Navigation Routing (/stores, /reviews, /offers, /insights)"]
         CanvasFX["Procedural Rainy Glass Canvas Shader"]
@@ -46,18 +47,26 @@ flowchart TD
     end
 
     subgraph GatewayTier["API Gateway & Middleware Tier"]
+        direction TB
         Express["Express 5.x REST API Gateway"]
         CORS["Cross-Origin Resource Sharing (CORS)"]
         RateLimiter["Sliding-Window IP Rate Limiter (60 req/min)"]
-        StaticSvc["Static Asset Provider (/uploads, /assets)"]
         AuthMiddleware["OTP Verification & Deliverability Gate"]
+        StaticSvc["Static Asset Provider (/uploads, /assets)"]
         Express --> CORS
         Express --> RateLimiter
-        Express --> StaticSvc
         Express --> AuthMiddleware
+        Express --> StaticSvc
+    end
+
+    subgraph SchedulerTier["Scheduler & Mutex Tier"]
+        CronDaemon["Node-Cron Scheduler (15-min intervals)"]
+        ReentrantLock["Reentrant Mutex Guard (atomic flag)"]
+        CronDaemon --> ReentrantLock
     end
 
     subgraph IngestionTier["Headless Automation & Scraping Tier"]
+        direction TB
         PlaywrightEngine["Playwright Headless Chromium Engine"]
         MetadataScraper["Product Ingestion (Title, Image, Live Price, ASIN)"]
         MultiStoreEngine["Multi-Store Search Scraper (Amazon vs Flipkart)"]
@@ -70,25 +79,34 @@ flowchart TD
     end
 
     subgraph CognitiveTier["Cognitive Intelligence Tier (Dual LLM Pipeline)"]
-        GeminiEngine["Google Gemini AI Engine"]
-        LlamaEngine["Meta-Llama-3-8B-Instruct (HF Router)"]
-        LocalCache[(".zemo_cache Filesystem Layer")]
-
-        GeminiEngine --> CompareStoresAI["Multi-Store Price Arbitrage Synthesis"]
-        GeminiEngine --> BankOffersAI["Bank & Card Discount Deduction Engine"]
-        GeminiEngine --> ShortNameAI["Product Title Canonicalizer"]
-        GeminiEngine --> DealMeterAI["Algorithmic Grab Meter Scoring"]
-        LlamaEngine --> AspectSentimentAI["Aspect-Based Sentiment Distillation"]
-
-        LocalCache <--> GeminiEngine
-        LocalCache <--> AspectSentimentAI
+        direction TB
+        subgraph LLMModels["Dual LLM Models"]
+            GeminiEngine["Google Gemini AI Engine"]
+            LlamaEngine["Meta-Llama-3-8B-Instruct (HF Router)"]
+        end
+        subgraph CognitiveTasks["Inference Engines"]
+            CompareStoresAI["Multi-Store Price Arbitrage Synthesis"]
+            BankOffersAI["Bank & Card Discount Deduction Engine"]
+            ShortNameAI["Product Title Canonicalizer"]
+            DealMeterAI["Algorithmic Grab Meter Scoring"]
+            AspectSentimentAI["Aspect-Based Sentiment Distillation"]
+        end
+        LocalCache[(".zemo_cache Local Filesystem Store")]
+        
+        GeminiEngine --> CompareStoresAI
+        GeminiEngine --> BankOffersAI
+        GeminiEngine --> ShortNameAI
+        GeminiEngine --> DealMeterAI
+        LlamaEngine --> AspectSentimentAI
+        LocalCache <--> LLMModels
     end
 
     subgraph PersistenceTier["Persistence Tier (MongoDB Atlas / Local)"]
+        direction TB
         DB[(MongoDB 6.x Database)]
         ColProducts[("products (Catalog, Aspects & Metadata)")]
         ColPriceHistory[("pricehistories (Time-Series Data)")]
-        ColAlerts[("alerts (Target Triggers)")]
+        ColAlerts[("alerts (Target Price Triggers)")]
         ColNotifications[("notifications (User Dispatch Queue)")]
         ColOtps[("otps (TTL Verification Codes)")]
         ColUsers[("users (Profiles & Preferences)")]
@@ -101,6 +119,7 @@ flowchart TD
     end
 
     subgraph DispatchTier["Multi-Tier Transactional Messaging Tier"]
+        direction TB
         DeliverabilityGate["Abstract API Mailbox Validator"]
         BrevoEngine["Tier 1: Brevo HTTPS REST API (Port 443)"]
         ResendEngine["Tier 2: Resend HTTPS REST API (Port 443)"]
@@ -111,24 +130,17 @@ flowchart TD
         ResendEngine -.->|Fallback on Local| SmtpEngine
     end
 
-    subgraph SchedulerTier["Scheduler & Notification Tier"]
-        CronDaemon["Node-Cron Scheduler (15-min intervals)"]
-        ReentrantLock["Reentrant Mutex Guard (atomic flag)"]
-        CronDaemon --> ReentrantLock
-        ReentrantLock --> IngestionTier
-        ReentrantLock --> DispatchTier
-    end
+    UserInbox["User Email Inbox (Gmail)"]
 
-    ClientTier <-->|REST API / JSON| GatewayTier
-    GatewayTier <--> PersistenceTier
-    GatewayTier <--> IngestionTier
-    GatewayTier <--> CognitiveTier
-
-    IngestionTier --> PersistenceTier
-    ReviewMiner -->|Raw Review Corpus| AspectSentimentAI
-    AspectSentimentAI -->|Distilled Aspects & Scores| ColProducts
-
-    DispatchTier -->|HTTPS / Port 443| UserInbox["User Email Inbox (Gmail)"]
+    %% Direct Strict Vertical Hierarchy
+    ClientTier -->|REST API / JSON| GatewayTier
+    GatewayTier --> IngestionTier
+    SchedulerTier -->|Periodic Automation Trigger| IngestionTier
+    IngestionTier -->|Raw Corpus & Telemetry| CognitiveTier
+    IngestionTier -->|Live Price Snapshots| PersistenceTier
+    CognitiveTier -->|Distilled Aspects & Arbitrage| PersistenceTier
+    PersistenceTier -->|Active Price Drops & OTPs| DispatchTier
+    DispatchTier -->|HTTPS / Port 443| UserInbox
 ```
 
 ---
