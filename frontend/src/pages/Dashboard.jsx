@@ -406,8 +406,26 @@ export default function Dashboard() {
         email: savedEmail || undefined
       });
 
+      // Optimistic update: mark the alert as active in local state immediately so button flips to "Wish Set!" with zero delay
+      setProducts((prev) =>
+        prev.map((p) => {
+          if (p._id === productId) {
+            return {
+              ...p,
+              activeAlert: {
+                ...(p.activeAlert || {}),
+                targetPrice: Number(targetPrice),
+                tolerance: Number(tolerance),
+                triggered: false
+              }
+            };
+          }
+          return p;
+        })
+      );
+
       window.dispatchEvent(new Event("notificationUpdated"));
-      await loadProducts();
+      loadProducts().catch(() => {});
     } catch (error) {
       console.error(error);
       throw error;

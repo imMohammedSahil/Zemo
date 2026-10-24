@@ -35,65 +35,71 @@ router.post("/create", async (req, res) => {
     );
 
     console.log("[Alert] Alert saved to DB:", alert._id);
-
-    // Create warm feel-good notification for the top-right Wish Bell
-    const prod = await Product.findById(productId);
-    if (prod) {
-      const { getOrGenerateShortName } = require("../services/productShortNameAI");
-      const { shortTitle, warmPhrase } = await getOrGenerateShortName(prod);
-      const formattedTarget = Number(targetPrice).toLocaleString();
-      const message = warmPhrase
-        ? `${warmPhrase} at ₹${formattedTarget} — all eyes on it, left a little postcard in your Gmail.`
-        : `Chasing ${shortTitle} around the clock until it surrenders at ₹${formattedTarget} — all eyes on it, left a little postcard in your Gmail.`;
-
-      await Notification.create({
-        email: cleanEmail || "",
-        productId,
-        title: "",
-        message,
-        sentAt: new Date()
-      });
-
-      // Find recipient email: check req.body first, then latest saved user, then env
-      let recipientEmail = email;
-      if (!recipientEmail) {
-        try {
-          const User = require("../models/user");
-          const latestUser = await User.findOne({ email: { $exists: true, $ne: "" } }).sort({ createdAt: -1 });
-          if (latestUser && latestUser.email) {
-            recipientEmail = latestUser.email;
-            console.log("[Alert] Found fallback user email from DB:", recipientEmail);
-          }
-        } catch (e) {
-          console.warn("[Alert] Failed to find fallback user:", e.message);
-        }
-      }
-      if (!recipientEmail) {
-        recipientEmail = process.env.NOTIFICATION_EMAIL || process.env.EMAIL_USER;
-        console.log("[Alert] Falling back to env email:", recipientEmail);
-      }
-
-      console.log(`[Alert] Dispatching sendWishSetEmail to: "${recipientEmail}"`);
-
-      // Dispatch warm feel-good email notification
-      sendWishSetEmail({
-        to: recipientEmail || null,
-        productTitle: shortTitle || prod.title,
-        warmPhrase: message,
-        targetPrice: Number(targetPrice),
-        currentPrice: prod.currentPrice,
-        mrp: prod.mrp,
-        productImage: prod.image,
-        productUrl: prod.productUrl,
-        source: prod.source
-      }).then(result => {
-        console.log("[Alert] sendWishSetEmail result:", result);
-      }).catch(err => console.error("[Alert] Email send warning:", err));
-    } else {
-      console.warn("[Alert] Product not found in DB for productId:", productId);
-    }
-
     res.json(alert);
+
+    // Asynchronously create warm feel-good notification and dispatch email in background
+    (async () => {
+      try {
+        const prod = await Product.findById(productId);
+        if (!prod) {
+          console.warn("[Alert] Product not found in DB for productId:", productId);
+          return;
+        }
+
+        const { getOrGenerateShortName } = require("../services/productShortNameAI");
+        const { shortTitle, warmPhrase } = await getOrGenerateShortName(prod);
+        const formattedTarget = Number(targetPrice).toLocaleString();
+        const message = warmPhrase
+          ? `${warmPhrase} at ₹${formattedTarget} — all eyes on it, left a little postcard in your Gmail.`
+          : `Chasing ${shortTitle} around the clock until it surrenders at ₹${formattedTarget} — all eyes on it, left a little postcard in your Gmail.`;
+
+        await Notification.create({
+          email: cleanEmail || "",
+          productId,
+          title: "",
+          message,
+          sentAt: new Date()
+        });
+
+        // Find recipient email: check req.body first, then latest saved user, then env
+        let recipientEmail = email;
+        if (!recipientEmail) {
+          try {
+            const User = require("../models/user");
+            const latestUser = await User.findOne({ email: { $exists: true, $ne: "" } }).sort({ createdAt: -1 });
+            if (latestUser && latestUser.email) {
+              recipientEmail = latestUser.email;
+              console.log("[Alert] Found fallback user email from DB:", recipientEmail);
+            }
+          } catch (e) {
+            console.warn("[Alert] Failed to find fallback user:", e.message);
+          }
+        }
+        if (!recipientEmail) {
+          recipientEmail = process.env.NOTIFICATION_EMAIL || process.env.EMAIL_USER;
+          console.log("[Alert] Falling back to env email:", recipientEmail);
+        }
+
+        console.log(`[Alert] Dispatching sendWishSetEmail to: "${recipientEmail}"`);
+
+        // Dispatch warm feel-good email notification
+        sendWishSetEmail({
+          to: recipientEmail || null,
+          productTitle: shortTitle || prod.title,
+          warmPhrase: message,
+          targetPrice: Number(targetPrice),
+          currentPrice: prod.currentPrice,
+          mrp: prod.mrp,
+          productImage: prod.image,
+          productUrl: prod.productUrl,
+          source: prod.source
+        }).then(result => {
+          console.log("[Alert] sendWishSetEmail result:", result);
+        }).catch(err => console.error("[Alert] Email send warning:", err));
+      } catch (bgErr) {
+        console.error("[Alert] Background notification/email error:", bgErr);
+      }
+    })();
   } catch (error) {
 
     console.error(error);
