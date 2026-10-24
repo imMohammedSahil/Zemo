@@ -56,7 +56,10 @@ async function deliverEmail({ to, defaultSenderName, subject, html, attachments 
   if (resend) {
     console.log(`[EmailService] Dispatching via Resend HTTP API to ${recipient}...`);
     try {
-      const fromAddress = process.env.EMAIL_FROM || "Zemo Alerts <onboarding@resend.dev>";
+      let fromAddress = process.env.EMAIL_FROM || "Zemo <onboarding@resend.dev>";
+      if (fromAddress.includes("Zemo Alerts") || fromAddress.includes("Zemo Wish Bell") || fromAddress.includes("Zemo Deals")) {
+        fromAddress = fromAddress.replace(/Zemo (?:Alerts|Wish Bell|Deals)/, "Zemo");
+      }
       const resendAttachments = attachments
         .map(att => ({
           filename: att.filename,
@@ -235,7 +238,7 @@ async function sendWishSetEmail({ to, productTitle, warmPhrase, targetPrice, cur
 
   return await deliverEmail({
     to: recipient,
-    defaultSenderName: "Zemo Wish Bell",
+    defaultSenderName: "Zemo",
     subject: `Your wish is safely locked in: Chasing ${productTitle} for you at ₹${formattedTarget}!`,
     html: htmlContent
   });
@@ -282,7 +285,7 @@ async function sendPriceDropEmail({ to, productTitle, newPrice, targetPrice, pro
 
   return await deliverEmail({
     to: recipient,
-    defaultSenderName: "Zemo Deals",
+    defaultSenderName: "Zemo",
     subject: `Price Drop Alert: ${productTitle.slice(0, 45)}... is now ₹${formattedNew}!`,
     html: htmlContent
   });
