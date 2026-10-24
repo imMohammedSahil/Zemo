@@ -3,9 +3,7 @@ import { useNavigate } from "react-router-dom";
 export default function ProductNavTabs({
   productId,
   activeTab,
-  isLoading = false,
-  onClearCache = null,
-  isClearing = false
+  isLoading = false
 }) {
   const navigate = useNavigate();
 
@@ -19,25 +17,24 @@ export default function ProductNavTabs({
 
   return (
     <div className="flex items-center justify-between w-full flex-wrap gap-2.5">
-      <div className="flex items-center gap-2.5 flex-wrap">
-        {/* Return to Main Radar / Dashboard */}
-        <button
-          onClick={() => {
-            if (productId) {
-              sessionStorage.setItem("last_viewed_product_id", productId);
-            }
-            navigate(productId ? `/dashboard?focusProduct=${productId}` : "/dashboard", {
-              state: { scrollToProductId: productId }
-            });
-          }}
-          className="flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-[#08150D] border border-[#184C2E] text-[#A6A095] hover:bg-[#CEFF00] hover:border-[#CEFF00] hover:text-black font-mono text-xs font-bold transition-all cursor-pointer active:scale-95 shrink-0"
-        >
-          <span>←</span>
-          <span>Dashboard</span>
-        </button>
+      {/* Return to Main Radar / Dashboard */}
+      <button
+        onClick={() => {
+          if (productId) {
+            sessionStorage.setItem("last_viewed_product_id", productId);
+          }
+          navigate(productId ? `/dashboard?focusProduct=${productId}` : "/dashboard", {
+            state: { scrollToProductId: productId }
+          });
+        }}
+        className="flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-[#08150D] border border-[#184C2E] text-[#A6A095] hover:bg-[#CEFF00] hover:border-[#CEFF00] hover:text-black font-mono text-xs font-bold transition-all cursor-pointer active:scale-95 shrink-0"
+      >
+        <span>←</span>
+        <span>Dashboard</span>
+      </button>
 
-        {/* Sibling navigation tabs */}
-        <div className="flex items-center gap-1 sm:gap-1.5 p-1 rounded-xl bg-[#08150D] border border-[#1E5633] shadow-sm">
+      {/* Sibling navigation tabs */}
+      <div className="flex items-center gap-1 sm:gap-1.5 p-1 rounded-xl bg-[#08150D] border border-[#1E5633] shadow-sm">
         {tabs.map((tab) => {
           const isActive = tab.id === activeTab;
           if (isActive) {
@@ -92,22 +89,6 @@ export default function ProductNavTabs({
           );
         })}
       </div>
-      </div>
-
-      {/* Optional On-Demand Cache Clear & Re-synthesize Button */}
-      {onClearCache && (
-        <button
-          onClick={onClearCache}
-          disabled={isLoading || isClearing}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#08150D] border border-[#184C2E] text-[#CEFF00] hover:bg-[#CEFF00] hover:border-[#CEFF00] hover:text-black font-mono text-xs font-bold transition-all cursor-pointer active:scale-95 shrink-0 disabled:opacity-50 disabled:cursor-not-allowed"
-          title="Clear cache and re-analyze fresh"
-        >
-          <span className={isClearing ? "animate-spin inline-block text-[10px]" : "text-[11px]"}>
-            {isClearing ? "⏳" : "↻"}
-          </span>
-          <span>{isClearing ? "Re-analyzing..." : "Clear Cache & Re-analyze"}</span>
-        </button>
-      )}
     </div>
   );
 }

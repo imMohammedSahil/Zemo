@@ -371,8 +371,91 @@ async function sendWelcomeEmail({ to }) {
   });
 }
 
+/**
+ * Send 6-Digit Verification Code Email
+ */
+async function sendVerificationCodeEmail({ to, code }) {
+  const recipient = to || process.env.NOTIFICATION_EMAIL || process.env.EMAIL_USER;
+
+  const htmlContent = `
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color: #060D09; width: 100% !important; min-width: 100%; margin: 0; padding: 32px 16px; table-layout: fixed;">
+      <tr>
+        <td align="center" style="background-color: #060D09; padding: 0;">
+          <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: transparent; color: #EAE5D9; max-width: 540px; width: 100%; margin: auto; border: none; box-sizing: border-box;">
+            
+            <!-- Top Nav Bar: Logo on Left, Security Badge on Right -->
+            <table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-bottom: 28px; width: 100%;">
+              <tr>
+                <td align="left" valign="middle" style="padding: 0;">
+                  <img src="${LOGO_URL}" alt="Zemo" width="56" height="56" style="display: block; width: 56px; height: 56px; object-fit: contain;" />
+                </td>
+                <td align="right" valign="middle" style="padding: 0;">
+                  <span style="background: #0E2A1B; color: #CEFF00; font-family: monospace; font-size: 10px; font-weight: 800; padding: 6px 14px; border-radius: 999px; border: 1px solid #163E26; text-transform: uppercase; letter-spacing: 1px; display: inline-block;">
+                    Secure Verification
+                  </span>
+                </td>
+              </tr>
+            </table>
+
+            <!-- Heading -->
+            <div style="text-align: center; margin-bottom: 24px;">
+              <h1 style="color: #F5F2EA; font-size: 26px; font-weight: 900; margin: 0 0 8px 0; letter-spacing: -0.5px; line-height: 1.25;">
+                Your Verification Code
+              </h1>
+              <p style="color: #9EB0A3; font-size: 14px; line-height: 1.6; margin: 0; max-width: 440px; margin: auto;">
+                Enter this 6-digit verification code in Zemo to confirm your Gmail and unlock your dashboard.
+              </p>
+            </div>
+
+            <!-- OTP Card -->
+            <div style="background: #08150D; border: 1px solid #1E5633; border-radius: 20px; padding: 28px; margin-bottom: 24px; text-align: center; box-shadow: inset 0 1px 1px rgba(255,255,255,0.05);">
+              <span style="font-family: monospace; font-size: 11px; font-weight: 700; color: #6D8274; text-transform: uppercase; letter-spacing: 2px; display: block; margin-bottom: 12px;">
+                One-Time Access Code
+              </span>
+              <div style="background: #060E08; border: 1px solid #163E26; border-radius: 14px; padding: 18px 24px; display: inline-block; margin-bottom: 12px;">
+                <span style="font-family: monospace, 'Courier New', Courier; font-size: 34px; font-weight: 900; color: #CEFF00; letter-spacing: 8px; line-height: 1;">
+                  ${code}
+                </span>
+              </div>
+              <p style="color: #8C9E92; font-size: 12px; margin: 0; font-family: monospace;">
+                Valid for the next 10 minutes
+              </p>
+            </div>
+
+            <!-- Security Advisory -->
+            <div style="background: #061009; border: 1px solid #123320; border-radius: 14px; padding: 14px 18px; margin-bottom: 24px; text-align: left;">
+              <p style="color: #A6A095; font-size: 12px; line-height: 1.6; margin: 0;">
+                If you didn&apos;t request this verification code, please ignore this email. No changes will be made to your account.
+              </p>
+            </div>
+
+            <!-- Warm Footer -->
+            <div style="text-align: center; border-top: 1px solid #143E26; padding-top: 20px;">
+              <p style="color: #EAE5D9; font-size: 13px; font-weight: 700; margin: 0 0 4px 0;">
+                Warmly,<br/>Zemo
+              </p>
+              <p style="color: #6D8274; font-size: 11px; margin: 0; font-family: monospace;">
+                Safe & quiet shopping surveillance
+              </p>
+            </div>
+
+          </div>
+        </td>
+      </tr>
+    </table>
+  `;
+
+  return await deliverEmail({
+    to: recipient,
+    defaultSenderName: "Zemo Security",
+    subject: `${code} is your Zemo verification code`,
+    html: htmlContent
+  });
+}
+
 module.exports = {
   sendWishSetEmail,
   sendPriceDropEmail,
-  sendWelcomeEmail
+  sendWelcomeEmail,
+  sendVerificationCodeEmail
 };

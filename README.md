@@ -35,7 +35,7 @@ flowchart TD
         UI["React 19 SPA (Vite + Tailwind CSS)"]
         SubRoutes["Sub-Navigation Routing (/stores, /reviews, /offers, /insights)"]
         CanvasFX["Procedural Rainy Glass Canvas Shader"]
-        AudioEng["Audio Subsystem (Lenis Smooth Scroll + SoundPill)"]
+        AudioEng["Audio Subsystem (Atmospheric Audio + SoundPill)"]
         UI --- SubRoutes
         UI --- CanvasFX
         UI --- AudioEng
@@ -532,7 +532,7 @@ Zemo/
 │       ├── App.css                  # Component-specific stylesheet
 │       ├── App.jsx                  # Main application layout, audio manager, router
 │       ├── firebase.js              # Client Firebase SDK configuration
-│       ├── index.css                # Global CSS directives, font imports, Lenis rules
+│       ├── index.css                # Global CSS directives and font imports
 │       ├── main.jsx                 # React root renderer
 │       ├── components/              # Modular user interface components
 │       │   ├── AiProgressLoader.jsx # Multi-phase loading state simulator

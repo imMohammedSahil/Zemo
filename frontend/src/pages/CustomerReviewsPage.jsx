@@ -182,8 +182,6 @@ export default function CustomerReviewsPage() {
           productId={productId}
           activeTab="reviews"
           isLoading={loading}
-          onClearCache={handleClearCache}
-          isClearing={clearingCache}
         />
       </div>
 

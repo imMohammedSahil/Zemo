@@ -21,6 +21,7 @@ export default function LandingPage() {
   const handleEmailSuccess = () => {
     sessionStorage.removeItem("last_viewed_product_id");
     sessionStorage.removeItem("last_dashboard_scroll_y");
+    sessionStorage.removeItem("zemo_cached_products");
     setIsEmailModalOpen(false);
     navigate("/dashboard");
   };

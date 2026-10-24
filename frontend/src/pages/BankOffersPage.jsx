@@ -380,8 +380,6 @@ export default function BankOffersPage() {
           productId={productId}
           activeTab="offers"
           isLoading={loading}
-          onClearCache={handleClearCache}
-          isClearing={clearingCache}
         />
       </div>
 

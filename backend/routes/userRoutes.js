@@ -18,7 +18,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 const Notification = require("../models/Notification");
-const { sendWelcomeEmail } = require("../services/emailService");
+const { sendWelcomeEmail, sendVerificationCodeEmail } = require("../services/emailService");
 
 /* REAL-TIME EMAIL DELIVERABILITY CHECKER (AbstractAPI) */
 async function verifyEmailDeliverability(email) {
@@ -70,6 +70,137 @@ async function verifyEmailDeliverability(email) {
   }
 }
 
+const otpStore = new Map();
+
+/* SEND OTP TO GMAIL */
+router.post("/send-otp", async (req, res) => {
+  try {
+    const { email } = req.body;
+    if (!email || typeof email !== "string" || !email.includes("@")) {
+      return res.status(400).json({ error: "Please enter a valid Gmail address." });
+    }
+
+    const cleanEmail = email.trim().toLowerCase();
+
+    // Verify email deliverability
+    const verification = await verifyEmailDeliverability(cleanEmail);
+    if (!verification.valid) {
+      return res.status(400).json({ error: verification.reason });
+    }
+
+    // Rate limiting: allow at most 1 OTP every 30 seconds
+    const existing = otpStore.get(cleanEmail);
+    if (existing && Date.now() - existing.createdAt < 30 * 1000) {
+      const waitSec = Math.ceil((30 * 1000 - (Date.now() - existing.createdAt)) / 1000);
+      return res.status(429).json({ error: `Please wait ${waitSec}s before requesting a new code.` });
+    }
+
+    // Generate 6-digit numeric OTP
+    const code = String(Math.floor(100000 + Math.random() * 900000));
+    otpStore.set(cleanEmail, {
+      code,
+      senderName: verification.senderName,
+      createdAt: Date.now(),
+      expiresAt: Date.now() + 10 * 60 * 1000,
+      attempts: 0
+    });
+
+    console.log(`[OTP] Generated verification code ${code} for ${cleanEmail}`);
+
+    // Dispatch verification code email
+    const dispatchResult = await sendVerificationCodeEmail({ to: cleanEmail, code });
+    if (dispatchResult && dispatchResult.error) {
+      console.warn("[OTP] Email dispatch warning:", dispatchResult.error);
+    }
+
+    res.json({
+      success: true,
+      email: cleanEmail,
+      message: `Verification code sent to ${cleanEmail}`
+    });
+  } catch (error) {
+    console.error("Error in /send-otp:", error);
+    res.status(500).json({ error: "Failed to send verification code" });
+  }
+});
+
+/* VERIFY OTP */
+router.post("/verify-otp", async (req, res) => {
+  try {
+    const { email, code } = req.body;
+    if (!email || !code) {
+      return res.status(400).json({ error: "Email and verification code are required." });
+    }
+
+    const cleanEmail = email.trim().toLowerCase();
+    const cleanCode = String(code).trim();
+
+    const record = otpStore.get(cleanEmail);
+    if (!record) {
+      return res.status(400).json({ error: "No verification code found. Please request a new code." });
+    }
+
+    if (Date.now() > record.expiresAt) {
+      otpStore.delete(cleanEmail);
+      return res.status(400).json({ error: "Verification code has expired. Please request a new code." });
+    }
+
+    if (record.attempts >= 5) {
+      otpStore.delete(cleanEmail);
+      return res.status(429).json({ error: "Too many incorrect attempts. Please request a new code." });
+    }
+
+    if (record.code !== cleanCode) {
+      record.attempts += 1;
+      return res.status(400).json({ error: "Incorrect verification code. Please check your Gmail." });
+    }
+
+    // Code verified successfully!
+    otpStore.delete(cleanEmail);
+
+    // Find or create User
+    let user = await User.findOne({ email: cleanEmail });
+    let isNewUser = false;
+    if (!user) {
+      isNewUser = true;
+      user = new User({
+        googleId: "guest-" + Date.now(),
+        name: record.senderName || cleanEmail.split("@")[0],
+        username: cleanEmail.split("@")[0],
+        email: cleanEmail
+      });
+      await user.save();
+    }
+
+    // Dispatch welcome notification strictly ONCE for brand new users
+    if (isNewUser && !user.hasReceivedWelcomeEmail) {
+      user.hasReceivedWelcomeEmail = true;
+      await user.save();
+
+      await Notification.create({
+        email: cleanEmail,
+        title: "Connected with Care",
+        message: `Your inbox (${cleanEmail}) is now tuned in for gentle price drop alerts — sent a warm welcome note to your Gmail.`,
+        sentAt: new Date()
+      });
+
+      sendWelcomeEmail({ to: cleanEmail })
+        .catch(err => console.warn("[EmailService] Welcome email error:", err.message));
+    }
+
+    res.json({
+      success: true,
+      verified: true,
+      email: cleanEmail,
+      isNewUser,
+      message: "Gmail successfully verified"
+    });
+  } catch (error) {
+    console.error("Error in /verify-otp:", error);
+    res.status(500).json({ error: "Verification failed. Please try again." });
+  }
+});
+
 /* ENTER EMAIL & DISPATCH NOTIFICATION */
 router.post("/enter-email", async (req, res) => {
   try {
@@ -107,6 +238,7 @@ router.post("/enter-email", async (req, res) => {
 
       // Record in-app notification for the Wish Bell
       await Notification.create({
+        email: cleanEmail,
         title: "Connected with Care",
         message: `Your inbox (${cleanEmail}) is now tuned in for gentle price drop alerts — sent a warm welcome note to your Gmail.`,
         sentAt: new Date()

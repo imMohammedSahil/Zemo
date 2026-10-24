@@ -55,7 +55,7 @@ export const LOADER_PRESETS = {
     estimatedSeconds: 11,
     stages: [
       "Digging into your wallet to find secret card perks...",
-      "Teaming up with partner banks to see who gives you the sweetest deal...",
+      "Teaming up with partner banks for the sweetest deal...",
       "Stacking up voucher magic for maximum savings at checkout...",
       "Squeezing out every last rupee of discount for you...",
       "Discounts ready! Save that extra cash."
@@ -200,12 +200,12 @@ export default function AiProgressLoader({
       </div>
 
       {/* Progress Bar Container */}
-      <div className="w-full max-w-md mt-6 space-y-2">
-        <div className="flex items-center justify-between text-[11px] font-mono">
-          <span className="text-[#CEFF00] font-semibold">
+      <div className="w-full max-w-lg mt-6 space-y-2">
+        <div className="flex items-center justify-between text-[11px] font-mono gap-3">
+          <span className="text-[#CEFF00] font-semibold truncate sm:whitespace-nowrap">
             {stages[currentStageIdx]}
           </span>
-          <span className="text-zinc-400 font-bold">
+          <span className="text-zinc-400 font-bold shrink-0 whitespace-nowrap">
             {progress >= 100 ? (
               "Ready!"
             ) : (

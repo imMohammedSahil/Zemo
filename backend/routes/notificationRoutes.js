@@ -10,8 +10,39 @@ router.get("/", async (req, res) => {
         const Product = require("../models/Product");
         const Alert = require("../models/Alert");
 
-        const rawNotifications = await Notification.find().sort({ sentAt: -1, createdAt: -1 }).limit(30);
-        const activeAlerts = await Alert.find({}).sort({ updatedAt: -1, createdAt: -1 }).limit(15);
+        const userEmail = req.query.email ? req.query.email.toLowerCase().trim() : null;
+
+        let userProductIds = new Set();
+        if (userEmail) {
+            const userProducts = await Product.find({ trackedBy: userEmail }, "_id");
+            userProductIds = new Set(userProducts.map(p => String(p._id)));
+        }
+
+        let rawNotifications = await Notification.find().sort({ sentAt: -1, createdAt: -1 }).limit(60);
+        if (userEmail) {
+            rawNotifications = rawNotifications.filter(n => {
+                // If notification explicitly has an email field, match it
+                if (n.email) {
+                    return n.email.toLowerCase().trim() === userEmail;
+                }
+                // If message text contains an email address, ensure it matches this user
+                const emailMatch = (n.message || "").match(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/);
+                if (emailMatch) {
+                    return emailMatch[0].toLowerCase() === userEmail;
+                }
+                // If tied to a product, only show if this user tracks that product
+                if (n.productId) {
+                    return userProductIds.has(String(n.productId));
+                }
+                return false;
+            });
+        } else {
+            rawNotifications = [];
+        }
+
+        const activeAlerts = userEmail
+            ? await Alert.find({ email: userEmail }).sort({ updatedAt: -1, createdAt: -1 }).limit(15)
+            : [];
 
         // Sanitize and shorten notification entries on the fly
         const notifications = rawNotifications.map(n => {

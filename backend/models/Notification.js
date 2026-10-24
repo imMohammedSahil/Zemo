@@ -8,6 +8,13 @@ const NotificationSchema = new mongoose.Schema({
     required: false
   },
 
+  email: {
+    type: String,
+    default: "",
+    lowercase: true,
+    trim: true
+  },
+
   productId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Product",

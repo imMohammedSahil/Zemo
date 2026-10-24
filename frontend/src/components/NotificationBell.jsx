@@ -7,27 +7,43 @@ export default function NotificationBell() {
   const [unreadCount, setUnreadCount] = useState(0);
   const dropdownRef = useRef(null);
 
-  const getStoredReadTime = () => {
+  const getCurrentUserEmail = () => {
+    let email = localStorage.getItem("zemo_user_email");
+    if (!email) {
+      try {
+        const userObj = JSON.parse(localStorage.getItem("user") || "null");
+        email = userObj?.email;
+      } catch (_) {}
+    }
+    return email ? email.toLowerCase().trim() : null;
+  };
+
+  const getStoredReadTime = (email) => {
     try {
-      return Number(localStorage.getItem("zemo_last_read_notifs") || 0);
+      const key = email ? `zemo_last_read_notifs_${email}` : "zemo_last_read_notifs";
+      return Number(localStorage.getItem(key) || 0);
     } catch {
       return 0;
     }
   };
 
-  const setStoredReadTime = (time) => {
+  const setStoredReadTime = (email, time) => {
     try {
-      localStorage.setItem("zemo_last_read_notifs", String(time));
+      const key = email ? `zemo_last_read_notifs_${email}` : "zemo_last_read_notifs";
+      localStorage.setItem(key, String(time));
     } catch {}
   };
 
   async function loadNotifications() {
     try {
-      const res = await API.get("/notifications");
+      const email = getCurrentUserEmail();
+      const res = await API.get("/notifications", {
+        params: email ? { email } : {}
+      });
       const list = res.data || [];
       setNotifications(list);
 
-      const lastRead = getStoredReadTime();
+      const lastRead = getStoredReadTime(email);
       const unread = list.filter(n => {
         const t = new Date(n.sentAt || n.createdAt || 0).getTime();
         return t > lastRead;
@@ -43,9 +59,13 @@ export default function NotificationBell() {
     loadNotifications();
     const handleUpdate = () => loadNotifications();
     window.addEventListener("notificationUpdated", handleUpdate);
+    window.addEventListener("zemo_user_email_changed", handleUpdate);
+    window.addEventListener("storage", handleUpdate);
     const interval = setInterval(loadNotifications, 4000);
     return () => {
       window.removeEventListener("notificationUpdated", handleUpdate);
+      window.removeEventListener("zemo_user_email_changed", handleUpdate);
+      window.removeEventListener("storage", handleUpdate);
       clearInterval(interval);
     };
   }, []);
@@ -54,7 +74,8 @@ export default function NotificationBell() {
     const nextState = !open;
     setOpen(nextState);
     if (nextState) {
-      setStoredReadTime(Date.now());
+      const email = getCurrentUserEmail();
+      setStoredReadTime(email, Date.now());
       setUnreadCount(0);
       loadNotifications();
     }

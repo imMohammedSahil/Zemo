@@ -47,6 +47,7 @@ router.post("/create", async (req, res) => {
         : `Chasing ${shortTitle} around the clock until it surrenders at ₹${formattedTarget} — all eyes on it, left a little postcard in your Gmail.`;
 
       await Notification.create({
+        email: cleanEmail || "",
         productId,
         title: "",
         message,
