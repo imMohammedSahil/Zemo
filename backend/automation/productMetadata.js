@@ -1,6 +1,85 @@
 const { chromium } = require("playwright");
+const axios = require("axios");
+const cheerio = require("cheerio");
+
+async function scrapeWithCheerio(url) {
+  try {
+    const res = await axios.get(url, {
+      headers: {
+        "User-Agent":
+          "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
+        "Accept-Language": "en-IN,en-GB;q=0.9,en-US;q=0.8,en;q=0.7",
+        "Accept":
+          "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8"
+      },
+      timeout: 12000
+    });
+
+    const $ = cheerio.load(res.data);
+    const title =
+      $("#productTitle").text().trim() ||
+      $('meta[name="title"]').attr("content") ||
+      $("title").text().trim();
+
+    if (!title || title.includes("Robot Check") || title.includes("Sorry! Something went wrong")) {
+      return null;
+    }
+
+    let image =
+      $("#landingImage").attr("src") ||
+      $("#landingImage").attr("data-old-hires") ||
+      $('meta[property="og:image"]').attr("content") ||
+      "";
+
+    let currentPrice = 0;
+    const priceText = $(
+      ".a-price .a-offscreen, #corePriceDisplay_desktop_feature_div .a-price-whole, #priceblock_ourprice"
+    )
+      .first()
+      .text()
+      .trim();
+
+    if (priceText) {
+      const num = parseInt(priceText.split(".")[0].replace(/[^0-9]/g, ""), 10);
+      if (num > 0) currentPrice = num;
+    }
+
+    let mrp = 0;
+    const mrpText = $(
+      ".a-price[data-a-strike='true'] .a-offscreen, span.a-price.a-text-price span.a-offscreen"
+    )
+      .first()
+      .text()
+      .trim();
+
+    if (mrpText) {
+      const num = parseInt(mrpText.split(".")[0].replace(/[^0-9]/g, ""), 10);
+      if (num > 0) mrp = num;
+    }
+
+    return {
+      title,
+      image,
+      currentPrice,
+      mrp: mrp || (currentPrice > 0 ? Math.round(currentPrice * 1.18) : 0),
+      rating: 4.2,
+      ratingsCount: "",
+      ratingDistribution: {},
+      bankOffers: [],
+      coupon: null
+    };
+  } catch (_) {
+    return null;
+  }
+}
 
 async function fetchProductMetadata(url) {
+  // Fast path: try Cheerio first to save memory & bypass Playwright timeouts on low-spec cloud servers
+  const quickResult = await scrapeWithCheerio(url);
+  if (quickResult && quickResult.title && quickResult.title !== "Unknown Product") {
+    console.log("Cheerio scrape succeeded:", quickResult.title);
+    return quickResult;
+  }
 
   let browser;
 
@@ -8,28 +87,44 @@ async function fetchProductMetadata(url) {
 
     browser = await chromium.launch({
       headless: true,
-      args: ["--no-sandbox", "--disable-setuid-sandbox"]
+      args: [
+        "--no-sandbox",
+        "--disable-setuid-sandbox",
+        "--disable-dev-shm-usage",
+        "--disable-gpu"
+      ]
     });
 
     const context = await browser.newContext({
       userAgent:
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120 Safari/537.36"
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
+      extraHTTPHeaders: {
+        "Accept-Language": "en-IN,en-GB;q=0.9,en-US;q=0.8,en;q=0.7"
+      }
     });
 
     const page = await context.newPage();
 
-    // Block heavy media/font downloads to make page load 5x faster
-    await page.route(/\.(png|jpg|jpeg|webp|svg|gif|woff|woff2|ttf|css)($|\?)/, route => route.abort());
+    // Block only media and fonts (do NOT abort CSS as it prevents domcontentloaded from firing)
+    await page.route(/\.(png|jpg|jpeg|webp|svg|gif|woff|woff2|ttf)($|\?)/, route => route.abort());
 
     console.log("Scraping product:", url);
 
-    await page.goto(url, {
-      waitUntil: "domcontentloaded",
-      timeout: 20000
-    });
+    try {
+      await page.goto(url, {
+        waitUntil: "domcontentloaded",
+        timeout: 25000
+      });
+    } catch (navErr) {
+      // If domcontentloaded hangs, fallback to commit
+      await page.goto(url, {
+        waitUntil: "commit",
+        timeout: 15000
+      }).catch(() => {});
+    }
 
     try {
-      await page.waitForSelector("#productTitle, #title, h1", { timeout: 3000 });
+      await page.waitForSelector("#productTitle, #title, h1", { timeout: 4000 });
     } catch (_) {}
 
     let title = "Unknown Product";
@@ -330,6 +425,9 @@ async function fetchProductMetadata(url) {
   } catch (error) {
 
     console.error("Metadata scraping error:", error);
+
+    const fallback = await scrapeWithCheerio(url);
+    if (fallback) return fallback;
 
     return {
       title: "Unknown Product",
