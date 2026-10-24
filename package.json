@@ -24,6 +24,7 @@
     "react-gauge-chart": "^0.5.1",
     "react-plotly.js": "^2.6.0",
     "react-router-dom": "^7.13.1",
+    "resend": "^6.34.1",
     "string-similarity": "^4.0.4"
   },
   "devDependencies": {

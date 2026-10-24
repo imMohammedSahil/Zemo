@@ -1,3 +1,4 @@
+const { Resend } = require("resend");
 const nodemailer = require("nodemailer");
 const path = require("path");
 const fs = require("fs");
@@ -8,29 +9,33 @@ function getLogoAttachment() {
     return [{
       filename: "logo.png",
       path: logoPath,
+      content: fs.readFileSync(logoPath),
       cid: "zemologo"
     }];
   }
   return [];
 }
 
+function getResendClient() {
+  if (process.env.RESEND_API_KEY) {
+    return new Resend(process.env.RESEND_API_KEY);
+  }
+  return null;
+}
+
 /**
- * Configure email transporter
- * Supports Gmail, Outlook, or standard custom SMTP via environment variables
+ * Configure email transporter for local SMTP fallback
  */
 function getTransporter() {
   const user = process.env.EMAIL_USER || process.env.SMTP_USER;
   const pass = process.env.EMAIL_PASS || process.env.SMTP_PASS;
 
   if (!user || !pass) {
-    console.warn(`[EmailService] SMTP Transporter NOT configured. EMAIL_USER=${user ? "SET" : "MISSING"}, EMAIL_PASS=${pass ? "SET" : "MISSING"}`);
     return null;
   }
 
-  // If custom SMTP host provided (non-Gmail)
   if (process.env.SMTP_HOST && process.env.SMTP_HOST !== "smtp.gmail.com") {
     const port = Number(process.env.SMTP_PORT) || 587;
-    console.log(`[EmailService] Creating custom SMTP transport (${process.env.SMTP_HOST}:${port}) for ${user}`);
     return nodemailer.createTransport({
       host: process.env.SMTP_HOST,
       port,
@@ -39,12 +44,79 @@ function getTransporter() {
     });
   }
 
-  // Standard Gmail configuration (works seamlessly on Render/cloud)
-  console.log(`[EmailService] Creating Gmail transport for user: ${user}`);
   return nodemailer.createTransport({
     service: "gmail",
     auth: { user, pass }
   });
+}
+
+/**
+ * Universal email dispatcher: Resend HTTP API first (bypasses Render SMTP port blocks),
+ * with Nodemailer SMTP fallback for local dev.
+ */
+async function deliverEmail({ to, defaultSenderName, subject, html, attachments = [] }) {
+  const recipient = to || process.env.NOTIFICATION_EMAIL || process.env.EMAIL_USER;
+  if (!recipient) {
+    console.warn(`[EmailService] No recipient provided for "${subject}". Simulating.`);
+    return { success: true, simulated: true };
+  }
+
+  // 1. Prioritize Resend HTTP API (works 100% on Render Free tier over HTTPS)
+  const resend = getResendClient();
+  if (resend) {
+    console.log(`[EmailService] Dispatching via Resend HTTP API to ${recipient}...`);
+    try {
+      const fromAddress = process.env.EMAIL_FROM || "Zemo Alerts <onboarding@resend.dev>";
+      const resendAttachments = attachments
+        .map(att => ({
+          filename: att.filename,
+          content: att.content || (att.path && fs.existsSync(att.path) ? fs.readFileSync(att.path) : undefined)
+        }))
+        .filter(att => att.content);
+
+      const response = await resend.emails.send({
+        from: fromAddress,
+        to: [recipient],
+        subject,
+        html,
+        attachments: resendAttachments.length > 0 ? resendAttachments : undefined
+      });
+
+      if (response.error) {
+        console.error("[EmailService] Resend API error:", response.error);
+        return { success: false, error: response.error.message };
+      }
+
+      console.log(`[EmailService] Delivered successfully via Resend to ${recipient}:`, response.data?.id);
+      return { success: true, messageId: response.data?.id };
+    } catch (err) {
+      console.error("[EmailService] Resend HTTP call failed:", err.message);
+    }
+  }
+
+  // 2. Fallback to Nodemailer SMTP
+  const transporter = getTransporter();
+  if (transporter) {
+    console.log(`[EmailService] Dispatching via Nodemailer SMTP to ${recipient}...`);
+    try {
+      const from = `"${defaultSenderName || 'Zemo'}" <${process.env.EMAIL_USER || process.env.SMTP_USER}>`;
+      const info = await transporter.sendMail({
+        from,
+        to: recipient,
+        subject,
+        html,
+        attachments
+      });
+      console.log(`[EmailService] Delivered successfully via SMTP to ${recipient}:`, info.messageId);
+      return { success: true, messageId: info.messageId };
+    } catch (err) {
+      console.error("[EmailService] SMTP sendMail failed:", err.message);
+      return { success: false, error: err.message };
+    }
+  }
+
+  console.log(`[EmailService] Email simulated for ${recipient} ("${subject}"). Set RESEND_API_KEY to send real emails.`);
+  return { success: true, simulated: true };
 }
 
 /**
@@ -171,33 +243,13 @@ async function sendWishSetEmail({ to, productTitle, warmPhrase, targetPrice, cur
     </table>
   `;
 
-  console.log(`[EmailService] sendWishSetEmail invoked for product="${productTitle}", recipient="${recipient}"`);
-
-  if (!transporter || !recipient) {
-    console.warn(`[EmailService] CANNOT SEND: transporterReady=${Boolean(transporter)}, recipient="${recipient}". Simulating email.`);
-    return { success: true, simulated: true };
-  }
-
-  try {
-    console.log(`[EmailService] Sending email to ${recipient} via nodemailer...`);
-    const info = await transporter.sendMail({
-      from: `"Zemo Wish Bell" <${process.env.EMAIL_USER || process.env.SMTP_USER}>`,
-      to: recipient,
-      subject: `Your wish is safely locked in: Chasing ${productTitle} for you at ₹${formattedTarget}!`,
-      html: htmlContent,
-      attachments: getLogoAttachment()
-    });
-    console.log("[EmailService] Real wish set email dispatched successfully to", recipient, ":", info.messageId);
-    return { success: true, messageId: info.messageId };
-  } catch (err) {
-    console.error("[EmailService] Wish email dispatch failed with error details:", {
-      message: err.message,
-      code: err.code,
-      response: err.response,
-      responseCode: err.responseCode
-    });
-    return { success: false, error: err.message };
-  }
+  return await deliverEmail({
+    to: recipient,
+    defaultSenderName: "Zemo Wish Bell",
+    subject: `Your wish is safely locked in: Chasing ${productTitle} for you at ₹${formattedTarget}!`,
+    html: htmlContent,
+    attachments: getLogoAttachment()
+  });
 }
 
 /**
@@ -205,8 +257,6 @@ async function sendWishSetEmail({ to, productTitle, warmPhrase, targetPrice, cur
  */
 async function sendPriceDropEmail({ to, productTitle, newPrice, targetPrice, productUrl }) {
   const recipient = to || process.env.NOTIFICATION_EMAIL || process.env.EMAIL_USER;
-  const transporter = getTransporter();
-
   const formattedNew = Number(newPrice).toLocaleString();
   const formattedTarget = Number(targetPrice).toLocaleString();
 
@@ -241,22 +291,12 @@ async function sendPriceDropEmail({ to, productTitle, newPrice, targetPrice, pro
     </div>
   `;
 
-  if (!transporter || !recipient) {
-    console.log(`[EmailService] Price Drop Email simulated for "${productTitle}" (Dropped to ₹${formattedNew}).`);
-    return { success: true, simulated: true };
-  }
-
-  try {
-    const info = await transporter.sendMail({
-      from: `"Zemo Deals" <${process.env.EMAIL_USER || process.env.SMTP_USER}>`,
-      to: recipient,
-      subject: `Price Drop Alert: ${productTitle.slice(0, 45)}... is now ₹${formattedNew}!`,
-      html: htmlContent
-    });
-    return { success: true, messageId: info.messageId };
-  } catch (err) {
-    return { success: false, error: err.message };
-  }
+  return await deliverEmail({
+    to: recipient,
+    defaultSenderName: "Zemo Deals",
+    subject: `Price Drop Alert: ${productTitle.slice(0, 45)}... is now ₹${formattedNew}!`,
+    html: htmlContent
+  });
 }
 
 /**
@@ -264,7 +304,6 @@ async function sendPriceDropEmail({ to, productTitle, newPrice, targetPrice, pro
  */
 async function sendWelcomeEmail({ to }) {
   const recipient = to || process.env.NOTIFICATION_EMAIL || process.env.EMAIL_USER;
-  const transporter = getTransporter();
 
   const htmlContent = `
     <table width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color: #060D09; width: 100% !important; min-width: 100%; margin: 0; padding: 32px 16px; table-layout: fixed;">
@@ -328,25 +367,13 @@ async function sendWelcomeEmail({ to }) {
     </table>
   `;
 
-  if (!transporter || !recipient) {
-    console.log(`[EmailService] Welcome Email simulated for ${recipient}. Set EMAIL_USER & EMAIL_PASS in .env to deliver real emails.`);
-    return { success: true, simulated: true };
-  }
-
-  try {
-    const info = await transporter.sendMail({
-      from: `"Zemo" <${process.env.EMAIL_USER || process.env.SMTP_USER}>`,
-      to: recipient,
-      subject: `Welcome to the family — Happy savings ahead!`,
-      html: htmlContent,
-      attachments: getLogoAttachment()
-    });
-    console.log("[EmailService] Real welcome email dispatched successfully:", info.messageId);
-    return { success: true, messageId: info.messageId };
-  } catch (err) {
-    console.warn("[EmailService] Welcome email dispatch failed:", err.message);
-    return { success: false, error: err.message };
-  }
+  return await deliverEmail({
+    to: recipient,
+    defaultSenderName: "Zemo",
+    subject: `Welcome to the family — Happy savings ahead!`,
+    html: htmlContent,
+    attachments: getLogoAttachment()
+  });
 }
 
 module.exports = {
