@@ -76,14 +76,13 @@ async function deliverEmail({ to, defaultSenderName, subject, html, attachments 
       });
 
       if (response.error) {
-        console.error("[EmailService] Resend API error:", response.error);
-        return { success: false, error: response.error.message };
+        console.warn("[EmailService] Resend API error (falling back to Nodemailer SMTP):", response.error.message || response.error);
+      } else {
+        console.log(`[EmailService] Delivered successfully via Resend to ${recipient}:`, response.data?.id);
+        return { success: true, messageId: response.data?.id };
       }
-
-      console.log(`[EmailService] Delivered successfully via Resend to ${recipient}:`, response.data?.id);
-      return { success: true, messageId: response.data?.id };
     } catch (err) {
-      console.error("[EmailService] Resend HTTP call failed:", err.message);
+      console.error("[EmailService] Resend HTTP call failed (falling back to Nodemailer SMTP):", err.message);
     }
   }
 
