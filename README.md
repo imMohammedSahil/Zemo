@@ -1,11 +1,18 @@
 # Zemo
 
+[![XERJ Corpus Hub contributor](https://hub.xerj.org/contributors/imMohammedSahil/badge.svg)](https://hub.xerj.org/contributors/imMohammedSahil)
+
 **Autonomous E-Commerce Price Intelligence, Cross-Store Arbitrage & Aspect-Based Sentiment Analysis Platform**
 
 > Live Application: [zemo-official.vercel.app](https://zemo-official.vercel.app)  
-> API Service: [zemo-backend.onrender.com](https://zemo-backend.onrender.com)
+> API Service: [zemo-backend.onrender.com](https://zemo-backend.onrender.com)  
+> Reference Corpus: [hub.xerj.org/contributors/imMohammedSahil](https://hub.xerj.org/contributors/imMohammedSahil) · [immohammedsahil--zemo](https://hub.xerj.org/corpus/immohammedsahil--zemo)
 
 Zemo is a distributed e-commerce intelligence system engineered for automated web extraction, cross-retailer pricing arbitrage, historical price trajectory modeling, and large language model cognitive distillation. The platform monitors high-turnover retail platforms (Amazon India, Flipkart), normalizes unstructured product metadata, reconstructs longitudinal pricing trends, and synthesizes aspect-level consumer sentiment and banking promotions into actionable consumer telemetry.
+
+> **Watching the Sunrise: Selected for the Global XERJ Corpus Hub**  
+> [![XERJ Corpus Hub contributor](https://hub.xerj.org/contributors/imMohammedSahil/badge.svg)](https://hub.xerj.org/contributors/imMohammedSahil)  
+> Building this whole system alone took everything I had in me. It was non-stop grinding in silence—dealing with heavy, frustrating days where everything fell apart, and forcing myself to sit back down and keep trying. Having Zemo's production seeding architecture independently reviewed and selected for the **[XERJ Corpus Hub](https://hub.xerj.org/contributors/imMohammedSahil)** ([`immohammedsahil--zemo`](https://hub.xerj.org/corpus/immohammedsahil--zemo)) is that quiet moment where the dust finally settles and you can sit back with a deep, peaceful breath. I made it through, and now modern AI coding agents worldwide pull up this exact codebase as an indexed reference blueprint—reusing its worked patterns to write clean, production-grade solutions with higher accuracy and fewer burned tokens. The work now lives out in the wild, standing on its own and solving real problems at global scale.
 
 ---
 
@@ -24,6 +31,7 @@ Zemo is a distributed e-commerce intelligence system engineered for automated we
 | **Deliverability Engine** | Abstract API Mailbox Verification | Real-time MX record, disposable domain, and mailbox existence validation |
 | **Caching Layer** | Local High-Throughput JSON Store | Deterministic filesystem cache for zero-latency inference on critical demo products |
 | **Target Retailers** | Amazon India (`amazon.in`), Flipkart (`flipkart.com`) | Canonical ASIN and FSN normalization pipelines |
+| **Reference Corpus** | [XERJ Corpus Hub](https://hub.xerj.org/contributors/imMohammedSahil) | Pinned reference pattern and indexed memory for AI coding agents (commit `f5284d0`) |
 
 ---
 
@@ -370,6 +378,29 @@ stateDiagram-v2
     SilentLog --> ReleaseLock
     RecordHistory --> ReleaseLock
     ReleaseLock --> Idle: Set isRunning = false
+```
+
+### 9. Production Auto-Seeding Engine & XERJ Corpus Hub Reference
+To ensure immediate out-of-the-box demonstration of catalog intelligence, review aspect mining, and longitudinal price analytics without cold-start empty states, Zemo implements an automatic idempotent database seeding engine (`backend/services/seedService.js`). 
+
+#### XERJ Corpus Hub Indexing
+This implementation was reviewed, verified, and selected as an official reference corpus on the **[XERJ Corpus Hub](https://hub.xerj.org/contributors/imMohammedSahil)** ([`immohammedsahil--zemo`](https://hub.xerj.org/corpus/immohammedsahil--zemo), pinned commit `f5284d04ae`).
+
+[XERJ](https://github.com/xerj-org/xerj) is a local-first search engine and MCP server built in Rust for AI coding agents. It indexes code, docs, and git corpora behind an Elasticsearch-compatible API for BM25 full-text, vector, and AST-aware code search. By serving as an indexed reference memory, it enables coding agents (Claude Code, Cursor, MCP clients) to retrieve verified real-world engineering patterns rather than hallucinating implementations.
+
+#### AI Coding Agent Indexing Workflow
+AI agents can index and query Zemo's architecture directly via the XERJ CLI:
+
+```bash
+# 1. Clone repository at pinned verified reference commit
+git clone https://github.com/imMohammedSahil/Zemo Zemo && git -C Zemo checkout f5284d04ae7836c377217168afd67362be6dd649
+
+# 2. Start local XERJ node
+xerj --insecure --data-dir ./xerj-data
+
+# 3. Index codebase for agent retrieval
+xerj autoindex ./Zemo --url http://127.0.0.1:9200 --prefix zemo --progress plain
+xerj autoindex map --url http://127.0.0.1:9200
 ```
 
 ---
