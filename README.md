@@ -13,7 +13,11 @@ Zemo is a distributed e-commerce intelligence system engineered for automated we
 
 [![XERJ Corpus Hub contributor](https://hub.xerj.org/contributors/imMohammedSahil/badge.svg)](https://hub.xerj.org/contributors/imMohammedSahil)
 
-Building this whole system alone took everything I had in me. It was non-stop grinding in silence—dealing with heavy, frustrating days where everything fell apart, and forcing myself to sit back down and keep trying. Having Zemo's production seeding architecture independently reviewed and selected for the **[XERJ Corpus Hub](https://hub.xerj.org/contributors/imMohammedSahil)** ([`immohammedsahil--zemo`](https://hub.xerj.org/corpus/immohammedsahil--zemo)) is that quiet moment where the dust finally settles and you can sit back with a deep, peaceful breath. I made it through, and now modern AI coding agents worldwide pull up this exact codebase as an indexed reference blueprint—reusing its worked patterns to write clean, production-grade solutions with higher accuracy and fewer burned tokens. The work now lives out in the wild, standing on its own and solving real problems at global scale.
+Building this entire system on my own took a little piece of everything I had. There were long days, countless setbacks, and moments when even the simplest things seemed impossibly difficult. But I knew I had to see it through. So I kept building, learning, fixing, and putting the pieces together, one day at a time. Back then, I could never quite see what it was all leading to. Looking back now, I realise every little effort was bringing this moment closer.
+
+Having Zemo's production seeding architecture independently reviewed and selected for the [XERJ Corpus Hub](https://hub.xerj.org/contributors/imMohammedSahil) ([immohammedsahil--zemo](https://hub.xerj.org/corpus/immohammedsahil--zemo)) makes it all feel incredibly worthwhile. The codebase is now indexed as a reference for modern AI coding agents worldwide, allowing its implementation patterns to help produce cleaner, production-grade solutions with greater accuracy and fewer wasted tokens.
+
+And there's something quietly beautiful about that. After all those hours, all those little victories and setbacks, I finally get to look back and smile. An idea that once lived only in my imagination has now found its way into the wider world, reaching places I may never get to see. And I think I'll carry that feeling with me for a long time.
 
 ---
 
