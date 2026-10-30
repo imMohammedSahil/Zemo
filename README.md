@@ -1,18 +1,19 @@
 # Zemo
 
-[![XERJ Corpus Hub contributor](https://hub.xerj.org/contributors/imMohammedSahil/badge.svg)](https://hub.xerj.org/contributors/imMohammedSahil)
-
 **Autonomous E-Commerce Price Intelligence, Cross-Store Arbitrage & Aspect-Based Sentiment Analysis Platform**
 
 > Live Application: [zemo-official.vercel.app](https://zemo-official.vercel.app)  
-> API Service: [zemo-backend.onrender.com](https://zemo-backend.onrender.com)  
-> Reference Corpus: [hub.xerj.org/contributors/imMohammedSahil](https://hub.xerj.org/contributors/imMohammedSahil) · [immohammedsahil--zemo](https://hub.xerj.org/corpus/immohammedsahil--zemo)
+> API Service: [zemo-backend.onrender.com](https://zemo-backend.onrender.com)
 
 Zemo is a distributed e-commerce intelligence system engineered for automated web extraction, cross-retailer pricing arbitrage, historical price trajectory modeling, and large language model cognitive distillation. The platform monitors high-turnover retail platforms (Amazon India, Flipkart), normalizes unstructured product metadata, reconstructs longitudinal pricing trends, and synthesizes aspect-level consumer sentiment and banking promotions into actionable consumer telemetry.
 
-> **Watching the Sunrise: Selected for the Global XERJ Corpus Hub**  
-> [![XERJ Corpus Hub contributor](https://hub.xerj.org/contributors/imMohammedSahil/badge.svg)](https://hub.xerj.org/contributors/imMohammedSahil)  
-> Building this whole system alone took everything I had in me. It was non-stop grinding in silence—dealing with heavy, frustrating days where everything fell apart, and forcing myself to sit back down and keep trying. Having Zemo's production seeding architecture independently reviewed and selected for the **[XERJ Corpus Hub](https://hub.xerj.org/contributors/imMohammedSahil)** ([`immohammedsahil--zemo`](https://hub.xerj.org/corpus/immohammedsahil--zemo)) is that quiet moment where the dust finally settles and you can sit back with a deep, peaceful breath. I made it through, and now modern AI coding agents worldwide pull up this exact codebase as an indexed reference blueprint—reusing its worked patterns to write clean, production-grade solutions with higher accuracy and fewer burned tokens. The work now lives out in the wild, standing on its own and solving real problems at global scale.
+---
+
+## Watching the Sunrise: Selected for the Global XERJ Corpus Hub
+
+[![XERJ Corpus Hub contributor](https://hub.xerj.org/contributors/imMohammedSahil/badge.svg)](https://hub.xerj.org/contributors/imMohammedSahil)
+
+Building this whole system alone took everything I had in me. It was non-stop grinding in silence—dealing with heavy, frustrating days where everything fell apart, and forcing myself to sit back down and keep trying. Having Zemo's production seeding architecture independently reviewed and selected for the **[XERJ Corpus Hub](https://hub.xerj.org/contributors/imMohammedSahil)** ([`immohammedsahil--zemo`](https://hub.xerj.org/corpus/immohammedsahil--zemo)) is that quiet moment where the dust finally settles and you can sit back with a deep, peaceful breath. I made it through, and now modern AI coding agents worldwide pull up this exact codebase as an indexed reference blueprint—reusing its worked patterns to write clean, production-grade solutions with higher accuracy and fewer burned tokens. The work now lives out in the wild, standing on its own and solving real problems at global scale.
 
 ---
 
