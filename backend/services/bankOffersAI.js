@@ -69,15 +69,15 @@ function getDefaultVerifiedOffers(currentPrice) {
       bank: "Amazon Pay ICICI Bank",
       bankCode: "icici",
       accentColor: "#CEFF00",
-      badge: "LIVE AMAZON PROMO",
+      badge: "CARD BENEFIT ESTIMATE",
       type: "cashback",
-      title: "5% Unlimited Cashback with Amazon Pay ICICI Credit Card",
-      description: "Earn flat 5% cashback on this order with Amazon Pay ICICI credit card, credited directly as Amazon Pay balance.",
+      title: "Standard 5% Reward for Amazon Prime Cardholders (Amazon Pay ICICI)",
+      description: "Estimated standard 5% reward points for eligible Amazon Prime cardholders on Amazon.in, credited as Amazon Pay balance subject to bank and merchant terms.",
       discountAmount: Math.round(currentPrice * 0.05),
       effectivePrice: Math.max(0, Math.round(currentPrice * 0.95)),
       stores: ["Amazon India"],
       code: "NO CODE REQUIRED",
-      validTill: "Active on Amazon India",
+      validTill: "Publicly advertised cardholder benefit",
       cardTypes: ["Amazon Pay ICICI Credit Card", "ICICI Bank"]
     },
     {
@@ -175,7 +175,7 @@ function generateFallbackOffers(product) {
 
   const advice = totalStackedSavings > 0
     ? `I checked the live listings on Amazon India! The best verified savings right now is ${bankDiscount > 0 ? `₹${bankDiscount.toLocaleString()} instant bank discount on ${bankPartner}` : ""}${couponDiscount > 0 ? `${bankDiscount > 0 ? " plus " : ""}your ₹${couponDiscount.toLocaleString()} store coupon` : ""}, dropping your real checkout total from ₹${currentPrice.toLocaleString()} to ₹${bestStackedPrice.toLocaleString()}!`
-    : `Verified standard bank discounts and 5% Amazon Pay ICICI cashback are active on this purchase, along with zero-interest EMI options.`;
+    : `Publicly advertised bank discounts and standard card features are calculated for this purchase, along with zero-interest EMI options.`;
 
   const fallbackData = {
     productId: product._id,
