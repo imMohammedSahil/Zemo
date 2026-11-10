@@ -22,3 +22,4 @@ test("AspectSentimentMiner generates structured fallback when offline", async ()
   assert.ok(res.pros.length > 0);
   assert.ok(typeof res.verdict === "string");
 });
+

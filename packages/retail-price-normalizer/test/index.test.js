@@ -45,3 +45,4 @@ test("calculateDiscount returns correct metrics", () => {
   assert.strictEqual(result.discountPercentage, 20);
   assert.strictEqual(result.hasSavings, true);
 });
+

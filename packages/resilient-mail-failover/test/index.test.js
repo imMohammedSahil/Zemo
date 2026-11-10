@@ -20,3 +20,4 @@ test("ResilientMailer throws if recipient 'to' is missing", async () => {
     /recipient email is required/
   );
 });
+

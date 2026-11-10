@@ -74,3 +74,4 @@ analyzeProduct();
 
 MIT © [Mohammed Sahil](https://github.com/imMohammedSahil)
 Extracted from the cognitive review intelligence engine of [Zemo](https://github.com/imMohammedSahil/Zemo).
+

@@ -116,3 +116,4 @@ Output strictly valid JSON with this exact schema (no markdown, no backticks):
 }
 
 module.exports = AspectSentimentMiner;
+
