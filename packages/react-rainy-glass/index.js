@@ -27,14 +27,27 @@ function RainyGlass({
     let animationFrameId;
 
     const parent = canvas.parentElement;
-    let width = (canvas.width = parent ? parent.offsetWidth : window.innerWidth);
-    let height = (canvas.height = parent ? parent.offsetHeight : window.innerHeight);
+    let width = parent ? parent.offsetWidth : window.innerWidth;
+    let height = parent ? parent.offsetHeight : window.innerHeight;
+    let dpr = Math.min(2, window.devicePixelRatio || 1);
+
+    canvas.width = width * dpr;
+    canvas.height = height * dpr;
+    canvas.style.width = width + "px";
+    canvas.style.height = height + "px";
+    ctx.scale(dpr, dpr);
 
     const handleResize = () => {
       if (!canvas) return;
       const p = canvas.parentElement;
-      width = canvas.width = p ? p.offsetWidth : window.innerWidth;
-      height = canvas.height = p ? p.offsetHeight : window.innerHeight;
+      width = p ? p.offsetWidth : window.innerWidth;
+      height = p ? p.offsetHeight : window.innerHeight;
+      dpr = Math.min(2, window.devicePixelRatio || 1);
+      canvas.width = width * dpr;
+      canvas.height = height * dpr;
+      canvas.style.width = width + "px";
+      canvas.style.height = height + "px";
+      ctx.scale(dpr, dpr);
       initStaticDrops();
     };
 
@@ -47,19 +60,36 @@ function RainyGlass({
       const baseArea = 3800 / Math.max(0.2, density);
       const count = Math.floor((width * height) / baseArea);
       for (let i = 0; i < count; i++) {
+        const baseR = Math.random() * 2.2 + 0.6;
         staticDrops.push({
           x: Math.random() * width,
           y: Math.random() * height,
-          r: Math.random() * 2.2 + 0.6,
+          rx: baseR * (Math.random() * 0.35 + 0.85),
+          ry: baseR * (Math.random() * 0.4 + 0.9),
+          angle: (Math.random() - 0.5) * 0.6,
           alpha: Math.random() * 0.45 + 0.35
         });
       }
     };
     initStaticDrops();
 
+    const traceWaterBead = (c, x, y, rx, ry, tilt = 0) => {
+      c.save();
+      c.translate(x, y);
+      c.rotate(tilt);
+
+      c.beginPath();
+      c.moveTo(0, -ry);
+      c.bezierCurveTo(rx * 0.9, -ry * 0.9, rx * 1.05, ry * 0.3, rx * 0.85, ry * 0.85);
+      c.bezierCurveTo(rx * 0.5, ry * 1.05, -rx * 0.5, ry * 1.05, -rx * 0.85, ry * 0.85);
+      c.bezierCurveTo(-rx * 1.05, ry * 0.3, -rx * 0.9, -ry * 0.9, 0, -ry);
+      c.closePath();
+      c.restore();
+    };
+
     // 2. Active gravity-driven sliding droplets
     const activeDrops = [];
-    const maxActiveDrops = Math.max(12, Math.floor((width / 75) * density));
+    const maxActiveDrops = Math.max(6, Math.floor((width / 180) * density));
 
     class SlidingDrop {
       constructor() {
@@ -68,116 +98,123 @@ function RainyGlass({
 
       reset(initial = false) {
         this.x = Math.random() * width;
-        this.y = initial ? Math.random() * height : -20 - Math.random() * 80;
-        this.r = Math.random() * 3.5 + 2.5;
-        this.speed = (Math.random() * 1.8 + 0.8) * speed;
+        this.y = initial ? Math.random() * (height * 0.85) : -25 - Math.random() * 50;
+        this.r = (Math.random() * 1.8 + 2.6) * Math.max(0.5, density);
+        this.tilt = (Math.random() - 0.5) * 0.15;
+        this.aspectY = Math.random() * 0.3 + 1.25;
+
+        this.state = 'RESTING';
+        this.restTimer = Math.floor(Math.random() * 200 + (initial ? 30 : 120));
+        this.slideRemaining = 0;
+        this.velocity = 0;
+        this.maxSlowSpeed = (Math.random() * 0.5 + 0.7) * speed;
         this.trail = [];
-        this.trailTimer = 0;
-        this.wobble = Math.random() * Math.PI * 2;
-        this.wobbleSpeed = Math.random() * 0.1 + 0.05;
       }
 
       update() {
-        this.wobble += this.wobbleSpeed;
+        if (this.state === 'RESTING') {
+          this.restTimer--;
+          if (this.restTimer <= 0) {
+            this.state = 'SLIDING';
+            this.slideRemaining = Math.floor(Math.random() * 70 + 30);
+            this.velocity = Math.random() * 0.3 + 0.3;
+          }
+        } else if (this.state === 'SLIDING') {
+          this.velocity = Math.min(this.maxSlowSpeed, this.velocity + 0.04);
+          this.y += this.velocity;
+          this.slideRemaining -= this.velocity;
 
-        // Surface tension physics: stutter and slide bursts
-        if (Math.random() < 0.03) {
-          this.speed = Math.max(0.2, this.speed * 0.4);
-        } else if (Math.random() < 0.06) {
-          this.speed = Math.min(6.5 * speed, this.speed + 1.2);
-        }
+          if (Math.random() < 0.1) {
+            this.x += (Math.random() - 0.5) * 0.25;
+          }
 
-        this.y += this.speed;
-        this.x += Math.sin(this.wobble) * 0.35;
+          if (Math.random() < 0.18) {
+            this.trail.push({
+              x: this.x + (Math.random() - 0.5) * (this.r * 0.3),
+              y: this.y - this.r * 1.5,
+              r: Math.max(0.5, this.r * (Math.random() * 0.22 + 0.15)),
+              alpha: 0.6
+            });
+            if (this.trail.length > 18) {
+              this.trail.shift();
+            }
+          }
 
-        // Leave tiny trail droplets behind
-        this.trailTimer++;
-        if (this.trailTimer % 7 === 0 && Math.random() < 0.8) {
-          this.trail.push({
-            x: this.x + (Math.random() - 0.5) * 1.5,
-            y: this.y - this.r,
-            r: Math.random() * 1.2 + 0.5,
-            alpha: 0.6
-          });
-        }
-
-        // Fade out trails
-        for (let i = this.trail.length - 1; i >= 0; i--) {
-          this.trail[i].alpha -= 0.003;
-          if (this.trail[i].alpha <= 0) {
-            this.trail.splice(i, 1);
+          if (this.slideRemaining <= 0) {
+            this.velocity *= 0.85;
+            if (this.velocity < 0.2) {
+              this.state = 'RESTING';
+              this.restTimer = Math.floor(Math.random() * 240 + 100);
+            }
           }
         }
 
-        if (this.y > height + 50) {
+        for (let i = 0; i < this.trail.length; i++) {
+          this.trail[i].alpha *= 0.995;
+        }
+
+        if (this.y - this.r > height + 30) {
           this.reset(false);
         }
       }
 
       draw(c) {
-        // Draw droplet trail
-        for (let i = 0; i < this.trail.length; i++) {
-          const t = this.trail[i];
+        for (const t of this.trail) {
           if (t.alpha <= 0.05) continue;
           c.save();
           c.globalAlpha = t.alpha;
 
-          // Dark meniscus
           c.beginPath();
-          c.arc(t.x, t.y, t.r + 0.3, 0, Math.PI * 2);
-          c.fillStyle = "rgba(0, 0, 0, 0.5)";
+          c.arc(t.x, t.y, t.r + 0.2, 0, Math.PI * 2);
+          c.strokeStyle = "rgba(0, 0, 0, 0.4)";
+          c.lineWidth = 0.5;
+          c.stroke();
+
+          c.beginPath();
+          c.arc(t.x - t.r * 0.25, t.y - t.r * 0.25, Math.max(0.3, t.r * 0.4), 0, Math.PI * 2);
+          c.fillStyle = "rgba(255, 255, 255, 0.85)";
           c.fill();
 
-          // Refraction body
-          c.beginPath();
-          c.arc(t.x, t.y, t.r, 0, Math.PI * 2);
-          c.fillStyle = "rgba(220, 245, 235, 0.4)";
-          c.fill();
-
-          // Specular glint
-          c.beginPath();
-          c.arc(t.x - t.r * 0.3, t.y - t.r * 0.3, Math.max(0.4, t.r * 0.3), 0, Math.PI * 2);
-          c.fillStyle = "rgba(255, 255, 255, 0.95)";
-          c.fill();
           c.restore();
         }
 
-        // Draw main sliding droplet with true optical water refraction
         c.save();
 
-        const stretch = Math.min(1.5, 1 + this.speed * 0.08);
         const rx = this.r;
-        const ry = this.r * stretch;
+        const ry = this.r * (this.state === 'SLIDING' ? this.aspectY * 1.25 : this.aspectY);
 
-        // Dark meniscus edge
-        c.beginPath();
-        c.ellipse(this.x, this.y, rx + 0.6, ry + 0.6, 0, 0, Math.PI * 2);
-        c.fillStyle = "rgba(0, 0, 0, 0.65)";
-        c.fill();
+        traceWaterBead(c, this.x, this.y, rx, ry, this.tilt);
+        c.strokeStyle = "rgba(0, 0, 0, 0.5)";
+        c.lineWidth = 0.75;
+        c.stroke();
 
-        // Lens refraction: dark upper half, luminous lower caustic
-        const dropGrad = c.createLinearGradient(
+        const waterLens = c.createRadialGradient(
           this.x,
-          this.y - ry,
+          this.y + ry * 0.3,
+          rx * 0.2,
           this.x,
-          this.y + ry
+          this.y,
+          ry
         );
-        dropGrad.addColorStop(0, "rgba(10, 25, 18, 0.75)");
-        dropGrad.addColorStop(0.4, "rgba(30, 60, 45, 0.3)");
-        dropGrad.addColorStop(0.75, "rgba(180, 230, 210, 0.45)");
-        dropGrad.addColorStop(1, "rgba(240, 255, 245, 0.7)");
-        c.beginPath();
-        c.ellipse(this.x, this.y, rx, ry, 0, 0, Math.PI * 2);
-        c.fillStyle = dropGrad;
+        waterLens.addColorStop(0, "rgba(255, 255, 255, 0.1)");
+        waterLens.addColorStop(0.7, "rgba(200, 240, 220, 0.05)");
+        waterLens.addColorStop(0.95, "rgba(255, 255, 255, 0.25)");
+        waterLens.addColorStop(1, "rgba(0, 0, 0, 0.25)");
+
+        traceWaterBead(c, this.x, this.y, rx, ry, this.tilt);
+        c.fillStyle = waterLens;
         c.fill();
 
-        // Primary sharp specular reflection
+        c.save();
+        c.translate(this.x, this.y);
+        c.rotate(this.tilt);
+
         c.beginPath();
         c.ellipse(
-          this.x - rx * 0.35,
-          this.y - ry * 0.38,
+          -rx * 0.3,
+          -ry * 0.45,
           rx * 0.38,
-          ry * 0.22,
+          ry * 0.2,
           -0.25,
           0,
           Math.PI * 2
@@ -185,32 +222,20 @@ function RainyGlass({
         c.fillStyle = "rgba(255, 255, 255, 0.95)";
         c.fill();
 
-        // Secondary pinpoint highlight
-        c.beginPath();
-        c.arc(
-          this.x - rx * 0.15,
-          this.y - ry * 0.52,
-          Math.max(0.6, rx * 0.15),
-          0,
-          Math.PI * 2
-        );
-        c.fillStyle = "rgba(255, 255, 255, 0.85)";
-        c.fill();
-
-        // Bottom caustic rim
         c.beginPath();
         c.ellipse(
-          this.x + rx * 0.1,
-          this.y + ry * 0.65,
-          rx * 0.5,
-          ry * 0.18,
-          0.1,
+          rx * 0.2,
+          ry * 0.5,
+          rx * 0.4,
+          ry * 0.15,
+          0.15,
           0,
           Math.PI * 2
         );
-        c.fillStyle = "rgba(220, 255, 235, 0.5)";
+        c.fillStyle = "rgba(255, 255, 255, 0.4)";
         c.fill();
 
+        c.restore();
         c.restore();
       }
     }
@@ -222,21 +247,28 @@ function RainyGlass({
     const render = () => {
       ctx.clearRect(0, 0, width, height);
 
-      // Render static drops
       for (let i = 0; i < staticDrops.length; i++) {
         const d = staticDrops[i];
+        ctx.save();
+        ctx.globalAlpha = d.alpha;
+
         ctx.beginPath();
-        ctx.arc(d.x, d.y, d.r, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(255, 255, 255, ${d.alpha * 0.4})`;
+        ctx.ellipse(d.x, d.y, d.rx, d.ry, d.angle, 0, Math.PI * 2);
+        ctx.strokeStyle = "rgba(0, 0, 0, 0.35)";
+        ctx.lineWidth = 0.6;
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.ellipse(d.x, d.y, d.rx * 0.9, d.ry * 0.9, d.angle, 0, Math.PI * 2);
+        ctx.fillStyle = "rgba(255, 255, 255, 0.08)";
         ctx.fill();
 
-        // Tiny specular dot
-        if (d.r > 1.2) {
-          ctx.beginPath();
-          ctx.arc(d.x - d.r * 0.25, d.y - d.r * 0.25, d.r * 0.3, 0, Math.PI * 2);
-          ctx.fillStyle = `rgba(255, 255, 255, ${d.alpha * 0.9})`;
-          ctx.fill();
-        }
+        ctx.beginPath();
+        ctx.arc(d.x - d.rx * 0.3, d.y - d.ry * 0.3, Math.max(0.35, d.rx * 0.35), 0, Math.PI * 2);
+        ctx.fillStyle = "rgba(255, 255, 255, 0.9)";
+        ctx.fill();
+
+        ctx.restore();
       }
 
       // Update & render sliding drops
