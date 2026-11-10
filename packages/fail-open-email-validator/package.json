@@ -1,0 +1,19 @@
+{
+  "name": "fail-open-email-validator",
+  "version": "1.0.0",
+  "description": "Fail-open email deliverability checker. Validates email syntax, domain MX records, and mailbox existence with automatic timeout fail-open safety.",
+  "main": "index.js",
+  "scripts": {
+    "test": "node --test test/*.test.js"
+  },
+  "keywords": [
+    "email-validation",
+    "deliverability",
+    "mx-check",
+    "fail-open",
+    "disposable-email",
+    "auth-utility"
+  ],
+  "author": "Mohammed Sahil <immohammedsahil>",
+  "license": "MIT"
+}

@@ -1,0 +1,19 @@
+{
+  "name": "deal-score-calculator",
+  "version": "1.0.0",
+  "description": "Financial scoring engine that calculates discount depth, price volatility, drop probability, and buy/wait deal verdicts from e-commerce price points.",
+  "main": "index.js",
+  "scripts": {
+    "test": "node --test test/*.test.js"
+  },
+  "keywords": [
+    "deal-score",
+    "price-tracker",
+    "ecommerce",
+    "volatility",
+    "arbitrage",
+    "discount-calculator"
+  ],
+  "author": "Mohammed Sahil <immohammedsahil>",
+  "license": "MIT"
+}

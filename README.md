@@ -23,13 +23,24 @@ And there's something quietly beautiful about that. After all those hours, all t
 
 ## Modular Open-Source NPM Ecosystem
 
-Key subsystems developed for Zemo have been extracted into independent, production-grade packages available for the wider developer community:
+Key subsystems engineered for Zemo have been extracted into independent, production-grade packages for the wider developer community:
 
+### Creative Frontend & UI Components
 | Package | Purpose & Problem Solved | Quick Install | Source |
 | :--- | :--- | :--- | :--- |
-| [**retail-price-normalizer**](packages/retail-price-normalizer) | Zero-dependency parser for messy retail prices (`₹43,999` ➔ `43999`), Amazon ASIN & Flipkart PID extraction, query sanitization, and instant `npx` CLI. | `npm i retail-price-normalizer` | [View Package](packages/retail-price-normalizer) |
-| [**resilient-mail-failover**](packages/resilient-mail-failover) | Cascading email dispatcher bypassing cloud SMTP port blocks (Render, Vercel, AWS) via Brevo HTTPS (Port 443) ➔ Resend HTTPS ➔ Nodemailer SMTP. | `npm i resilient-mail-failover` | [View Package](packages/resilient-mail-failover) |
-| [**aspect-sentiment-miner**](packages/aspect-sentiment-miner) | Aspect-based sentiment analysis engine (Performance, Display, Battery, Value) using Google Gemini with automatic heuristic fallback. | `npm i aspect-sentiment-miner` | [View Package](packages/aspect-sentiment-miner) |
+| [**react-rainy-glass**](packages/react-rainy-glass) | Aesthetic physics-driven procedural rain on glass canvas. Micro-droplets, gravity sliding, and surface tension trails. | `npm i react-rainy-glass` | [View Package](packages/react-rainy-glass) |
+| [**react-ai-progress-loader**](packages/react-ai-progress-loader) | Multi-stage progressive loader that keeps users engaged during long (5-15s) LLM inference calls with real-time timers. | `npm i react-ai-progress-loader` | [View Package](packages/react-ai-progress-loader) |
+
+### Backend, E-Commerce & Cognitive Utilities
+| Package | Purpose & Problem Solved | Quick Install | Source |
+| :--- | :--- | :--- | :--- |
+| [**retail-price-normalizer**](packages/retail-price-normalizer) | Zero-dependency parser for messy retail prices (`₹43,999` ➔ `43999`), Amazon ASIN & Flipkart PID extraction, and instant `npx` CLI. | `npm i retail-price-normalizer` | [View Package](packages/retail-price-normalizer) |
+| [**resilient-mail-failover**](packages/resilient-mail-failover) | Cascading email dispatcher bypassing cloud SMTP port blocks (Render, Vercel, AWS) via Brevo HTTPS ➔ Resend HTTPS ➔ SMTP. | `npm i resilient-mail-failover` | [View Package](packages/resilient-mail-failover) |
+| [**aspect-sentiment-miner**](packages/aspect-sentiment-miner) | Aspect-based sentiment analysis engine (Performance, Display, Battery, Value) using Gemini with heuristic fallback. | `npm i aspect-sentiment-miner` | [View Package](packages/aspect-sentiment-miner) |
+| [**ecommerce-title-condenser**](packages/ecommerce-title-condenser) | Strips 150-char SEO spam into clean 3-5 word product titles for mobile notifications, carts, and checkout cards. | `npm i ecommerce-title-condenser` | [View Package](packages/ecommerce-title-condenser) |
+| [**deal-score-calculator**](packages/deal-score-calculator) | Volatility & discount depth scoring engine that computes 0-10 deal scores and buy/wait recommendations. | `npm i deal-score-calculator` | [View Package](packages/deal-score-calculator) |
+| [**fail-open-email-validator**](packages/fail-open-email-validator) | Deliverability checker with strict fail-open timeout safety so users are never blocked on network/DNS glitches. | `npm i fail-open-email-validator` | [View Package](packages/fail-open-email-validator) |
+| [**cross-store-arbitrage-matrix**](packages/cross-store-arbitrage-matrix) | Multi-retailer price comparison optimizer evaluating base prices, bank discounts, and shipping for the lowest checkout. | `npm i cross-store-arbitrage-matrix` | [View Package](packages/cross-store-arbitrage-matrix) |
 
 
 ---

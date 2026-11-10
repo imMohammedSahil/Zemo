@@ -1,0 +1,18 @@
+{
+  "name": "cross-store-arbitrage-matrix",
+  "version": "1.0.0",
+  "description": "Multi-retailer price comparison and arbitrage optimizer. Calculates optimal checkout routes taking into account store base prices, bank card perks, and shipping fees.",
+  "main": "index.js",
+  "scripts": {
+    "test": "node --test test/*.test.js"
+  },
+  "keywords": [
+    "arbitrage",
+    "ecommerce",
+    "price-comparison",
+    "retail-matrix",
+    "best-route"
+  ],
+  "author": "Mohammed Sahil <immohammedsahil>",
+  "license": "MIT"
+}

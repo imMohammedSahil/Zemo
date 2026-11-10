@@ -1,0 +1,25 @@
+{
+  "name": "react-ai-progress-loader",
+  "version": "1.0.0",
+  "description": "Engaging multi-stage progressive loader component for React AI applications. Cycles through status updates, animated progress, and elapsed time during slow LLM inference.",
+  "main": "index.js",
+  "keywords": [
+    "react",
+    "ai",
+    "loader",
+    "progress-bar",
+    "llm-ux",
+    "chatgpt-loader",
+    "gemini",
+    "step-loader"
+  ],
+  "author": "Mohammed Sahil <immohammedsahil>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/imMohammedSahil/react-ai-progress-loader.git"
+  },
+  "peerDependencies": {
+    "react": ">=18.0.0"
+  }
+}

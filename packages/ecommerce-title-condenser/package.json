@@ -1,0 +1,23 @@
+{
+  "name": "ecommerce-title-condenser",
+  "version": "1.0.0",
+  "description": "Smart utility that strips SEO keyword stuffing from messy Amazon and Flipkart product titles into clean 3-5 word concise titles.",
+  "main": "index.js",
+  "bin": {
+    "condense-title": "./bin/cli.js"
+  },
+  "scripts": {
+    "test": "node --test test/*.test.js"
+  },
+  "keywords": [
+    "ecommerce",
+    "title-cleaner",
+    "product-title",
+    "amazon",
+    "flipkart",
+    "seo-remover",
+    "string-utility"
+  ],
+  "author": "Mohammed Sahil <immohammedsahil>",
+  "license": "MIT"
+}

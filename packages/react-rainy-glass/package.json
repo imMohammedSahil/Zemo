@@ -1,0 +1,25 @@
+{
+  "name": "react-rainy-glass",
+  "version": "1.0.0",
+  "description": "Aesthetic, physics-based procedural rain on glass canvas component for React. Features micro-droplets, gravity-driven sliding drops, surface tension bursts, and wobble trails.",
+  "main": "index.js",
+  "keywords": [
+    "react",
+    "canvas",
+    "rain",
+    "rainy-glass",
+    "water-drops",
+    "procedural-shader",
+    "creative-coding",
+    "atmospheric-ui"
+  ],
+  "author": "Mohammed Sahil <immohammedsahil>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/imMohammedSahil/react-rainy-glass.git"
+  },
+  "peerDependencies": {
+    "react": ">=18.0.0"
+  }
+}
