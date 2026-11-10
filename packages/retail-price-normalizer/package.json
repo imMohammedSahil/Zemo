@@ -1,0 +1,22 @@
+{
+  "name": "retail-price-normalizer",
+  "version": "1.0.0",
+  "description": "High-throughput parser for e-commerce pricing, currency normalization, ASIN/FSN extraction, and title sanitization for Amazon and Flipkart.",
+  "main": "index.js",
+  "keywords": [
+    "ecommerce",
+    "price-parser",
+    "asin-extractor",
+    "flipkart-fsn",
+    "currency-cleaner",
+    "scraper-utility",
+    "retail-arbitrage"
+  ],
+  "author": "Mohammed Sahil <immohammedsahil>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/imMohammedSahil/retail-price-normalizer.git"
+  },
+  "dependencies": {}
+}

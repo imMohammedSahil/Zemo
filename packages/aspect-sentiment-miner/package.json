@@ -1,0 +1,24 @@
+{
+  "name": "aspect-sentiment-miner",
+  "version": "1.0.0",
+  "description": "Aspect-based sentiment analysis engine for e-commerce and SaaS reviews using Google Gemini LLM with built-in heuristic fallback.",
+  "main": "index.js",
+  "keywords": [
+    "sentiment-analysis",
+    "aspect-based-sentiment",
+    "gemini",
+    "llm",
+    "review-mining",
+    "customer-feedback",
+    "nlp"
+  ],
+  "author": "Mohammed Sahil <immohammedsahil>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/imMohammedSahil/aspect-sentiment-miner.git"
+  },
+  "dependencies": {
+    "@google/genai": "^0.1.1"
+  }
+}

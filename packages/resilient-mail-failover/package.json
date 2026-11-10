@@ -1,0 +1,28 @@
+{
+  "name": "resilient-mail-failover",
+  "version": "1.0.0",
+  "description": "Failover-first email dispatcher for Node.js. Bypasses cloud SMTP port blocks by cascading Brevo HTTPS (443) -> Resend HTTPS -> Nodemailer SMTP.",
+  "main": "index.js",
+  "keywords": [
+    "email",
+    "nodemailer",
+    "resend",
+    "brevo",
+    "smtp-failover",
+    "cloud-email",
+    "render",
+    "vercel",
+    "port-443"
+  ],
+  "author": "Mohammed Sahil <immohammedsahil>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/imMohammedSahil/resilient-mail-failover.git"
+  },
+  "dependencies": {
+    "nodemailer": "^6.9.14",
+    "resend": "^3.5.0"
+  }
+}
+
