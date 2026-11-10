@@ -118,24 +118,99 @@ function RainyGlass({
         // Draw droplet trail
         for (let i = 0; i < this.trail.length; i++) {
           const t = this.trail[i];
+          if (t.alpha <= 0.05) continue;
+          c.save();
+          c.globalAlpha = t.alpha;
+
+          // Dark meniscus
+          c.beginPath();
+          c.arc(t.x, t.y, t.r + 0.3, 0, Math.PI * 2);
+          c.fillStyle = "rgba(0, 0, 0, 0.5)";
+          c.fill();
+
+          // Refraction body
           c.beginPath();
           c.arc(t.x, t.y, t.r, 0, Math.PI * 2);
-          c.fillStyle = `rgba(255, 255, 255, ${t.alpha * 0.5})`;
+          c.fillStyle = "rgba(220, 245, 235, 0.4)";
           c.fill();
+
+          // Specular glint
+          c.beginPath();
+          c.arc(t.x - t.r * 0.3, t.y - t.r * 0.3, Math.max(0.4, t.r * 0.3), 0, Math.PI * 2);
+          c.fillStyle = "rgba(255, 255, 255, 0.95)";
+          c.fill();
+          c.restore();
         }
 
-        // Draw main sliding droplet
+        // Draw main sliding droplet with true optical water refraction
         c.save();
+
+        const stretch = Math.min(1.5, 1 + this.speed * 0.08);
+        const rx = this.r;
+        const ry = this.r * stretch;
+
+        // Dark meniscus edge
         c.beginPath();
-        c.arc(this.x, this.y, this.r, 0, Math.PI * 2);
-        c.fillStyle = "rgba(220, 240, 255, 0.25)";
+        c.ellipse(this.x, this.y, rx + 0.6, ry + 0.6, 0, 0, Math.PI * 2);
+        c.fillStyle = "rgba(0, 0, 0, 0.65)";
         c.fill();
 
-        // Highlight glint
+        // Lens refraction: dark upper half, luminous lower caustic
+        const dropGrad = c.createLinearGradient(
+          this.x,
+          this.y - ry,
+          this.x,
+          this.y + ry
+        );
+        dropGrad.addColorStop(0, "rgba(10, 25, 18, 0.75)");
+        dropGrad.addColorStop(0.4, "rgba(30, 60, 45, 0.3)");
+        dropGrad.addColorStop(0.75, "rgba(180, 230, 210, 0.45)");
+        dropGrad.addColorStop(1, "rgba(240, 255, 245, 0.7)");
         c.beginPath();
-        c.arc(this.x - this.r * 0.3, this.y - this.r * 0.3, this.r * 0.35, 0, Math.PI * 2);
+        c.ellipse(this.x, this.y, rx, ry, 0, 0, Math.PI * 2);
+        c.fillStyle = dropGrad;
+        c.fill();
+
+        // Primary sharp specular reflection
+        c.beginPath();
+        c.ellipse(
+          this.x - rx * 0.35,
+          this.y - ry * 0.38,
+          rx * 0.38,
+          ry * 0.22,
+          -0.25,
+          0,
+          Math.PI * 2
+        );
+        c.fillStyle = "rgba(255, 255, 255, 0.95)";
+        c.fill();
+
+        // Secondary pinpoint highlight
+        c.beginPath();
+        c.arc(
+          this.x - rx * 0.15,
+          this.y - ry * 0.52,
+          Math.max(0.6, rx * 0.15),
+          0,
+          Math.PI * 2
+        );
         c.fillStyle = "rgba(255, 255, 255, 0.85)";
         c.fill();
+
+        // Bottom caustic rim
+        c.beginPath();
+        c.ellipse(
+          this.x + rx * 0.1,
+          this.y + ry * 0.65,
+          rx * 0.5,
+          ry * 0.18,
+          0.1,
+          0,
+          Math.PI * 2
+        );
+        c.fillStyle = "rgba(220, 255, 235, 0.5)";
+        c.fill();
+
         c.restore();
       }
     }

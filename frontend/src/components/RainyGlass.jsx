@@ -99,82 +99,130 @@ export default function RainyGlass({ backdropImage = "/rain_forest_bokeh.png" })
       }
 
       draw(c) {
-        // Draw trail droplets first
+        // 1. Draw trail droplets (beaded water droplets left behind the slide)
         for (const t of this.trail) {
           if (t.alpha <= 0.05) continue;
           c.save();
-          c.globalAlpha = t.alpha;
+          c.globalAlpha = Math.min(1, t.alpha);
 
-          // Droplet body
+          // Dark meniscus boundary
           c.beginPath();
           c.arc(t.x, t.y, t.r, 0, Math.PI * 2);
-          c.fillStyle = "rgba(180, 220, 200, 0.25)";
+          c.fillStyle = "rgba(0, 0, 0, 0.55)";
           c.fill();
 
-          // Droplet specular highlight
+          // Internal water refraction (bottom caustic)
+          const tGrad = c.createRadialGradient(
+            t.x,
+            t.y + t.r * 0.35,
+            0.1,
+            t.x,
+            t.y,
+            t.r * 0.95
+          );
+          tGrad.addColorStop(0, "rgba(220, 245, 235, 0.45)");
+          tGrad.addColorStop(0.5, "rgba(50, 80, 65, 0.2)");
+          tGrad.addColorStop(1, "rgba(0, 0, 0, 0.4)");
           c.beginPath();
-          c.arc(t.x - t.r * 0.3, t.y - t.r * 0.3, t.r * 0.35, 0, Math.PI * 2);
-          c.fillStyle = "rgba(255, 255, 255, 0.75)";
+          c.arc(t.x, t.y, t.r * 0.9, 0, Math.PI * 2);
+          c.fillStyle = tGrad;
+          c.fill();
+
+          // Sharp specular glint
+          c.beginPath();
+          c.arc(t.x - t.r * 0.32, t.y - t.r * 0.32, Math.max(0.4, t.r * 0.32), 0, Math.PI * 2);
+          c.fillStyle = "rgba(255, 255, 255, 0.95)";
           c.fill();
 
           c.restore();
         }
 
-        // Draw main sliding droplet
+        // 2. Draw main sliding droplet with true optical water refraction
         c.save();
-        
-        // Tear-drop elongated shape
-        const stretch = Math.min(1.6, 1 + this.speed * 0.1);
+
+        const stretch = Math.min(1.5, 1 + this.speed * 0.08);
+        const rx = this.r;
+        const ry = this.r * stretch;
+
+        // Layer A: Dark Refraction Rim (Meniscus Edge)
         c.beginPath();
-        c.ellipse(this.x, this.y, this.r, this.r * stretch, 0, 0, Math.PI * 2);
-        
-        // Realistic glass refraction gradient
-        const grad = c.createRadialGradient(
-          this.x - this.r * 0.2,
-          this.y - this.r * 0.3,
-          this.r * 0.1,
-          this.x,
-          this.y,
-          this.r * 1.2
-        );
-        grad.addColorStop(0, "rgba(220, 255, 230, 0.35)");
-        grad.addColorStop(0.6, "rgba(20, 45, 30, 0.4)");
-        grad.addColorStop(0.9, "rgba(5, 15, 10, 0.7)");
-        grad.addColorStop(1, "rgba(206, 255, 0, 0.2)"); // subtle acid edge tint
-        c.fillStyle = grad;
+        c.ellipse(this.x, this.y, rx + 0.6, ry + 0.6, 0, 0, Math.PI * 2);
+        c.fillStyle = "rgba(0, 0, 0, 0.65)";
         c.fill();
 
-        // Droplet rim shadow
-        c.strokeStyle = "rgba(0, 0, 0, 0.45)";
-        c.lineWidth = 0.75;
-        c.stroke();
+        // Layer B: Glass/Water Lens Refraction Body
+        // Water acts as a convex lens: darker upper half, bright luminous bottom caustic
+        const dropGrad = c.createLinearGradient(
+          this.x,
+          this.y - ry,
+          this.x,
+          this.y + ry
+        );
+        dropGrad.addColorStop(0, "rgba(10, 25, 18, 0.75)");   // upper dark refraction shadow
+        dropGrad.addColorStop(0.4, "rgba(30, 60, 45, 0.3)");   // body transition
+        dropGrad.addColorStop(0.75, "rgba(180, 230, 210, 0.45)"); // focused caustic glow
+        dropGrad.addColorStop(1, "rgba(240, 255, 245, 0.7)");     // bright lower optical edge
 
-        // Top specular reflection (light source from above)
+        c.beginPath();
+        c.ellipse(this.x, this.y, rx, ry, 0, 0, Math.PI * 2);
+        c.fillStyle = dropGrad;
+        c.fill();
+
+        // Layer C: Secondary internal ambient depth
+        const depthGrad = c.createRadialGradient(
+          this.x - rx * 0.25,
+          this.y - ry * 0.3,
+          rx * 0.1,
+          this.x,
+          this.y + ry * 0.2,
+          ry
+        );
+        depthGrad.addColorStop(0, "rgba(255, 255, 255, 0.2)");
+        depthGrad.addColorStop(0.6, "transparent");
+        depthGrad.addColorStop(1, "rgba(0, 0, 0, 0.4)");
+        c.beginPath();
+        c.ellipse(this.x, this.y, rx * 0.92, ry * 0.92, 0, 0, Math.PI * 2);
+        c.fillStyle = depthGrad;
+        c.fill();
+
+        // Layer D: Primary Sharp Specular Glint (Light from above)
         c.beginPath();
         c.ellipse(
-          this.x - this.r * 0.25,
-          this.y - this.r * stretch * 0.35,
-          this.r * 0.35,
-          this.r * 0.2,
-          -0.2,
+          this.x - rx * 0.35,
+          this.y - ry * 0.38,
+          rx * 0.38,
+          ry * 0.22,
+          -0.25,
+          0,
+          Math.PI * 2
+        );
+        c.fillStyle = "rgba(255, 255, 255, 0.95)";
+        c.fill();
+
+        // Layer E: Secondary micro-pinpoint glint
+        c.beginPath();
+        c.arc(
+          this.x - rx * 0.15,
+          this.y - ry * 0.52,
+          Math.max(0.6, rx * 0.15),
           0,
           Math.PI * 2
         );
         c.fillStyle = "rgba(255, 255, 255, 0.85)";
         c.fill();
 
-        // Bottom refraction reflection
+        // Layer F: Delicate Bottom Caustic Rim Reflection
         c.beginPath();
         c.ellipse(
-          this.x + this.r * 0.2,
-          this.y + this.r * stretch * 0.4,
-          this.r * 0.3,
-          this.r * 0.15,
-          0.2,
+          this.x + rx * 0.1,
+          this.y + ry * 0.65,
+          rx * 0.5,
+          ry * 0.18,
+          0.1,
           0,
           Math.PI * 2
         );
-        c.fillStyle = "rgba(206, 255, 0, 0.45)";
+        c.fillStyle = "rgba(220, 255, 235, 0.5)";
         c.fill();
 
         c.restore();
@@ -189,21 +237,32 @@ export default function RainyGlass({ backdropImage = "/rain_forest_bokeh.png" })
     const render = () => {
       ctx.clearRect(0, 0, width, height);
 
-      // 1. Draw static micro drops
+      // 1. Draw static micro drops with optical water refraction
       for (let i = 0; i < staticDrops.length; i++) {
         const d = staticDrops[i];
         ctx.save();
         ctx.globalAlpha = d.alpha;
 
+        // Dark meniscus edge shadow
         ctx.beginPath();
-        ctx.arc(d.x, d.y, d.r, 0, Math.PI * 2);
-        ctx.fillStyle = "rgba(200, 240, 220, 0.2)";
+        ctx.arc(d.x, d.y, d.r + 0.4, 0, Math.PI * 2);
+        ctx.fillStyle = "rgba(0, 0, 0, 0.5)";
         ctx.fill();
 
-        // Specular dot
+        // Lens refraction body: dark top shadow, bright bottom caustic
+        const g = ctx.createLinearGradient(d.x, d.y - d.r, d.x, d.y + d.r);
+        g.addColorStop(0, "rgba(10, 25, 18, 0.7)");
+        g.addColorStop(0.5, "rgba(40, 70, 55, 0.25)");
+        g.addColorStop(1, "rgba(230, 255, 240, 0.55)");
         ctx.beginPath();
-        ctx.arc(d.x - d.r * 0.25, d.y - d.r * 0.25, d.r * 0.35, 0, Math.PI * 2);
-        ctx.fillStyle = "rgba(255, 255, 255, 0.7)";
+        ctx.arc(d.x, d.y, d.r, 0, Math.PI * 2);
+        ctx.fillStyle = g;
+        ctx.fill();
+
+        // Pinpoint specular glint
+        ctx.beginPath();
+        ctx.arc(d.x - d.r * 0.32, d.y - d.r * 0.32, Math.max(0.4, d.r * 0.32), 0, Math.PI * 2);
+        ctx.fillStyle = "rgba(255, 255, 255, 0.95)";
         ctx.fill();
 
         ctx.restore();
