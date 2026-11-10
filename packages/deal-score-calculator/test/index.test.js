@@ -22,3 +22,4 @@ test("calculateDealScore recommends waiting when price is inflated", () => {
   assert.ok(result.dealScore <= 5.0);
   assert.strictEqual(result.verdict, "WAIT_FOR_DROP");
 });
+

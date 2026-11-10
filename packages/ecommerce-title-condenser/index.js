@@ -30,3 +30,4 @@ function condenseTitle(fullTitle = "", maxWords = 5) {
 }
 
 module.exports = { condenseTitle };
+

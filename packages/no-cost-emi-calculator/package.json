@@ -1,0 +1,20 @@
+{
+  "name": "no-cost-emi-calculator",
+  "version": "1.0.0",
+  "description": "Zero-dependency financial calculator for e-commerce checkouts. Computes Standard Bank EMI vs. True No-Cost EMI with upfront merchant interest waivers, processing fees, and GST.",
+  "main": "index.js",
+  "scripts": {
+    "test": "node --test test/*.test.js"
+  },
+  "keywords": [
+    "emi-calculator",
+    "no-cost-emi",
+    "credit-card-emi",
+    "fintech",
+    "checkout-calculator",
+    "interest-waiver",
+    "ecommerce"
+  ],
+  "author": "Mohammed Sahil <immohammedsahil>",
+  "license": "MIT"
+}

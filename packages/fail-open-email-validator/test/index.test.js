@@ -18,3 +18,4 @@ test("validateEmail rejects invalid syntax", async () => {
   const result = await validateEmail("invalid-email");
   assert.strictEqual(result.valid, false);
 });
+

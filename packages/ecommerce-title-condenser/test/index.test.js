@@ -12,3 +12,4 @@ test("condenseTitle handles fallback strings gracefully", () => {
   assert.strictEqual(condenseTitle(""), "Product");
   assert.strictEqual(condenseTitle(null), "Product");
 });
+

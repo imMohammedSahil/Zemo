@@ -1,0 +1,21 @@
+{
+  "name": "reentrant-cron-mutex",
+  "version": "1.0.0",
+  "description": "Zero-dependency async re-entrancy mutex runner for Node.js scheduled jobs. Safely skips overlapping cron cycles to prevent parallel database deadlocks and race conditions.",
+  "main": "index.js",
+  "scripts": {
+    "test": "node --test test/*.test.js"
+  },
+  "keywords": [
+    "cron",
+    "mutex",
+    "reentrancy",
+    "node-cron",
+    "lock",
+    "async-mutex",
+    "scheduled-job",
+    "concurrency"
+  ],
+  "author": "Mohammed Sahil <immohammedsahil>",
+  "license": "MIT"
+}

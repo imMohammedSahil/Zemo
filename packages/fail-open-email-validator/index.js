@@ -69,3 +69,4 @@ async function validateEmail(email, { timeoutMs = 3500 } = {}) {
 }
 
 module.exports = { validateEmail };
+

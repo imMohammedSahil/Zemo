@@ -14,3 +14,4 @@ test("calculateBestRoute finds lowest net price taking into account discounts an
   assert.strictEqual(result.bestRoute.netCheckoutPrice, 37200);
   assert.strictEqual(result.maxSavingsVsHighest, 40000 - 37200);
 });
+

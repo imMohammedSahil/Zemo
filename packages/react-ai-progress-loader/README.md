@@ -59,3 +59,4 @@ export default function AnalysisView({ loading }) {
 
 MIT © [Mohammed Sahil](https://github.com/imMohammedSahil)
 Extracted from the AI progress design system of [Zemo](https://github.com/imMohammedSahil/Zemo).
+

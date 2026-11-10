@@ -8,3 +8,4 @@ if (!input) {
 }
 
 console.log(condenseTitle(input));
+

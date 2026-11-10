@@ -1,0 +1,21 @@
+{
+  "name": "magnetic-cursor-pill",
+  "version": "1.0.0",
+  "description": "Fluid kinetic mouse-trailing pill component for React. Features inertia smoothing (0.14 lerp), first-move snap without fly-in lag, and scroll boundary auto-docking.",
+  "main": "index.js",
+  "keywords": [
+    "react",
+    "cursor",
+    "mouse-follower",
+    "magnetic-pill",
+    "framer",
+    "awwwards",
+    "interactive-ui",
+    "creative-dev"
+  ],
+  "author": "Mohammed Sahil <immohammedsahil>",
+  "license": "MIT",
+  "peerDependencies": {
+    "react": ">=18.0.0"
+  }
+}
