@@ -3,6 +3,12 @@
   "version": "1.0.0",
   "description": "High-throughput parser for e-commerce pricing, currency normalization, ASIN/FSN extraction, and title sanitization for Amazon and Flipkart.",
   "main": "index.js",
+  "bin": {
+    "retail-price-normalizer": "./bin/cli.js"
+  },
+  "scripts": {
+    "test": "node --test test/*.test.js"
+  },
   "keywords": [
     "ecommerce",
     "price-parser",
@@ -10,7 +16,8 @@
     "flipkart-fsn",
     "currency-cleaner",
     "scraper-utility",
-    "retail-arbitrage"
+    "retail-arbitrage",
+    "cli"
   ],
   "author": "Mohammed Sahil <immohammedsahil>",
   "license": "MIT",

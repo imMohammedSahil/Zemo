@@ -21,6 +21,19 @@ And there's something quietly beautiful about that. After all those hours, all t
 
 ---
 
+## Modular Open-Source NPM Ecosystem
+
+Key subsystems developed for Zemo have been extracted into independent, production-grade packages available for the wider developer community:
+
+| Package | Purpose & Problem Solved | Quick Install | Source |
+| :--- | :--- | :--- | :--- |
+| **[`retail-price-normalizer`](packages/retail-price-normalizer)** | Zero-dependency parser for messy retail prices (`₹43,999` ➔ `43999`), Amazon ASIN & Flipkart PID extraction, query sanitization, and instant `npx` CLI. | `npm i retail-price-normalizer` | [View Package](packages/retail-price-normalizer) |
+| **[`resilient-mail-failover`](packages/resilient-mail-failover)** | Cascading email dispatcher bypassing cloud SMTP port blocks (Render, Vercel, AWS) via Brevo HTTPS (Port 443) ➔ Resend HTTPS ➔ Nodemailer SMTP. | `npm i resilient-mail-failover` | [View Package](packages/resilient-mail-failover) |
+| **[`aspect-sentiment-miner`](packages/aspect-sentiment-miner)** | Aspect-based sentiment analysis engine (Performance, Display, Battery, Value) using Google Gemini with automatic heuristic fallback. | `npm i aspect-sentiment-miner` | [View Package](packages/aspect-sentiment-miner) |
+
+
+---
+
 ## Architectural Specification
 
 | Dimension | Specification | Engineering Context |

@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "Failover-first email dispatcher for Node.js. Bypasses cloud SMTP port blocks by cascading Brevo HTTPS (443) -> Resend HTTPS -> Nodemailer SMTP.",
   "main": "index.js",
+  "scripts": {
+    "test": "node --test test/*.test.js"
+  },
   "keywords": [
     "email",
     "nodemailer",
@@ -25,4 +28,3 @@
     "resend": "^3.5.0"
   }
 }
-

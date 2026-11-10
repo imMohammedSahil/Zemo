@@ -13,11 +13,17 @@ function parsePrice(rawPrice, asInteger = true) {
   if (typeof rawPrice === "number") return asInteger ? Math.round(rawPrice) : rawPrice;
   if (!rawPrice || typeof rawPrice !== "string") return 0;
 
-  // Split off trailing decimal or cents if integer requested
-  const cleaned = rawPrice.replace(/[^\d.,]/g, "").trim();
+  // 1. Remove currency abbreviations (e.g., "Rs.", "INR", "USD")
+  let cleaned = rawPrice.replace(/\b(rs|inr|usd|eur|gbp)\b\.?/gi, "").trim();
+
+  // 2. Remove symbols and non-numeric characters except digits, commas, and dots
+  cleaned = cleaned.replace(/[^\d.,]/g, "").trim();
+
+  // 3. Strip any stray leading dots or commas
+  cleaned = cleaned.replace(/^[.,]+/, "");
   if (!cleaned) return 0;
 
-  // Handle standard thousand commas: "43,999.00" -> 43999
+  // 4. Remove thousand commas
   const normalized = cleaned.replace(/,/g, "");
   const num = parseFloat(normalized);
 
@@ -33,7 +39,6 @@ function parsePrice(rawPrice, asInteger = true) {
 function extractAmazonASIN(urlOrString) {
   if (!urlOrString || typeof urlOrString !== "string") return null;
 
-  // Matches /dp/B0..., /gp/product/B0..., /gp/aw/d/B0..., or raw ASIN
   const patterns = [
     /(?:\/dp\/|\/gp\/product\/|\/gp\/aw\/d\/|asin=)([A-Z0-9]{10})/i,
     /\b(B0[A-Z0-9]{8})\b/i
@@ -57,7 +62,6 @@ function extractAmazonASIN(urlOrString) {
 function extractFlipkartPID(urlOrString) {
   if (!urlOrString || typeof urlOrString !== "string") return null;
 
-  // Matches ?pid=... or /p/itm...
   const pidMatch = urlOrString.match(/[?&]pid=([A-Z0-9]{16})/i);
   if (pidMatch && pidMatch[1]) return pidMatch[1].toUpperCase();
 
@@ -76,14 +80,12 @@ function extractFlipkartPID(urlOrString) {
 function cleanProductTitle(title) {
   if (!title || typeof title !== "string") return "";
 
-  // 1. Tablet pattern: Preserve core model and storage
   const tabletMatch = title.match(/^(Samsung\s+Galaxy\s+Tab\s+[A-Za-z0-9\s+]+?)(?=[,\[]|\b\d{1,2}\.?\d?\s*(?:cm|inch|Display)|\s*S\s*Pen)/i);
   if (tabletMatch) {
     const storageMatch = title.match(/(\d{2,4}\s*GB\s*Storage|\d{2,4}\s*GB)/i);
     return `${tabletMatch[1].trim()} ${storageMatch ? storageMatch[1].replace(/Storage/i, '').trim() : ""}`.trim();
   }
 
-  // 2. TV pattern: Preserve brand, model code, and screen size
   const tvSizeMatch = title.match(/(\d{2,3})\s*(?:inch|inches|\")/i);
   const tvModelMatch = title.match(/\b([A-Z0-9]{1,4}-[A-Z0-9]{4,10})\b/i);
   if (tvModelMatch && tvSizeMatch) {

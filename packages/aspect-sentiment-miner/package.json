@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "Aspect-based sentiment analysis engine for e-commerce and SaaS reviews using Google Gemini LLM with built-in heuristic fallback.",
   "main": "index.js",
+  "scripts": {
+    "test": "node --test test/*.test.js"
+  },
   "keywords": [
     "sentiment-analysis",
     "aspect-based-sentiment",
