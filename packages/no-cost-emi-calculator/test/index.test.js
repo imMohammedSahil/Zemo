@@ -32,3 +32,4 @@ test("calculateEmi computes standard interest-bearing EMI with processing fee GS
   assert.strictEqual(result.processingFeeTotal, Math.round(199 * 1.18));
   assert.strictEqual(result.isNoCost, false);
 });
+

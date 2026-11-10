@@ -1,10 +1,17 @@
 {
-  "name": "deal-score-calculator",
+  "name": "@immohammedsahil/deal-score-calculator",
   "version": "1.0.0",
   "description": "Financial scoring engine that calculates discount depth, price volatility, drop probability, and buy/wait deal verdicts from e-commerce price points.",
   "main": "index.js",
   "scripts": {
     "test": "node --test test/*.test.js"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/imMohammedSahil/Zemo.git"
   },
   "keywords": [
     "deal-score",
@@ -17,4 +24,3 @@
   "author": "Mohammed Sahil <immohammedsahil>",
   "license": "MIT"
 }
-

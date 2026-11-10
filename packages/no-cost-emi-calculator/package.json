@@ -1,10 +1,17 @@
 {
-  "name": "no-cost-emi-calculator",
+  "name": "@immohammedsahil/no-cost-emi-calculator",
   "version": "1.0.0",
   "description": "Zero-dependency financial calculator for e-commerce checkouts. Computes Standard Bank EMI vs. True No-Cost EMI with upfront merchant interest waivers, processing fees, and GST.",
   "main": "index.js",
   "scripts": {
     "test": "node --test test/*.test.js"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/imMohammedSahil/Zemo.git"
   },
   "keywords": [
     "emi-calculator",

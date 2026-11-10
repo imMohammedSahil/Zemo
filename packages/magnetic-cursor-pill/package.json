@@ -1,8 +1,15 @@
 {
-  "name": "magnetic-cursor-pill",
+  "name": "@immohammedsahil/magnetic-cursor-pill",
   "version": "1.0.0",
   "description": "Fluid kinetic mouse-trailing pill component for React. Features inertia smoothing (0.14 lerp), first-move snap without fly-in lag, and scroll boundary auto-docking.",
   "main": "index.js",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/imMohammedSahil/Zemo.git"
+  },
   "keywords": [
     "react",
     "cursor",

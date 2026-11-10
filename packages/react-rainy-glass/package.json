@@ -1,8 +1,15 @@
 {
-  "name": "react-rainy-glass",
+  "name": "@immohammedsahil/react-rainy-glass",
   "version": "1.0.0",
   "description": "Aesthetic, physics-based procedural rain on glass canvas component for React. Features micro-droplets, gravity-driven sliding drops, surface tension bursts, and wobble trails.",
   "main": "index.js",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/imMohammedSahil/Zemo.git"
+  },
   "keywords": [
     "react",
     "canvas",
@@ -15,12 +22,7 @@
   ],
   "author": "Mohammed Sahil <immohammedsahil>",
   "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/imMohammedSahil/react-rainy-glass.git"
-  },
   "peerDependencies": {
     "react": ">=18.0.0"
   }
 }
-

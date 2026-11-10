@@ -1,5 +1,5 @@
 {
-  "name": "ecommerce-title-condenser",
+  "name": "@immohammedsahil/ecommerce-title-condenser",
   "version": "1.0.0",
   "description": "Smart utility that strips SEO keyword stuffing from messy Amazon and Flipkart product titles into clean 3-5 word concise titles.",
   "main": "index.js",
@@ -8,6 +8,13 @@
   },
   "scripts": {
     "test": "node --test test/*.test.js"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/imMohammedSahil/Zemo.git"
   },
   "keywords": [
     "ecommerce",
@@ -21,4 +28,3 @@
   "author": "Mohammed Sahil <immohammedsahil>",
   "license": "MIT"
 }
-

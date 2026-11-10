@@ -1,10 +1,17 @@
 {
-  "name": "resilient-mail-failover",
+  "name": "@immohammedsahil/resilient-mail-failover",
   "version": "1.0.0",
   "description": "Failover-first email dispatcher for Node.js. Bypasses cloud SMTP port blocks by cascading Brevo HTTPS (443) -> Resend HTTPS -> Nodemailer SMTP.",
   "main": "index.js",
   "scripts": {
     "test": "node --test test/*.test.js"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/imMohammedSahil/Zemo.git"
   },
   "keywords": [
     "email",
@@ -19,10 +26,6 @@
   ],
   "author": "Mohammed Sahil <immohammedsahil>",
   "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/imMohammedSahil/resilient-mail-failover.git"
-  },
   "dependencies": {
     "nodemailer": "^6.9.14",
     "resend": "^3.5.0"

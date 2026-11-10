@@ -65,3 +65,4 @@ function createCronMutex(nameOrFn, options = {}) {
 }
 
 module.exports = { CronMutex, createCronMutex };
+

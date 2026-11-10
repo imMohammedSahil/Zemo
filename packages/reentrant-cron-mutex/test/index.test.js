@@ -38,3 +38,4 @@ test("CronMutex safely skips overlapping parallel calls", async () => {
   assert.strictEqual(overlapRes.skipped, true);
   assert.strictEqual(mutex.skippedCount, 1);
 });
+

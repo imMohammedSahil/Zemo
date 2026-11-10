@@ -1,5 +1,5 @@
 {
-  "name": "retail-price-normalizer",
+  "name": "@immohammedsahil/retail-price-normalizer",
   "version": "1.0.0",
   "description": "High-throughput parser for e-commerce pricing, currency normalization, ASIN/FSN extraction, and title sanitization for Amazon and Flipkart.",
   "main": "index.js",
@@ -8,6 +8,13 @@
   },
   "scripts": {
     "test": "node --test test/*.test.js"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/imMohammedSahil/Zemo.git"
   },
   "keywords": [
     "ecommerce",
@@ -20,10 +27,5 @@
     "cli"
   ],
   "author": "Mohammed Sahil <immohammedsahil>",
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/imMohammedSahil/retail-price-normalizer.git"
-  },
-  "dependencies": {}
+  "license": "MIT"
 }
