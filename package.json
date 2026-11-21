@@ -21,7 +21,7 @@
     "nodemailer": "^10.1.4",
     "express-rate-limit": "^7.5.0",
     "playwright": "^1.58.2",
-    "plotly.js": "^3.4.0",
+    "plotly.js": "^4.3.0",
     "react-gauge-chart": "^0.5.1",
     "react-plotly.js": "^2.6.0",
     "react-router-dom": "^7.13.1",
