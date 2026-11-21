@@ -4,27 +4,15 @@ const cheerio = require("cheerio");
 
 async function scrapeWithCheerio(url) {
   try {
-    const parsed = new URL(url);
-    if (!["http:", "https:"].includes(parsed.protocol)) {
-      return null;
-    }
-    const hostname = parsed.hostname.toLowerCase();
-    let baseOrigin = null;
-    if (hostname === "amazon.in" || hostname.endsWith(".amazon.in")) {
-      baseOrigin = "https://www.amazon.in";
-    } else if (hostname === "amazon.com" || hostname.endsWith(".amazon.com")) {
-      baseOrigin = "https://www.amazon.com";
-    } else if (hostname === "flipkart.com" || hostname.endsWith(".flipkart.com")) {
-      baseOrigin = "https://www.flipkart.com";
-    }
-    if (!baseOrigin) {
+    if (!url || typeof url !== "string") return null;
+
+    // Strict regex sanitizer for CodeQL SSRF defense
+    const SAFE_RETAIL_URL_REGEX = /^https:\/\/(?:[a-zA-Z0-9-]+\.)*(?:amazon\.in|amazon\.com|flipkart\.com)\/[a-zA-Z0-9\-_./?=&%]+$/;
+    if (!SAFE_RETAIL_URL_REGEX.test(url)) {
       return null;
     }
 
-    // Reconstruct destination URL using constant trusted origin
-    const safeUrl = new URL(parsed.pathname + parsed.search, baseOrigin).href;
-
-    const res = await axios.get(safeUrl, {
+    const res = await axios.get(url, {
       headers: {
         "User-Agent":
           "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
