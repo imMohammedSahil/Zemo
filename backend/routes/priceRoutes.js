@@ -1,5 +1,15 @@
 const express = require("express");
 const router = express.Router();
+const rateLimit = require("express-rate-limit");
+
+const priceLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 100,
+  standardHeaders: true,
+  legacyHeaders: false
+});
+
+router.use(priceLimiter);
 
 const PriceHistory = require("../models/PriceHistory");
 const Product = require("../models/Product");

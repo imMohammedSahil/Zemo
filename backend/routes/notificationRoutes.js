@@ -1,5 +1,15 @@
 const express = require("express");
 const router = express.Router();
+const rateLimit = require("express-rate-limit");
+
+const notificationLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 100,
+  standardHeaders: true,
+  legacyHeaders: false
+});
+
+router.use(notificationLimiter);
 
 const Notification = require("../models/Notification");
 

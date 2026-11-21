@@ -1,5 +1,15 @@
 const express = require("express");
 const router = express.Router();
+const rateLimit = require("express-rate-limit");
+
+const alertLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 100,
+  standardHeaders: true,
+  legacyHeaders: false
+});
+
+router.use(alertLimiter);
 
 const Alert = require("../models/Alert");
 const Product = require("../models/Product");
@@ -13,8 +23,13 @@ router.post("/create", async (req, res) => {
     const { productId, targetPrice, tolerance, email } = req.body;
     console.log("[Alert] /create called with payload:", { productId, targetPrice, tolerance, email });
 
-    const cleanEmail = email ? email.toLowerCase().trim() : undefined;
-    const alertQuery = { productId };
+    const cleanEmail = (typeof email === "string" && email.trim()) ? email.toLowerCase().trim() : undefined;
+    const cleanProductId = typeof productId === "string" ? productId : String(productId || "");
+    if (!cleanProductId) {
+      return res.status(400).json({ error: "Invalid productId" });
+    }
+
+    const alertQuery = { productId: cleanProductId };
     if (cleanEmail) {
       alertQuery.email = cleanEmail;
     }
@@ -22,7 +37,7 @@ router.post("/create", async (req, res) => {
     const alert = await Alert.findOneAndUpdate(
       alertQuery,
       {
-        productId,
+        productId: cleanProductId,
         ...(cleanEmail ? { email: cleanEmail } : {}),
         targetPrice,
         tolerance,
@@ -40,7 +55,7 @@ router.post("/create", async (req, res) => {
     // Asynchronously create warm feel-good notification and dispatch email in background
     (async () => {
       try {
-        const prod = await Product.findById(productId);
+        const prod = await Product.findById(cleanProductId);
         if (!prod) {
           console.warn("[Alert] Product not found in DB for productId:", productId);
           return;

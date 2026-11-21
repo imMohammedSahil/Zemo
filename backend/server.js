@@ -30,9 +30,18 @@ const appVersion = pkg.version || "1.0.0";
 const { renderLandingPage } = require("./views/landingPage");
 
 const app = express();
+const rateLimit = require("express-rate-limit");
+
+const globalLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 200,
+  standardHeaders: true,
+  legacyHeaders: false
+});
 
 /* Middleware */
 
+app.use(globalLimiter);
 app.use("/uploads", express.static("uploads"));
 app.use("/assets", express.static(path.join(__dirname, "assets")));
 

@@ -60,7 +60,7 @@ async function deliverEmail({ to, defaultSenderName, subject, html, attachments 
   // 1. Prioritize Brevo HTTP API (Port 443 HTTPS - sends to ANY recipient with zemo.desk@gmail.com and Zemo logo)
   const brevoApiKey = (process.env.BREVO_API_KEY || "").trim();
   if (brevoApiKey) {
-    console.log(`[EmailService] Dispatching via Brevo HTTP API to ${recipient}...`);
+    console.log("[EmailService] Dispatching via Brevo HTTP API to", recipient);
     try {
       const senderEmail = (process.env.EMAIL_USER || "zemo.desk@gmail.com").trim();
       const senderName = defaultSenderName || "Zemo";
@@ -99,7 +99,7 @@ async function deliverEmail({ to, defaultSenderName, subject, html, attachments 
 
       const data = await response.json();
       if (response.ok && data.messageId) {
-        console.log(`[EmailService] Delivered successfully via Brevo to ${recipient}:`, data.messageId);
+        console.log("[EmailService] Delivered successfully via Brevo to", recipient, data.messageId);
         return { success: true, messageId: data.messageId };
       } else {
         console.warn("[EmailService] Brevo API error:", data.message || JSON.stringify(data));
@@ -112,7 +112,7 @@ async function deliverEmail({ to, defaultSenderName, subject, html, attachments 
   // 2. Resend HTTP API (works over HTTPS port 443)
   const resend = getResendClient();
   if (resend) {
-    console.log(`[EmailService] Dispatching via Resend HTTP API to ${recipient}...`);
+    console.log("[EmailService] Dispatching via Resend HTTP API to", recipient);
     try {
       let fromAddress = process.env.EMAIL_FROM || "Zemo <onboarding@resend.dev>";
       if (fromAddress.includes("Zemo Alerts") || fromAddress.includes("Zemo Wish Bell") || fromAddress.includes("Zemo Deals")) {
@@ -139,7 +139,7 @@ async function deliverEmail({ to, defaultSenderName, subject, html, attachments 
         // 1. Try Nodemailer SMTP fallback first for direct delivery to recipient (works on local dev & SMTP-enabled clouds)
         const transporter = getTransporter();
         if (transporter) {
-          console.log(`[EmailService] Attempting direct delivery via Nodemailer SMTP to ${recipient}...`);
+          console.log("[EmailService] Attempting direct delivery via Nodemailer SMTP to", recipient);
           try {
             const from = `"${defaultSenderName || 'Zemo'}" <${process.env.EMAIL_USER || process.env.SMTP_USER}>`;
             const info = await transporter.sendMail({
@@ -149,7 +149,7 @@ async function deliverEmail({ to, defaultSenderName, subject, html, attachments 
               html,
               attachments
             });
-            console.log(`[EmailService] Delivered successfully via SMTP to ${recipient}:`, info.messageId);
+            console.log("[EmailService] Delivered successfully via SMTP to", recipient, info.messageId);
             return { success: true, messageId: info.messageId };
           } catch (smtpErr) {
             console.warn("[EmailService] Nodemailer SMTP attempt failed (e.g. cloud port block):", smtpErr.message);
@@ -160,7 +160,7 @@ async function deliverEmail({ to, defaultSenderName, subject, html, attachments 
         // Route sandbox copy to account owner over HTTPS so developer can still access the code:
         const ownerEmail = (process.env.NOTIFICATION_EMAIL || process.env.EMAIL_USER || "").trim().toLowerCase();
         if (response.error.statusCode === 403 && ownerEmail && recipient.toLowerCase() !== ownerEmail) {
-          console.log(`[EmailService] Resend sandbox restriction: routing code for ${recipient} to account owner (${ownerEmail})...`);
+          console.log("[EmailService] Resend sandbox restriction: routing code to account owner", recipient, ownerEmail);
           try {
             const fallbackRes = await resend.emails.send({
               from: fromAddress,
@@ -171,7 +171,7 @@ async function deliverEmail({ to, defaultSenderName, subject, html, attachments 
               </div>` + html
             });
             if (fallbackRes.data?.id) {
-              console.log(`[EmailService] Delivered sandbox copy to ${ownerEmail}:`, fallbackRes.data.id);
+              console.log("[EmailService] Delivered sandbox copy to", ownerEmail, fallbackRes.data.id);
               return { success: true, messageId: fallbackRes.data.id };
             }
           } catch (rerouteErr) {
@@ -179,7 +179,7 @@ async function deliverEmail({ to, defaultSenderName, subject, html, attachments 
           }
         }
       } else {
-        console.log(`[EmailService] Delivered successfully via Resend to ${recipient}:`, response.data?.id);
+        console.log("[EmailService] Delivered successfully via Resend to", recipient, response.data?.id);
         return { success: true, messageId: response.data?.id };
       }
     } catch (err) {
@@ -190,7 +190,7 @@ async function deliverEmail({ to, defaultSenderName, subject, html, attachments 
   // 2. Fallback to Nodemailer SMTP
   const transporter = getTransporter();
   if (transporter) {
-    console.log(`[EmailService] Dispatching via Nodemailer SMTP to ${recipient}...`);
+    console.log("[EmailService] Dispatching via Nodemailer SMTP to", recipient);
     try {
       const from = `"${defaultSenderName || 'Zemo'}" <${process.env.EMAIL_USER || process.env.SMTP_USER}>`;
       const info = await transporter.sendMail({
@@ -200,7 +200,7 @@ async function deliverEmail({ to, defaultSenderName, subject, html, attachments 
         html,
         attachments
       });
-      console.log(`[EmailService] Delivered successfully via SMTP to ${recipient}:`, info.messageId);
+      console.log("[EmailService] Delivered successfully via SMTP to", recipient, info.messageId);
       return { success: true, messageId: info.messageId };
     } catch (err) {
       console.error("[EmailService] SMTP sendMail failed:", err.message);
@@ -208,7 +208,7 @@ async function deliverEmail({ to, defaultSenderName, subject, html, attachments 
     }
   }
 
-  console.log(`[EmailService] Email simulated for ${recipient} ("${subject}"). Set RESEND_API_KEY to send real emails.`);
+  console.log("[EmailService] Email simulated for", recipient, subject);
   return { success: true, simulated: true };
 }
 

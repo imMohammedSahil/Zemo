@@ -1,5 +1,15 @@
 const express = require("express");
 const router = express.Router();
+const rateLimit = require("express-rate-limit");
+
+const reviewLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 100,
+  standardHeaders: true,
+  legacyHeaders: false
+});
+
+router.use(reviewLimiter);
 
 const Review = require("../models/reviewModel");
 

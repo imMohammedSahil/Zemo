@@ -1,5 +1,16 @@
 const express = require("express");
 const router = express.Router();
+const rateLimit = require("express-rate-limit");
+
+const userLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 100,
+  standardHeaders: true,
+  legacyHeaders: false
+});
+
+router.use(userLimiter);
+
 const User = require("../models/user");
 const mongoose = require("mongoose");
 
@@ -292,12 +303,16 @@ router.put("/update-profile", async (req, res) => {
   try {
 
     const { name, location, email } = req.body;
+    if (!email || typeof email !== "string") {
+      return res.status(400).json({ error: "Invalid email" });
+    }
+    const cleanEmail = email.toLowerCase().trim();
 
     const user = await User.findOneAndUpdate(
-      { email: email },
+      { email: cleanEmail },
       {
-        name: name,
-        location: location
+        name: typeof name === "string" ? name : "",
+        location: typeof location === "string" ? location : ""
       },
       { new: true }
     );
@@ -451,8 +466,12 @@ router.post("/upload-pfp", upload.single("pfp"), async (req, res) => {
     console.log("UPLOAD FILE:", req.file);
 
     const { email } = req.body;
+    if (!email || typeof email !== "string") {
+      return res.status(400).json({ message: "Invalid email" });
+    }
+    const cleanEmail = email.toLowerCase().trim();
 
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email: cleanEmail });
 
     if (!user) {
       return res.status(404).json({ message: "User not found" });

@@ -7,7 +7,7 @@ function condenseTitle(fullTitle = "", maxWords = 5) {
   if (!fullTitle || typeof fullTitle !== "string") return "Product";
 
   // 1. Remove bracketed / parenthesized noise like [Smartchoice], (Black, 128GB)
-  let clean = fullTitle.replace(/\[.*?\]|\(.*?\)/g, " ");
+  let clean = fullTitle.replace(/\[[^\]\r\n]*\]|\([^)\r\n]*\)/g, " ");
 
   // 2. Remove seller marketing buzzwords
   const buzzwords = [

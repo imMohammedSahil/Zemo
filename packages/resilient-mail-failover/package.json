@@ -27,7 +27,7 @@
   "author": "Mohammed Sahil <immohammedsahil>",
   "license": "MIT",
   "dependencies": {
-    "nodemailer": "^6.9.14",
+    "nodemailer": "^10.1.4",
     "resend": "^3.5.0"
   }
 }

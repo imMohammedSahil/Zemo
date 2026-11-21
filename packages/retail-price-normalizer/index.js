@@ -80,7 +80,7 @@ function extractFlipkartPID(urlOrString) {
 function cleanProductTitle(title) {
   if (!title || typeof title !== "string") return "";
 
-  const tabletMatch = title.match(/^(Samsung\s+Galaxy\s+Tab\s+[A-Za-z0-9\s+]+?)(?=[,\[]|\b\d{1,2}\.?\d?\s*(?:cm|inch|Display)|\s*S\s*Pen)/i);
+  const tabletMatch = title.match(/^(Samsung\s+Galaxy\s+Tab(?:\s+[A-Za-z0-9+]+){1,6})/i);
   if (tabletMatch) {
     const storageMatch = title.match(/(\d{2,4}\s*GB\s*Storage|\d{2,4}\s*GB)/i);
     return `${tabletMatch[1].trim()} ${storageMatch ? storageMatch[1].replace(/Storage/i, '').trim() : ""}`.trim();
@@ -94,8 +94,8 @@ function cleanProductTitle(title) {
   }
 
   let cleaned = title
-    .replace(/\[[^\]]*\]/g, "")
-    .replace(/\([^)]*colour[^)]*\)/gi, "")
+    .replace(/\[[^\]\r\n]*\]/g, "")
+    .replace(/\([^)\r\n]*\)/gi, (m) => /colour/i.test(m) ? "" : m)
     .replace(/SmartChoice\s*/gi, "")
     .replace(/S\s*Pen in-Box\s*/gi, "")
     .replace(/AI Writing\s*/gi, "")

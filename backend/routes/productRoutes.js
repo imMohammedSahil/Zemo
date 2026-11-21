@@ -1,5 +1,15 @@
 const express = require("express");
 const router = express.Router();
+const rateLimit = require("express-rate-limit");
+
+const productLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 100,
+  standardHeaders: true,
+  legacyHeaders: false
+});
+
+router.use(productLimiter);
 
 const Product = require("../models/Product");
 const PriceHistory = require("../models/PriceHistory");
@@ -388,8 +398,9 @@ router.post("/reset-product-cache/:id", async (req, res) => {
       product = await Product.findById(id);
     }
     if (!product) {
+      const sanitizedId = String(id).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
       product = await Product.findOne({
-        $or: [{ asin: id }, { title: new RegExp(id, "i") }]
+        $or: [{ asin: String(id) }, { title: new RegExp(sanitizedId, "i") }]
       });
     }
 
