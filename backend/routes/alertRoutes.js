@@ -29,19 +29,22 @@ router.post("/create", async (req, res) => {
       return res.status(400).json({ error: "Invalid productId" });
     }
 
-    const alertQuery = { productId: { $eq: cleanProductId } };
-    if (cleanEmail) {
-      alertQuery.email = { $eq: cleanEmail };
-    }
+    const numTargetPrice = Number(targetPrice) || 0;
+    const numTolerance = Number(tolerance) || 0;
 
     const alert = await Alert.findOneAndUpdate(
-      alertQuery,
       {
-        productId: cleanProductId,
-        ...(cleanEmail ? { email: cleanEmail } : {}),
-        targetPrice,
-        tolerance,
-        triggered: false
+        productId: { $eq: cleanProductId },
+        ...(cleanEmail ? { email: { $eq: cleanEmail } } : {})
+      },
+      {
+        $set: {
+          productId: cleanProductId,
+          ...(cleanEmail ? { email: cleanEmail } : {}),
+          targetPrice: numTargetPrice,
+          tolerance: numTolerance,
+          triggered: false
+        }
       },
       {
         returnDocument: "after",

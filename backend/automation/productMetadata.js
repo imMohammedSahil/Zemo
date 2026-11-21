@@ -9,13 +9,22 @@ async function scrapeWithCheerio(url) {
       return null;
     }
     const hostname = parsed.hostname.toLowerCase();
-    const ALLOWED_DOMAINS = ["amazon.in", "amazon.com", "flipkart.com", "myntra.com", "croma.com", "tatacliq.com", "reliancedigital.in"];
-    const isAllowed = ALLOWED_DOMAINS.some(d => hostname === d || hostname.endsWith("." + d));
-    if (!isAllowed) {
+    let baseOrigin = null;
+    if (hostname === "amazon.in" || hostname.endsWith(".amazon.in")) {
+      baseOrigin = "https://www.amazon.in";
+    } else if (hostname === "amazon.com" || hostname.endsWith(".amazon.com")) {
+      baseOrigin = "https://www.amazon.com";
+    } else if (hostname === "flipkart.com" || hostname.endsWith(".flipkart.com")) {
+      baseOrigin = "https://www.flipkart.com";
+    }
+    if (!baseOrigin) {
       return null;
     }
 
-    const res = await axios.get(parsed.href, {
+    // Reconstruct destination URL using constant trusted origin
+    const safeUrl = new URL(parsed.pathname + parsed.search, baseOrigin).href;
+
+    const res = await axios.get(safeUrl, {
       headers: {
         "User-Agent":
           "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
