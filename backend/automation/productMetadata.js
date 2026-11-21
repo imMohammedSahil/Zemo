@@ -9,15 +9,9 @@ async function scrapeWithCheerio(url) {
       return null;
     }
     const hostname = parsed.hostname.toLowerCase();
-    if (
-      hostname === "localhost" ||
-      hostname === "127.0.0.1" ||
-      hostname === "::1" ||
-      hostname.endsWith(".local") ||
-      hostname.startsWith("10.") ||
-      hostname.startsWith("192.168.") ||
-      /^172\.(1[6-9]|2\d|3[0-1])\./.test(hostname)
-    ) {
+    const ALLOWED_DOMAINS = ["amazon.in", "amazon.com", "flipkart.com", "myntra.com", "croma.com", "tatacliq.com", "reliancedigital.in"];
+    const isAllowed = ALLOWED_DOMAINS.some(d => hostname === d || hostname.endsWith("." + d));
+    if (!isAllowed) {
       return null;
     }
 

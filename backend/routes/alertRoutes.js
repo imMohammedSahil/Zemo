@@ -29,9 +29,9 @@ router.post("/create", async (req, res) => {
       return res.status(400).json({ error: "Invalid productId" });
     }
 
-    const alertQuery = { productId: cleanProductId };
+    const alertQuery = { productId: { $eq: cleanProductId } };
     if (cleanEmail) {
-      alertQuery.email = cleanEmail;
+      alertQuery.email = { $eq: cleanEmail };
     }
 
     const alert = await Alert.findOneAndUpdate(

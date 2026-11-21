@@ -3,11 +3,26 @@
  * Strips bracketed tags, marketing buzzwords, and seller spam into clean product names.
  */
 
+function stripBracketed(text) {
+  let result = "";
+  let bDepth = 0;
+  let pDepth = 0;
+  for (let i = 0; i < text.length; i++) {
+    const ch = text[i];
+    if (ch === "[") { bDepth++; result += " "; }
+    else if (ch === "]") { if (bDepth > 0) bDepth--; }
+    else if (ch === "(") { pDepth++; result += " "; }
+    else if (ch === ")") { if (pDepth > 0) pDepth--; }
+    else if (bDepth === 0 && pDepth === 0) { result += ch; }
+  }
+  return result;
+}
+
 function condenseTitle(fullTitle = "", maxWords = 5) {
   if (!fullTitle || typeof fullTitle !== "string") return "Product";
 
   // 1. Remove bracketed / parenthesized noise like [Smartchoice], (Black, 128GB)
-  let clean = fullTitle.replace(/\[[^\]\r\n]*\]|\([^)\r\n]*\)/g, " ");
+  let clean = stripBracketed(fullTitle);
 
   // 2. Remove seller marketing buzzwords
   const buzzwords = [

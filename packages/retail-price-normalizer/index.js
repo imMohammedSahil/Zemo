@@ -71,6 +71,21 @@ function extractFlipkartPID(urlOrString) {
   return null;
 }
 
+function stripBracketed(text) {
+  let result = "";
+  let bDepth = 0;
+  let pDepth = 0;
+  for (let i = 0; i < text.length; i++) {
+    const ch = text[i];
+    if (ch === "[") { bDepth++; }
+    else if (ch === "]") { if (bDepth > 0) bDepth--; }
+    else if (ch === "(") { pDepth++; }
+    else if (ch === ")") { if (pDepth > 0) pDepth--; }
+    else if (bDepth === 0 && pDepth === 0) { result += ch; }
+  }
+  return result;
+}
+
 /**
  * Clean noisy retail product titles (strip promo labels, accessories, bracketed tags)
  * to produce clean keywords for cross-store search comparison.
@@ -93,9 +108,7 @@ function cleanProductTitle(title) {
     return `${brand} ${tvModelMatch[1]} ${tvSizeMatch[1]} inch`.trim();
   }
 
-  let cleaned = title
-    .replace(/\[[^\]\r\n]*\]/g, "")
-    .replace(/\([^)\r\n]*\)/gi, (m) => /colour/i.test(m) ? "" : m)
+  let cleaned = stripBracketed(title)
     .replace(/SmartChoice\s*/gi, "")
     .replace(/S\s*Pen in-Box\s*/gi, "")
     .replace(/AI Writing\s*/gi, "")
