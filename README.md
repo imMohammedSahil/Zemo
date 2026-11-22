@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="ZEMO%20Rainy%20Glass%20Price%20Banner.png" alt="Zemo Banner" width="100%" />
+</p>
+
 # Zemo
 
 **Autonomous E-Commerce Price Intelligence, Cross-Store Arbitrage & Aspect-Based Sentiment Analysis Platform**
